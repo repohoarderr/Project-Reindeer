@@ -29,5 +29,4 @@ document
 document.getElementById("removeFile").addEventListener("click", function () {
   const fileInput = document.getElementById("fileInput");
   fileInput.value = ""; // Clears the selected file
-  alert("File selection has been cleared.");
 });
