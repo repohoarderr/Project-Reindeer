@@ -12,9 +12,9 @@
 5. Run "npm run server:dev" to start the server. 
 
 ## Helpful VSCode extensions to use when running this code:
-npm Intellisense
-EditorConfig for VS Code
-Code Spell Checker
-Path Intellisense
-Prettier ESLint
-vscode-icons
+npm Intellisense  
+EditorConfig for VS Code  
+Code Spell Checker  
+Path Intellisense  
+Prettier ESLint  
+vscode-icons  
