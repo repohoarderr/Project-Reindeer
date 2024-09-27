@@ -1,43 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Upload</title>
-</head>
-<body>
-    <h1>Upload a File</h1>
-    <form id="uploadForm">
-        <input type="file" id="fileInput" name="file" required>
-        <button type="submit">Upload</button>
-    </form>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Upload a File</h1>
+      <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" required />
+        <div class="button-group">
+          <button type="submit">Upload</button>
+          <button type="button" class="remove-button" id="removeFile">
+            Remove File
+          </button>
+        </div>
+      </form>
+    </div>
 
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                fetch('https://your-backend-url.com/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } else {
-                alert('Please select a file to upload.');
-            }
-        });
-    </script>
-</body>
+    <script src="form.js"></script>
+  </body>
 </html>

@@ -11,7 +11,7 @@
 4. Run "npm i" to download all the necessary node packages. 
 5. Run "npm run server:dev" to start the server. 
 
-## Helpful VSCode extensions to use when running this code:
+## Helpful VSCode extensions to use when editing this code:
 npm Intellisense  
 EditorConfig for VS Code  
 Code Spell Checker  
