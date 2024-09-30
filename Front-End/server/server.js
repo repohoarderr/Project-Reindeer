@@ -1,18 +1,15 @@
-// Express as our HTTP server
 import Express from "express";
+import router from "./router.js"; // Import the router
 
-// Make an express application
-const app = new Express();
+const app = Express();
 
-// Import the router
-import dataRouter from "./router.js";
-
-// Static file server to serve index.html
+// Middleware to serve static files
 app.use(Express.static("public"));
 
-app.use("/data", dataRouter);
+// Use the defined router for API requests
+app.use("/api", router);
 
-// Start server listening on port 5000
+// Start server on port 5678
 app.listen(5678, () => {
-  console.log("Listening on port 5678");
+  console.log("Server listening on port 5678");
 });

@@ -1,4 +1,3 @@
-// Import react base and dom root utilities
 import React from "react";
 import { createRoot } from "react-dom/client";
 
@@ -8,9 +7,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // Root app component
 import App from "./App.jsx";
 
-// Once page is loaded, create react root and render the app
-document.addEventListener("DOMContentLoaded", initApp);
-function initApp() {
-  const appRoot = createRoot(document.querySelector("#root"));
-  appRoot.render(<App />);
-}
+// Ensure DOM content is fully loaded before rendering React app
+document.addEventListener("DOMContentLoaded", () => {
+  const rootElement = document.getElementById("root");
+
+  if (rootElement) {
+    const root = createRoot(rootElement);
+    root.render(<App />);
+  } else {
+    console.error("Root element not found");
+  }
+});

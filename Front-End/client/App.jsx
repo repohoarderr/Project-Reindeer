@@ -1,18 +1,17 @@
 import React from "react";
-import "./styles.css";
+import "../public/styles.css";
+import FileUploadForm from "./Components/UploadForm.jsx";
 
 export default function App() {
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Welcome to Project Reindeer</h1>
-      </header>
-      <main className="app-main">
-        <p>This is the main content area.</p>
-      </main>
-      <footer className="app-footer">
-        <p>&copy; 2023 Project Reindeer</p>
-      </footer>
+    <div className="container">
+      <img
+        src="https://www.mathias-die.com/wp-content/uploads/2018/07/MDC-Logo-copy.png"
+        alt="MDC Logo"
+        className="centered-image"
+      />
+      <h1>Upload a File</h1>
+      <FileUploadForm />
     </div>
   );
 }
