@@ -2,10 +2,10 @@
   "name": "project-reindeer-frontend",
   "version": "0.1.0",
   "description": "Basic frontend starting point for building the MDC pricing page.",
-  "main": "index.html",
+  "main": "client/index.jsx",
   "type": "module",
   "scripts": {
-    "server:dev": "nodemon server.js",
+    "server:dev": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonathan Gutzmer",
