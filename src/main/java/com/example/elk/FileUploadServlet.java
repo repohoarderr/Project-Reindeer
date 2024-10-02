@@ -18,16 +18,18 @@ import java.io.InputStream;
 public class FileUploadServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    String path = "/Users/andrewlong/Documents/IntelliJ/elk/html/";
     /* Receive file uploaded to the Servlet from the HTML5 form */
     Part filePart = request.getPart("file");
     String fileName = filePart.getSubmittedFileName();
     for (Part part : request.getParts()) {
-      part.write("/Users/andrewlong/Documents/IntelliJ/elk/html/" + fileName);
+      part.write(path + fileName);
     }
     response.getWriter().print("The file uploaded successfully.");
-    System.out.println("File uploaded");
     System.out.println(fileName);
+    System.out.println("File uploaded");
+
+
   }
 
 }

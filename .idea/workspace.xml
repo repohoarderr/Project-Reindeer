@@ -10,63 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="added dxfreader and features class">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jakarta/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jakarta/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jakarta/src/main/java/com/example/mathiasdiepricingtool/DXFReader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jakarta/src/main/java/com/example/mathiasdiepricingtool/Features.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jakarta/src/main/java/com/example/mathiasdiepricingtool/SocketHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/elk.iml" beforeDir="false" afterPath="$PROJECT_DIR$/elk.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/beans.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Arc.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Arc.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Block.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Block.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Circle.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Circle.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$DXFViewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$DXFViewer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Dimen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Dimen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$DrawItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$DrawItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Ellipse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Ellipse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Entity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Entity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Hatch.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Hatch.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Insert.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Insert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Line.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Line.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$LwPolyline$LSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$LwPolyline$LSegment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$LwPolyline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$LwPolyline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$MText.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$MText.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Polyline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Polyline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Section.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Section.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Spline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Spline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Text.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Text.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Vertex.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader$Vertex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/DXFReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/FileResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/FileResource.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/HelloResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/HelloResource.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Arc.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Arc.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Block.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Block.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Circle.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Circle.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$DXFViewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$DXFViewer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Dimen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Dimen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$DrawItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$DrawItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Ellipse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Ellipse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Entity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Entity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Hatch.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Hatch.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Insert.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Insert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Line.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Line.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$LwPolyline$LSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$LwPolyline$LSegment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$LwPolyline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$LwPolyline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$MText.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$MText.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Polyline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Polyline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Section.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Section.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Spline.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Spline.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Text.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Text.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Vertex.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader$Vertex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/DXFReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/FileResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/FileResource.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/HelloResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/HelloResource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="backend" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -120,24 +65,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Unnamed.executor": "Run",
-    "HTTP Request.generated-requests | #3.executor": "Run",
-    "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Tomcat Server.Tomcat 10.1.30.executor": "Run",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.post-requests | Send a form with the text and file fields.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.30.executor&quot;: &quot;Run&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.30">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.elk.DXFReader" />
@@ -154,7 +99,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.30" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/elk_war_exploded/api/hello-world" />
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/elk_war_exploded/api/file-upload" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="elk:war exploded">
@@ -283,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727712945295</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="deleted jakarta">
+      <option name="closed" value="true" />
+      <created>1727893093051</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1727893093051</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -303,6 +256,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="inital commit" />
     <MESSAGE value="added dxfreader and features class" />
-    <option name="LAST_COMMIT_MESSAGE" value="added dxfreader and features class" />
+    <MESSAGE value="deleted jakarta" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted jakarta" />
   </component>
 </project>
