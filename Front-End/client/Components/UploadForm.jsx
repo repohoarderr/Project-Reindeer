@@ -1,16 +1,33 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import apiService from "../services/apiService";
 
-export default function FileUploadForm({ onUploadComplete }) {
+export default function UploadForm({ onUploadComplete }) {
   const fileInputRef = useRef(null);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const handleUpload = async (event) => {
     event.preventDefault();
 
-    alert("File upload functionality is currently disabled.");
+    const file = fileInputRef.current.files[0]; // Get the selected file
+
+    if (!file) {
+      setUploadStatus("No file selected");
+      return;
+    }
+
+    try {
+      // Upload file directly using the apiService
+      const result = await apiService.uploadFile(file);
+      setUploadStatus(`Upload successful: ${result}`); // Set status message
+      onUploadComplete(result); // Pass the result to the parent component
+    } catch (error) {
+      setUploadStatus(`Upload failed: ${error.message}`);
+    }
   };
 
   const handleRemove = () => {
     fileInputRef.current.value = ""; // Clear the selected file
+    setUploadStatus(""); // Reset the upload status
   };
 
   return (
@@ -29,6 +46,8 @@ export default function FileUploadForm({ onUploadComplete }) {
           Remove File
         </button>
       </div>
+      {/* Display the current upload status */}
+      {uploadStatus && <p>{uploadStatus}</p>}
     </form>
   );
 }

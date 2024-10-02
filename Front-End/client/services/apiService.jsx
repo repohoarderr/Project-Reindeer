@@ -1,30 +1,30 @@
-/**
- * apiService handles API requests related to file uploads.
- */
 const apiService = {
   /**
-   * Uploads a file to the server.
+   * Uploads a file directly to the external server.
    *
    * @param {File} file - The file to be uploaded
-   * @returns {Promise<Object>} The response data from the server
+   * @returns {Promise<string>} The response data from the server as a string
    */
   uploadFile: async (file) => {
     const formData = new FormData();
-    formData.append("file", file); // Append file to form data
+    formData.append("file", file); // Append the file to form data
 
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    // Send the file directly to the external server (localhost:8080)
+    const response = await fetch(
+      "http://localhost:8080/elk_war_exploded/fileuploadservlet",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
     if (!response.ok) {
       throw new Error("File upload failed");
     }
 
-    return await response.json(); // Return the response data
+    const data = await response.text(); // Get response as plain text (string)
+    return data; // Return the response data as a string
   },
-
-  // Add more API request functions here as needed
 };
 
 export default apiService;

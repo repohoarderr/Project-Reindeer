@@ -1,13 +1,11 @@
 import Express from "express";
-import router from "./router.js"; // Import the router
 
 const app = Express();
 
-// Middleware to serve static files
+// Middleware to serve static files from the "public" directory
 app.use(Express.static("public"));
 
-// Use the defined router for API requests
-app.use("/api", router);
+// If there are any other API endpoints, define them here (if necessary)
 
 // Start server on port 5678
 app.listen(5678, () => {
