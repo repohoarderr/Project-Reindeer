@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.*;
 import org.glassfish.jersey.*;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 @WebServlet(name = "FileUploadServlet", urlPatterns = { "/fileuploadservlet" })
@@ -28,6 +29,17 @@ public class FileUploadServlet extends HttpServlet {
     response.getWriter().print("The file uploaded successfully.");
     System.out.println(fileName);
     System.out.println("File uploaded");
+
+    File file = new File(path+fileName);
+    Shape[] shapesList;
+    try {
+      shapesList = new DXFReader().parseFile(file, 14, 3);
+      for (Shape s : shapesList){
+        System.out.println(s);
+      }
+    } catch (IOException e) {
+      System.out.println("Error opening file :(");
+    }
 
 
   }
