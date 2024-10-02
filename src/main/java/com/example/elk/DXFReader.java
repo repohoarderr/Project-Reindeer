@@ -82,6 +82,7 @@ public class DXFReader {
   }
 
   class Entity {
+
     private final String type;
 
     Entity(String type) {
@@ -100,6 +101,7 @@ public class DXFReader {
   }
 
   class DrawItem extends Entity {
+
 
     DrawItem(String type) {
       super(type);
@@ -1559,6 +1561,7 @@ public class DXFReader {
   }
 
   public static void main(String[] args) throws Exception {
+    Features feature = new Features();
     if (args.length < 1) { //if no arguments set, open the file picker
 //            System.out.println("Usage: java -jar DXFReader.jar <dxf file>");
       JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());

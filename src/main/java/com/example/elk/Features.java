@@ -65,4 +65,11 @@ public class Features {
       }
     }
   }
+  public String getFeatureListAsString(){
+    String temp = "";
+    for(Shape item : featureList){
+      temp += item.toString() + "\n";
+    }
+    return temp;
+  }
 }
