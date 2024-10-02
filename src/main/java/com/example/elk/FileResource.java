@@ -1,15 +1,25 @@
 package com.example.elk;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import com.fasterxml.jackson.core.format.DataFormatDetector;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 
-import java.io.IOException;
+import org.glassfish.jersey.*;
+
+import java.awt.*;
+import java.io.*;
 
 @Path("/file-upload")
 public class FileResource {
   @GET
-  @Produces("text/plain")
-  public String fileText(){ return ""; }
+  @Produces({MediaType.TEXT_HTML})
+  public InputStream viewHome() throws FileNotFoundException {
+
+    File f = new File("/Users/andrewlong/Documents/IntelliJ/elk/html/home.html");
+    return new FileInputStream(f);
+  }
 }
 
