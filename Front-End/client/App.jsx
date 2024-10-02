@@ -1,6 +1,7 @@
 import React from "react";
 import "../public/styles.css";
 import FileUploadForm from "./Components/UploadForm.jsx";
+import { IconLucideBookOpenText } from "./Components/BookIcon";
 
 export default function App() {
   return (
@@ -12,6 +13,11 @@ export default function App() {
       />
       <h1>Upload a File</h1>
       <FileUploadForm />
+
+      {/* User's Manual Button */}
+      <button className="manual-button" onClick={() => window.open("/path-to-manual", "_blank")}>
+        <IconLucideBookOpenText />
+      </button>
     </div>
   );
 }

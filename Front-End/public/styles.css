@@ -77,3 +77,36 @@ button:hover {
     height: auto;
     width: 150px; /* Set the width, you can adjust this */
 }
+
+.manual-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0px;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .manual-button:hover {
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .manual-button svg {
+    width: 30px;
+    height:30px;
+    color: #000000;
+  }
+  
+  .manual-button:hover svg {
+    color: #004c9d;
+  }
+  
