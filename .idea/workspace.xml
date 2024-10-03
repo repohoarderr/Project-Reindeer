@@ -9,9 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="added dxfreader and features class">
-      <change beforePath="$PROJECT_DIR$/elk.iml" beforeDir="false" afterPath="$PROJECT_DIR$/elk.iml" afterDir="false" />
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="added read of file after upload">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,17 +72,26 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Attach to Node.js/Chrome.Node.executor&quot;: &quot;Debug&quot;,
     &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.post-requests | Send a form with the text and file fields.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Node (Server).executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Tomcat Server.Tomcat 10.1.30.executor&quot;: &quot;Run&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.client:dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.server:dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15429688&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -92,11 +105,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Node" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" port="9229">
+      <mapping url="http://localhost:9229/index" local-file="$PROJECT_DIR$/html/Front-End/client/index.jsx" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="elk:war exploded" />
+        </option>
+      </method>
+    </configuration>
     <configuration name="generated-requests | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="3" requestIdentifier="#3" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="post-requests | Send a form with the text and file fields" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="jar://$APPLICATION_HOME_DIR$/plugins/restClient/lib/restClient.jar!/com/intellij/ws/rest/client/requests/collection/post-requests.http" index="3" requestIdentifier="Send a form with the text and file fields" runType="Run single request">
       <method v="2" />
+    </configuration>
+    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="Node (Server)" type="NodeJSConfigurationType" path-to-js-file="html/Front-End/client/index.jsx" working-dir="$PROJECT_DIR$">
+      <EXTENSION ID="com.jetbrains.nodejs.run.NodeStartBrowserRunConfigurationExtension">
+        <browser start="true" url="http://localhost:9229" />
+      </EXTENSION>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="elk:war exploded" />
+        </option>
+      </method>
     </configuration>
     <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.30" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/elk_war_exploded/api/file-upload" />
@@ -186,10 +222,42 @@
         </option>
       </method>
     </configuration>
+    <configuration name="client:dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/html/Front-End/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="client:dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="elk:war exploded" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="server:dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/html/Front-End/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="server:dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2">
+        <option name="LaunchBrowser.Before.Run" url="http://localhost:5678/" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Attach to Node.js/Chrome.Node" />
       <item itemvalue="HTTP Request.generated-requests | #3" />
       <item itemvalue="HTTP Request.post-requests | Send a form with the text and file fields" />
+      <item itemvalue="JavaScript Debug.Debug Application" />
+      <item itemvalue="Node.js.Node (Server)" />
+      <item itemvalue="npm.client:dev" />
+      <item itemvalue="npm.server:dev" />
       <item itemvalue="Tomcat Server.Tomcat 10.1.30" />
     </list>
     <recent_temporary>
@@ -211,6 +279,8 @@
       <workItem from="1727711509804" duration="711000" />
       <workItem from="1727712282473" duration="337000" />
       <workItem from="1727712644637" duration="502000" />
+      <workItem from="1727989947627" duration="3287000" />
+      <workItem from="1727994348238" duration="1112000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -236,7 +306,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727893093051</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added read of file after upload">
+      <option name="closed" value="true" />
+      <created>1727894393315</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1727894393315</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,6 +335,7 @@
     <MESSAGE value="inital commit" />
     <MESSAGE value="added dxfreader and features class" />
     <MESSAGE value="deleted jakarta" />
-    <option name="LAST_COMMIT_MESSAGE" value="deleted jakarta" />
+    <MESSAGE value="added read of file after upload" />
+    <option name="LAST_COMMIT_MESSAGE" value="added read of file after upload" />
   </component>
 </project>

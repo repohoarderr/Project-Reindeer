@@ -19,16 +19,18 @@ import java.io.InputStream;
 public class FileUploadServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String path = "/Users/andrewlong/Documents/IntelliJ/elk/html/";
+    String path = "/Users/andrewlong/Documents/IntelliJ/elk/html/Front-End/";
     /* Receive file uploaded to the Servlet from the HTML5 form */
     Part filePart = request.getPart("file");
     String fileName = filePart.getSubmittedFileName();
     for (Part part : request.getParts()) {
       part.write(path + fileName);
     }
-    response.getWriter().print("The file uploaded successfully.");
     System.out.println(fileName);
     System.out.println("File uploaded");
+    response.setStatus(200);
+    response.setContentType("application/json");
+    response.sendError(404);
 
     File file = new File(path+fileName);
     Shape[] shapesList;
@@ -40,8 +42,6 @@ public class FileUploadServlet extends HttpServlet {
     } catch (IOException e) {
       System.out.println("Error opening file :(");
     }
-
-
   }
 
 }
