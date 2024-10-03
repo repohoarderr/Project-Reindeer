@@ -9,13 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="added read of file after upload">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="brought in react, sending requests from react to tomcat">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/elk/Features.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/elk-1.0-SNAPSHOT/WEB-INF/classes/com/example/elk/Features.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -280,7 +276,7 @@
       <workItem from="1727712282473" duration="337000" />
       <workItem from="1727712644637" duration="502000" />
       <workItem from="1727989947627" duration="3287000" />
-      <workItem from="1727994348238" duration="1112000" />
+      <workItem from="1727994348238" duration="1451000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -314,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727894393315</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="brought in react, sending requests from react to tomcat">
+      <option name="closed" value="true" />
+      <created>1727996419422</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1727996419422</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -336,6 +340,7 @@
     <MESSAGE value="added dxfreader and features class" />
     <MESSAGE value="deleted jakarta" />
     <MESSAGE value="added read of file after upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="added read of file after upload" />
+    <MESSAGE value="brought in react, sending requests from react to tomcat" />
+    <option name="LAST_COMMIT_MESSAGE" value="brought in react, sending requests from react to tomcat" />
   </component>
 </project>
