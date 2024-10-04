@@ -50,7 +50,10 @@ import com.example.elk.*;
 public class DXFReader {
   private static final boolean DEBUG = false;
   private static final boolean INFO = false;
-  private static final boolean ANIMATE = false;
+  private static final boolean ANIMATE = true;
+  private static final boolean GRADUAL_DRAW = false; //draw objects one at a time, only works when ANIMATE is true
+  private static final boolean RAINBOW_DISPLAY = true;
+
   private boolean drawText;
   private boolean drawMText;
   private boolean drawDimen;
@@ -1527,18 +1530,26 @@ public class DXFReader {
       atScale.translate(border * SCREEN_PPI, border * SCREEN_PPI);
       atScale.scale(SCREEN_PPI, SCREEN_PPI);
       g2.setColor(Color.black);
+      Random random = new Random();
       if (ANIMATE) {
         if (shapes != null) {
           int count = 0;
           for (Shape shape : shapes) {
-            if (count++ >= frame) {
-              break;
+            if (GRADUAL_DRAW && count++ >= frame) {
+                break;
+              }
+
+            if (RAINBOW_DISPLAY) {
+              g2.setColor(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
             }
             g2.draw(atScale.createTransformedShape(shape));
           }
         }
       } else {
         for (Shape shape : shapes) {
+          if (RAINBOW_DISPLAY) {
+            g2.setColor(Color.getHSBColor(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+          }
           g2.draw(atScale.createTransformedShape(shape));
         }
       }
