@@ -11,10 +11,11 @@
 ### Configure React
 1. Download [Node.js](https://nodejs.org/en/download/prebuilt-installer)
 2. Walk through the installation, accept the defaults.
-3. Unpack the archive
-4. Open a terminal window
-5. Navigate to the directory the archive produced
-6. Run `npm i` to download all the necessary node packages.
-7. Run "npm run client:dev". Wait for it to finish.
-8. Run "npm run server:dev"(Open a new terminal window if needed). The webpage should open.
-9. If a webpage does not automatically open, go to [localhost:5678](http://localhost:5678)
+3. Download zip from frontend-update-prod.
+4. Unpack the archive.
+5. Open a terminal window.
+6. Navigate to the directory the archive produced.
+7. Run `npm i` to download all the necessary node packages.
+8. Run "npm run client:dev". Wait for it to finish.
+9. Run "npm run server:dev"(Open a new terminal window if needed). The webpage should open.
+10. If a webpage does not automatically open, go to [localhost:5678](http://localhost:5678)
