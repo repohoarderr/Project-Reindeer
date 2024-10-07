@@ -9,8 +9,5 @@
         <module name="elk" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="elk" target="14" />
-    </bytecodeTargetLevel>
   </component>
 </project>
