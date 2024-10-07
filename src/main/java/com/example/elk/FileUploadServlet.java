@@ -30,13 +30,13 @@ public class FileUploadServlet extends HttpServlet {
     System.out.println("File uploaded");
     response.setStatus(200);
     response.setContentType("application/json");
-    response.sendError(404);
+
 
     File file = new File(path+fileName);
     Shape[] shapesList;
     try {
       shapesList = new DXFReader().parseFile(file, 14, 3);
-      for (Shape s : shapesList){
+      for (Shape s : shapesList) {
         System.out.println(s);
       }
     } catch (IOException e) {

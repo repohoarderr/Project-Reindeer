@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="elk:war" />
+      <artifact name="elk:war exploded" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="brought in react, sending requests from react to tomcat">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="updated readme">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +56,13 @@
         <option name="mavenHome" value="Use Maven wrapper" />
       </MavenGeneralSettings>
     </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="downloadDocsAutomatically" value="true" />
+        <option name="downloadSourcesAutomatically" value="true" />
+        <option name="vmOptionsForImporter" value="-Xmx512m" />
+      </MavenImportingSettings>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -72,7 +80,10 @@
     "HTTP Request.generated-requests | #3.executor": "Run",
     "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
     "JAR Application.elk.jar.executor": "Run",
+    "Maven.Unnamed.executor": "Run",
+    "Maven.claen.executor": "Run",
     "Maven.compile.executor": "Run",
+    "Maven.install.executor": "Run",
     "Node.js.Node (Server).executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -91,11 +102,11 @@
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15429688",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.applicationServers",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.30 (1)">
+  <component name="RunManager" selected="Maven.install">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.elk.DXFReader" />
       <module name="elk" />
@@ -113,7 +124,7 @@
         </option>
       </method>
     </configuration>
-    <configuration name="generated-requests | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="3" requestIdentifier="#3" runType="Run single request">
+    <configuration name="generated-requests | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="3" requestIdentifier="#3" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="post-requests | Send a form with the text and file fields" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="jar://$APPLICATION_HOME_DIR$/plugins/restClient/lib/restClient.jar!/com/intellij/ws/rest/client/requests/collection/post-requests.http" index="3" requestIdentifier="Send a form with the text and file fields" runType="Run single request">
@@ -126,7 +137,7 @@
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
       <method v="2" />
     </configuration>
-    <configuration name="compile" type="MavenRunConfiguration" factoryName="Maven">
+    <configuration name="claen" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
         <option name="myRunnerSettings" />
@@ -138,7 +149,37 @@
             </option>
             <option name="goals">
               <list>
-                <option value="compile" />
+                <option value="clean" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="install" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="install" />
               </list>
             </option>
             <option name="multimoduleDir" />
@@ -377,7 +418,8 @@
       <item itemvalue="HTTP Request.post-requests | Send a form with the text and file fields" />
       <item itemvalue="JAR Application.elk.jar" />
       <item itemvalue="JavaScript Debug.Debug Application" />
-      <item itemvalue="Maven.compile" />
+      <item itemvalue="Maven.install" />
+      <item itemvalue="Maven.claen" />
       <item itemvalue="Node.js.Node (Server)" />
       <item itemvalue="npm.client:dev" />
       <item itemvalue="npm.server:dev" />
@@ -387,7 +429,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="JAR Application.elk.jar" />
-        <item itemvalue="HTTP Request.generated-requests | #3" />
         <item itemvalue="HTTP Request.post-requests | Send a form with the text and file fields" />
       </list>
     </recent_temporary>
@@ -406,7 +447,10 @@
       <workItem from="1727712644637" duration="502000" />
       <workItem from="1727989947627" duration="3287000" />
       <workItem from="1727994348238" duration="3098000" />
-      <workItem from="1728002529774" duration="3911000" />
+      <workItem from="1728002529774" duration="6599000" />
+      <workItem from="1728053634719" duration="3731000" />
+      <workItem from="1728313525302" duration="836000" />
+      <workItem from="1728314366660" duration="538000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -456,7 +500,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727996478816</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="updated readme">
+      <option name="closed" value="true" />
+      <created>1728006519126</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1728006519126</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -479,6 +531,18 @@
     <MESSAGE value="deleted jakarta" />
     <MESSAGE value="added read of file after upload" />
     <MESSAGE value="brought in react, sending requests from react to tomcat" />
-    <option name="LAST_COMMIT_MESSAGE" value="brought in react, sending requests from react to tomcat" />
+    <MESSAGE value="updated readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated readme" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/html/Front-End/client/services/apiService.jsx</url>
+          <line>15</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
