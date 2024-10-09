@@ -11,7 +11,6 @@ export default function ManualFeatureSelection() {
             <button> a</button>
             <button> a</button>
             <button> a</button>
-            <button> a</button>
         </div>
 
     );
