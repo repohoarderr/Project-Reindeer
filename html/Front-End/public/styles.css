@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box; /* Ensures the form width accounts for padding */
+}
+
+input[type="file"] {
+    width: calc(100% - 20px); /* Adjust the width to account for padding and border */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    box-sizing: border-box; /* Ensures the padding is included in the width */
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Adds 15px of space between the buttons */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 48%; /* Modify this width */
+    min-width: 150px; /* Ensure the button is wide enough for text */
+    box-sizing: border-box; /* Ensures even padding and width for buttons */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.remove-button {
+    background-color: #f44336;
+}
+
+.remove-button:hover {
+    background-color: #e41f1f;
+}
+
+.container {
+    text-align: center;
+}
+
+/* Styling for the image */
+.centered-image {
+    display: block;
+    margin: 0 auto 20px auto; /* Center the image and add margin below it */
+    max-width: 100%; /* Ensures the image is responsive */
+    height: auto;
+    width: 150px; /* Set the width, you can adjust this */
+}

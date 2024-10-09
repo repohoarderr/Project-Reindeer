@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.lang.Math.*;
+//import org.json.simple.JSONObject;
 
 public class Features {
   public static final String ANSI_RESET = "\u001B[0m";
@@ -30,22 +31,18 @@ public class Features {
     featureList = shapeArrayList;
     for(Shape feature : featureList){
       String className = feature.getClass().getName().substring(feature.getClass().getName().lastIndexOf(".") + 1, feature.getClass().getName().lastIndexOf("$"));
-//      System.out.println(className);
       switch(className){
         case "Line2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
-          feature = (Line2D.Double) feature;
           System.out.println("\n\t" + ANSI_BLUE + "Length: " + ANSI_RESET + Math.sqrt((Math.pow(((Line2D.Double) feature).x2 - ((Line2D.Double) feature).x1, 2)) + Math.pow(((Line2D.Double) feature).y2 - ((Line2D.Double) feature).y1, 2)));
         }case "Arc2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
-          feature = (Arc2D.Double) feature;
           double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) feature).getAngleStart() - ((Arc2D.Double) feature).getAngleExtent())));
           double radius = ((Arc2D.Double) feature).width/2*Math.sin(angleRad/2);
           double arcLength = radius * angleRad;
           System.out.println("\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength);
         }case "Ellipse2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
-          feature = (Ellipse2D.Double) feature;
           double a = ((Ellipse2D.Double) feature).height/2;
           double b = ((Ellipse2D.Double) feature).width/2;
 
@@ -64,5 +61,12 @@ public class Features {
         }
       }
     }
+  }
+  public String getFeatureListAsString(){
+    String temp = "";
+    for(Shape item : featureList){
+      temp += item.toString() + "\n";
+    }
+    return temp;
   }
 }
