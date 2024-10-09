@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class FileUploadServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String path = "/Users/andrewlong/Documents/IntelliJ/elk/html/Front-End/";
+    String path = new File("Front-End").getAbsolutePath();
     /* Receive file uploaded to the Servlet from the HTML5 form */
     Part filePart = request.getPart("file");
     String fileName = filePart.getSubmittedFileName();
