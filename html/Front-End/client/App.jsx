@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../public/styles.css";
 import FileUploadForm from "./Components/UploadForm.jsx";
 import DisplayResults from "./Components/DisplayResults.jsx";
+import ManualFeatureSelection from "./Components/ManualFeatureSelection.jsx";
 
 export default function App() {
   const [uploadResults, setUploadResults] = useState("");
@@ -21,6 +22,7 @@ export default function App() {
       <h1>Upload a File</h1>
       <FileUploadForm onUploadComplete={handleUploadComplete} />
       <DisplayResults results={uploadResults} /> {/* Display results here */}
+        <ManualFeatureSelection />
     </div>
   );
 }
