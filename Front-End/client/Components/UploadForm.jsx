@@ -18,7 +18,7 @@ export default function UploadForm({ onUploadComplete }) {
     try {
       // Upload file directly using the apiService
       const result = await apiService.uploadFile(file);
-      setUploadStatus(`Upload successful: ${result}`); // Set status message
+      setUploadStatus("Upload Successful: Results Below"); // Set status message
       onUploadComplete(result); // Pass the result to the parent component
     } catch (error) {
       setUploadStatus(`Upload failed: ${error.message}`);

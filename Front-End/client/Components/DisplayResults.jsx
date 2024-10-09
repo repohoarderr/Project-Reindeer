@@ -9,15 +9,15 @@ import React from "react";
 export default function DisplayResults({ results }) {
   return (
     <div className="results">
-      {/* Display the results if they exist, or show a message otherwise */}
-      {results ? (
-        <div>
-          <h2>File Upload Results:</h2>
-          <pre>{results}</pre> {/* Use <pre> for formatting */}
-        </div>
-      ) : (
-        <h2>No Results Available</h2>
-      )}
+      <div className="results">
+        <h2>Results:</h2>
+        {/* Display the actual results below the box, or show a message otherwise */}
+        {results ? (
+          <pre>{results}</pre> // Display the JSON result below the header
+        ) : (
+          <p>No Results Available</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../public/styles.css";
-import FileUploadForm from "./Components/UploadForm.jsx";
+import UploadForm from "./Components/UploadForm.jsx";
 import DisplayResults from "./Components/DisplayResults.jsx";
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
         className="centered-image"
       />
       <h1>Upload a File</h1>
-      <FileUploadForm onUploadComplete={handleUploadComplete} />
+      <UploadForm onUploadComplete={handleUploadComplete} />
       <DisplayResults results={uploadResults} /> {/* Display results here */}
     </div>
   );
