@@ -18,8 +18,8 @@ public class FileResource {
   @Produces({MediaType.TEXT_HTML})
   public InputStream viewHome() throws FileNotFoundException {
 
-    File f = new File("/Users/andrewlong/Documents/IntelliJ/elk/html/home.html");
-    return new FileInputStream(f);
+    //File f = new File("/Users/andrewlong/Documents/IntelliJ/elk/html/home.html");
+    return new FileInputStream(System.getProperty("user.home") + "/Documents/IntelliJ/elk/html/Front-End/");
   }
 }
 
