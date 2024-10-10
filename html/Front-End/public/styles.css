@@ -56,6 +56,9 @@ button {
 .feature-button{
     min-width: 10px;
     width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 button:hover {
@@ -84,7 +87,11 @@ button:hover {
 }
 
 .manual-feature-selection{
-    column-count: 3;
+    display: inline-grid;
+    /*grid-auto-rows: 1fr;*/
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1px;
+    column-gap: normal;
 }
 
 /*TODO: figure out how to turn buttons into icons*/

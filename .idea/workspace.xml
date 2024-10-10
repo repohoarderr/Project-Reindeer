@@ -9,15 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="updated readme">
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp2A.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/html/Front-End/public/icons/Grp6.jpg" afterDir="false" />
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Add several icons and buttons which aren't organized yet.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/html/Front-End/public/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/public/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,39 +84,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Attach to Node.js/Chrome.Node.executor&quot;: &quot;Debug&quot;,
-    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.post-requests | Send a form with the text and file fields.executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.elk.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.claen.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.compile.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.install.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.Node (Server).executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.30 (1).executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.30.executor&quot;: &quot;Run&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.client:dev.executor&quot;: &quot;Run&quot;,
-    &quot;npm.server:dev.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15429688&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Unnamed.executor": "Run",
+    "Attach to Node.js/Chrome.Node.executor": "Debug",
+    "HTTP Request.generated-requests | #3.executor": "Run",
+    "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
+    "JAR Application.elk.jar.executor": "Run",
+    "Maven.Unnamed.executor": "Run",
+    "Maven.claen.executor": "Run",
+    "Maven.compile.executor": "Run",
+    "Maven.install.executor": "Run",
+    "Node.js.Node (Server).executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Run",
+    "Tomcat Server.Tomcat 10.1.30.executor": "Run",
+    "jdk.selected.JAVA_MODULE": "22",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "npm.client:dev.executor": "Run",
+    "npm.server:dev.executor": "Run",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15429688",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DenneyLuke\OneDrive - University of Wisconsin-Stout\Documents\GitHub\Project-Reindeer\html\Front-End\public\icons" />
@@ -534,7 +528,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728006519126</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add several icons and buttons which aren't organized yet.">
+      <option name="closed" value="true" />
+      <created>1728572305576</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728572305576</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,6 +560,7 @@
     <MESSAGE value="added read of file after upload" />
     <MESSAGE value="brought in react, sending requests from react to tomcat" />
     <MESSAGE value="updated readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated readme" />
+    <MESSAGE value="Add several icons and buttons which aren't organized yet." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add several icons and buttons which aren't organized yet." />
   </component>
 </project>
