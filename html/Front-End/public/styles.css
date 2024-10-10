@@ -53,6 +53,11 @@ button {
     box-sizing: border-box; /* Ensures even padding and width for buttons */
 }
 
+.feature-button{
+    min-width: 10px;
+    width: 10%;
+}
+
 button:hover {
     background-color: #45a049;
 }
@@ -77,3 +82,12 @@ button:hover {
     height: auto;
     width: 150px; /* Set the width, you can adjust this */
 }
+
+.manual-feature-selection{
+    column-count: 3;
+}
+
+/*TODO: figure out how to turn buttons into icons*/
+/*.group1A{*/
+/*    background-image: url("icons/Grp6.jpg");*/
+/*}*/
