@@ -9,9 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Add several icons and buttons which aren't organized yet.">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Feature selection have more appealing layout.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/public/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/public/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +91,7 @@
     "HTTP Request.generated-requests | #3.executor": "Run",
     "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
     "JAR Application.elk.jar.executor": "Run",
+    "JavaScript Debug.Tomcat 10.1.30 (1) JavaScript.executor": "Debug",
     "Maven.Unnamed.executor": "Run",
     "Maven.claen.executor": "Run",
     "Maven.compile.executor": "Run",
@@ -99,7 +100,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Run",
+    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Debug",
     "Tomcat Server.Tomcat 10.1.30.executor": "Run",
     "jdk.selected.JAVA_MODULE": "22",
     "kotlin-language-version-configured": "true",
@@ -109,12 +110,13 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "npm.client:dev.executor": "Run",
+    "npm.client:dev.executor": "Debug",
     "npm.server:dev.executor": "Run",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15429688",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -228,7 +230,8 @@
       </method>
     </configuration>
     <configuration name="Tomcat 10.1.30 (1)" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.30" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/elk_war_exploded/fileuploadservlet" />
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:5678" />
+      <option name="START_JAVASCRIPT_DEBUGGER" value="true" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="elk:war exploded">
@@ -536,7 +539,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728572305576</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Feature selection have more appealing layout.">
+      <option name="closed" value="true" />
+      <created>1728573318186</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1728573318186</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -561,6 +572,25 @@
     <MESSAGE value="brought in react, sending requests from react to tomcat" />
     <MESSAGE value="updated readme" />
     <MESSAGE value="Add several icons and buttons which aren't organized yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add several icons and buttons which aren't organized yet." />
+    <MESSAGE value="Feature selection have more appealing layout." />
+    <option name="LAST_COMMIT_MESSAGE" value="Feature selection have more appealing layout." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx</url>
+          <line>4</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx</url>
+          <line>3</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
