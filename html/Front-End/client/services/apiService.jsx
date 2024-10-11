@@ -10,7 +10,7 @@ const apiService = {
     formData.append("file", file); // Append the file to form data
 
     const response = await fetch(
-      "http://localhost:678",
+      "http://localhost:8080/fileuploadservlet",
       {
         method: "POST",
         body: formData,
