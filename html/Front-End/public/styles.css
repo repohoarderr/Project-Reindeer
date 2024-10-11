@@ -53,6 +53,14 @@ button {
     box-sizing: border-box; /* Ensures even padding and width for buttons */
 }
 
+.feature-button{
+    min-width: 10px;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 button:hover {
     background-color: #45a049;
 }
@@ -77,3 +85,16 @@ button:hover {
     height: auto;
     width: 150px; /* Set the width, you can adjust this */
 }
+
+.manual-feature-selection{
+    display: inline-grid;
+    /*grid-auto-rows: 1fr;*/
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1px;
+    column-gap: normal;
+}
+
+/*TODO: figure out how to turn buttons into icons*/
+/*.group1A{*/
+/*    background-image: url("icons/Grp6.jpg");*/
+/*}*/
