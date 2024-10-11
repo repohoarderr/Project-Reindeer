@@ -9,9 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Feature selection have more appealing layout.">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Set up framework for button onClick actions.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/DisplayResults.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/DisplayResults.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/client/services/apiService.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/services/apiService.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +103,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Debug",
+    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Run",
     "Tomcat Server.Tomcat 10.1.30.executor": "Run",
     "jdk.selected.JAVA_MODULE": "22",
     "kotlin-language-version-configured": "true",
@@ -110,7 +113,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "npm.client:dev.executor": "Debug",
+    "npm.client:dev.executor": "Run",
     "npm.server:dev.executor": "Run",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15429688",
@@ -547,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728573318186</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Set up framework for button onClick actions.">
+      <option name="closed" value="true" />
+      <created>1728575582431</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1728575582431</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -573,22 +584,23 @@
     <MESSAGE value="updated readme" />
     <MESSAGE value="Add several icons and buttons which aren't organized yet." />
     <MESSAGE value="Feature selection have more appealing layout." />
-    <option name="LAST_COMMIT_MESSAGE" value="Feature selection have more appealing layout." />
+    <MESSAGE value="Set up framework for button onClick actions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Set up framework for button onClick actions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx</url>
-          <line>4</line>
+          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx</url>
+          <line>19</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/ManualFeatureSelection.jsx</url>
-          <line>3</line>
+          <url>file://$PROJECT_DIR$/html/Front-End/client/Components/DisplayResults.jsx</url>
+          <line>35</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="22" />
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
