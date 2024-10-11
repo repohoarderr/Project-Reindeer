@@ -27,7 +27,7 @@ public class FileUploadServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 //    filterChain.doFilter(servletRequest, servletResponse);
-    String path = "/Users/andrewlong/Documents/IntelliJ/elk/html/Front-End/";
+    String path = new File("Front-End").getAbsolutePath();;
     /* Receive file uploaded to the Servlet from the HTML5 form */
     Part filePart = request.getPart("file");
     String fileName = filePart.getSubmittedFileName();

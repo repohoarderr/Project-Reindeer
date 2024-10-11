@@ -17,8 +17,8 @@ public class FileResource {
   @GET
   @Produces({MediaType.TEXT_HTML})
   public InputStream viewHome() throws FileNotFoundException {
-
-    File f = new File("/Users/andrewlong/Documents/IntelliJ/elk/html/home.html");
+    //TODO: remove this class?
+    File f = new File("Front-End");
     return new FileInputStream(f);
   }
 }

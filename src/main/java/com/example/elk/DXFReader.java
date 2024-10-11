@@ -1439,31 +1439,37 @@ public class DXFReader {
     Features feature = new Features();
     feature.setFeatureList(shapes);
     Shape[] sOut = new Shape[shapes.size()];
-    if (shapes.size() > 0) {
-      for (Shape shape : shapes) {
-        bounds = bounds == null ? shape.getBounds2D() : bounds.createUnion(shape.getBounds2D());
-      }
-      double scale = 1;
-      double maxAxis = Math.max(bounds.getWidth(), bounds.getHeight());
-      // Limit size to maxSize inches on max dimension
-      if (maxSize > 0 && maxAxis > maxSize) {
-        scale = maxSize / maxAxis;
-        scaled = true;
-      }
-      // If minSize specified, scale up max dimension to match
-      if (minSize > 0 && maxAxis < minSize) {
-        scale = minSize / maxAxis;
-        scaled = true;
-      }
-      // Scale, as needed, and flip Y axis
-      AffineTransform at = new AffineTransform();
-      at.scale(scale, -scale);
-      at.translate(-bounds.getMinX(), -bounds.getHeight() - bounds.getMinY());
-      for (int ii = 0; ii < shapes.size(); ii++) {
-        sOut[ii] = at.createTransformedShape(shapes.get(ii));
-      }
+    for (int ii = 0; ii < shapes.size(); ii++) {
+      sOut[ii] = shapes.get(ii);
     }
     return sOut;
+    //ignore transformations for now
+//    if (shapes.size() > 0) {
+//      for (Shape shape : shapes) {
+//        bounds = bounds == null ? shape.getBounds2D() : bounds.createUnion(shape.getBounds2D());
+//      }
+//      double scale = 1;
+//      double maxAxis = Math.max(bounds.getWidth(), bounds.getHeight());
+//      // Limit size to maxSize inches on max dimension
+//      if (maxSize > 0 && maxAxis > maxSize) {
+//        scale = maxSize / maxAxis;
+//        scaled = true;
+//      }
+//      // If minSize specified, scale up max dimension to match
+//      if (minSize > 0 && maxAxis < minSize) {
+//        scale = minSize / maxAxis;
+//        scaled = true;
+//      }
+//      // Scale, as needed, and flip Y axis
+//      AffineTransform at = new AffineTransform();
+//      at.scale(scale, -scale);
+//      at.translate(-bounds.getMinX(), -bounds.getHeight() - bounds.getMinY());
+//      for (int ii = 0; ii < shapes.size(); ii++) {
+//        sOut[ii] = at.createTransformedShape(shapes.get(ii));
+//      }
+//
+//    }
+//    return sOut;
   }
 
   /*
