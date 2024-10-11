@@ -17,6 +17,7 @@ public class Features {
   public static final String ANSI_CYAN = "\u001B[36m";
   public static final String ANSI_WHITE = "\u001B[37m";
   private ArrayList<Shape> featureList;
+  public static ArrayList<Shape> staticFeatureList;
 
   public Features(){
     featureList = null;
@@ -29,18 +30,22 @@ public class Features {
 
   public void setFeatureList(ArrayList<Shape> shapeArrayList){ // set feature list variable to the shapes list in DXFReader
     featureList = shapeArrayList;
+    String out = "";
     for(Shape feature : featureList){
+      System.out.println(feature);
       String className = feature.getClass().getName().substring(feature.getClass().getName().lastIndexOf(".") + 1, feature.getClass().getName().lastIndexOf("$"));
       switch(className){
         case "Line2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
           System.out.println("\n\t" + ANSI_BLUE + "Length: " + ANSI_RESET + Math.sqrt((Math.pow(((Line2D.Double) feature).x2 - ((Line2D.Double) feature).x1, 2)) + Math.pow(((Line2D.Double) feature).y2 - ((Line2D.Double) feature).y1, 2)));
+          out += "\n\t" + ANSI_BLUE + "Length: " + ANSI_RESET + Math.sqrt((Math.pow(((Line2D.Double) feature).x2 - ((Line2D.Double) feature).x1, 2)) + Math.pow(((Line2D.Double) feature).y2 - ((Line2D.Double) feature).y1, 2));
         }case "Arc2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
           double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) feature).getAngleStart() - ((Arc2D.Double) feature).getAngleExtent())));
           double radius = ((Arc2D.Double) feature).width/2*Math.sin(angleRad/2);
           double arcLength = radius * angleRad;
           System.out.println("\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength);
+          out += "\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength;
         }case "Ellipse2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
           double a = ((Ellipse2D.Double) feature).height/2;
@@ -48,6 +53,7 @@ public class Features {
 
           double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
           System.out.print(ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum );
+          out += ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum;
 
           double area;
           if(a==b){
@@ -58,6 +64,7 @@ public class Features {
           System.out.println(ANSI_BLUE + "\n\tArea: " + ANSI_RESET + area );
         } default -> {
           System.out.println(className);
+          out += className;
         }
       }
     }

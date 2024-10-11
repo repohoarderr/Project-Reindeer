@@ -40,21 +40,22 @@ public class FileUploadServlet extends HttpServlet {
     response.setContentType("application/json");
 
     JSONObject obj = new JSONObject();
-    obj.put("name", "jonnyboi");
     PrintWriter out = response.getWriter();
-    out.print("slut");
-    out.flush();
 
     File file = new File(path+fileName);
     Shape[] shapesList;
     try {
       shapesList = new DXFReader().parseFile(file, 14, 3);
       for (Shape s : shapesList) {
+        obj.put("shape", s.getClass().getName().substring(s.getClass().getName().lastIndexOf("."),s.getClass().getName().lastIndexOf("$")));
         System.out.println(s);
+        out.print(obj);
       }
     } catch (IOException e) {
       System.out.println("Error opening file :(");
     }
+
+    out.flush();
   }
 
 }
