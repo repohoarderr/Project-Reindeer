@@ -26,7 +26,7 @@ export default function DisplayResults({results}) {
                     <h2>No Results Available</h2>
 
 
-                    <TreeTable value={testData} tableStyle={{minWidth: '50rem'}}>
+                    <TreeTable tableStyle={{minWidth: '50rem'}}>
                         <Column field="name" header="Name" expander></Column>
                         <Column field="size" header="Size"></Column>
                         <Column field="type" header="Type"></Column>
