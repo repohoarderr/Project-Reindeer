@@ -9,14 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Fixed post address (legit)">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Started JSON of shapes">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/public/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/public/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +53,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+        <option name="mavenHome" value="Use Maven wrapper" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
@@ -110,7 +106,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="npm.server:dev">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.30">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.elk.DXFReader" />
       <module name="elk" />
@@ -300,7 +296,7 @@
         </option>
       </method>
     </configuration>
-    <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.31" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.30" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:5678" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
@@ -456,7 +452,7 @@
       <workItem from="1728313525302" duration="836000" />
       <workItem from="1728314366660" duration="538000" />
       <workItem from="1728661067320" duration="2056000" />
-      <workItem from="1728918451057" duration="4631000" />
+      <workItem from="1728918451057" duration="5656000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -538,7 +534,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728662799622</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Started JSON of shapes">
+      <option name="closed" value="true" />
+      <created>1728923283774</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728923283774</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -565,6 +569,7 @@
     <MESSAGE value="added depnedencies" />
     <MESSAGE value="Fixed post address" />
     <MESSAGE value="Fixed post address (legit)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed post address (legit)" />
+    <MESSAGE value="Started JSON of shapes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started JSON of shapes" />
   </component>
 </project>

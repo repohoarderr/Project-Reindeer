@@ -98,15 +98,15 @@ public class Features {
         double radius = ((Arc2D.Double) shape).width/2*Math.sin(angleRad/2);
         double arcLength = radius * angleRad;
 
-//      ele1.put("length", arcLength);
-//      ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
-//      ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
-//      ele1.put("endX", ((Arc2D.Double) shape).getEndPoint().getX());
-//      ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
-//      ele1.put("radius", radius);
-//      ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
-//
-//      ele1.put("type", className);
+      ele1.put("length", arcLength);
+      ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
+      ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
+      ele1.put("endX", ((Arc2D.Double) shape).getEndPoint().getX());
+      ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
+      ele1.put("radius", radius);
+      ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
+
+      ele1.put("type", className);
       }case "Ellipse2D" -> {
         double a = ((Ellipse2D.Double) shape).height/2;
         double b = ((Ellipse2D.Double) shape).width/2;
