@@ -1,11 +1,12 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f4f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 0;
+    padding-top: 1in;
+    display: block; /* Switch from flex to block for natural page flow */
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 h1 {
@@ -21,48 +22,41 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
-    box-sizing: border-box; /* Ensures the form width accounts for padding */
+    box-sizing: border-box;
+    margin: 0 auto; /* Center form */
 }
 
 input[type="file"] {
-    width: calc(100% - 20px); /* Adjust the width to account for padding and border */
+    width: calc(100% - 20px); /* Adjust for padding and borders */
     padding: 10px;
     margin-bottom: 15px;
     border: 2px solid #ccc;
     border-radius: 6px;
     cursor: pointer;
-    box-sizing: border-box; /* Ensures the padding is included in the width */
+    box-sizing: border-box;
 }
 
 .button-group {
     display: flex;
     justify-content: space-between;
-    gap: 15px; /* Adds 15px of space between the buttons */
+    gap: 15px;
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #0e5d95;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
-    width: 48%; /* Modify this width */
-    min-width: 150px; /* Ensure the button is wide enough for text */
-    box-sizing: border-box; /* Ensures even padding and width for buttons */
-}
-
-.feature-button{
-    min-width: 10px;
-    width: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 48%;
+    min-width: 150px;
+    box-sizing: border-box;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0b4c7a;
 }
 
 .remove-button {
@@ -75,24 +69,34 @@ button:hover {
 
 .container {
     text-align: center;
+    padding: 20px;
+    margin: 0 auto;
 }
 
-/* Styling for the image */
 .centered-image {
     display: block;
-    margin: 0 auto 20px auto; /* Center the image and add margin below it */
-    max-width: 100%; /* Ensures the image is responsive */
+    margin: 0 auto 20px auto;
+    max-width: 150px;
     height: auto;
-    width: 150px; /* Set the width, you can adjust this */
 }
 
-.manual-feature-selection{
+.manual-feature-selection {
     display: inline-grid;
-    /*grid-auto-rows: 1fr;*/
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 1px;
-    column-gap: normal;
+    margin: 20px 0;
 }
+
+.results {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
 
 /*TODO: figure out how to turn buttons into icons*/
 /*.group1A{*/

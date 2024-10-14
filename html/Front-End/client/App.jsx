@@ -16,7 +16,7 @@ export default function App() {
     <div className="container">
       <img
         src="https://www.mathias-die.com/wp-content/uploads/2018/07/MDC-Logo-copy.png"
-        alt="MDC Logo"
+        alt="MDC Logo "
         className="centered-image"
       />
       <h1>Upload a File</h1>

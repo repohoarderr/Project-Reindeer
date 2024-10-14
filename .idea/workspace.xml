@@ -10,10 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Fixed post address (legit)">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/FileUploadServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/client/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/Front-End/public/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/public/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +57,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
@@ -74,40 +77,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Unnamed.executor": "Run",
-    "Attach to Node.js/Chrome.Node.executor": "Debug",
-    "HTTP Request.generated-requests | #3.executor": "Run",
-    "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
-    "JAR Application.elk.jar.executor": "Run",
-    "Maven.Unnamed.executor": "Run",
-    "Maven.claen.executor": "Run",
-    "Maven.compile.executor": "Run",
-    "Maven.install.executor": "Run",
-    "Node.js.Node (Server).executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Run",
-    "Tomcat Server.Tomcat 10.1.30.executor": "Run",
-    "jdk.selected.JAVA_MODULE": "22",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.client:dev.executor": "Run",
-    "npm.server:dev.executor": "Run",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15429688",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Attach to Node.js/Chrome.Node.executor&quot;: &quot;Debug&quot;,
+    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.post-requests | Send a form with the text and file fields.executor&quot;: &quot;Run&quot;,
+    &quot;JAR Application.elk.jar.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.claen.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.compile.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.install.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Node (Server).executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.30 (1).executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.30.executor&quot;: &quot;Run&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.client:dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.server:dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15429688&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.30">
+}</component>
+  <component name="RunManager" selected="npm.server:dev">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.elk.DXFReader" />
       <module name="elk" />
@@ -297,7 +300,7 @@
         </option>
       </method>
     </configuration>
-    <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.30" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 10.1.30" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.31" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:5678" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
