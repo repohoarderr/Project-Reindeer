@@ -40,7 +40,6 @@ public class FileUploadServlet extends HttpServlet {
     response.setStatus(200);
     response.setContentType("application/json");
 
-    JSONObject obj = new JSONObject();
     PrintWriter out = response.getWriter();
 
     File file = new File(path+fileName);
@@ -48,9 +47,17 @@ public class FileUploadServlet extends HttpServlet {
     try {
       shapesList = new DXFReader().parseFile(file, 14, 3);
       for (Shape s : shapesList) {
-        obj.put("shape", s.getClass().getName().substring(s.getClass().getName().lastIndexOf("."),s.getClass().getName().lastIndexOf("$")));
-        System.out.println(s);
-        out.print(obj);
+        JSONArray array = Features.featureJSON(s);
+
+        out.print(array);
+
+
+//        JSONArray arr = new JSONArray();
+//        JSONObject ele1 = new JSONObject();
+//        JSONArray arrayEle1 = new JSONArray();
+//        obj1.put("shape", s.getClass().getName().substring(s.getClass().getName().lastIndexOf("."),s.getClass().getName().lastIndexOf("$")));
+//        System.out.println(s);
+//        out.print(obj1;
       }
     } catch (IOException e) {
       System.out.println("Error opening file :(");
