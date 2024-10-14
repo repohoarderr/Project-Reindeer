@@ -9,14 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Fixed post address (legit)">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/client/Components/UploadForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package-lock.json" afterDir="false" />
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Fixed front end again">
       <change beforePath="$PROJECT_DIR$/html/Front-End/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/Front-End/public/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/html/Front-End/public/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -437,6 +431,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -457,6 +459,7 @@
       <workItem from="1728314366660" duration="538000" />
       <workItem from="1728661067320" duration="2056000" />
       <workItem from="1728918451057" duration="4631000" />
+      <workItem from="1728923415148" duration="253000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -538,7 +541,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728662799622</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Fixed front end again">
+      <option name="closed" value="true" />
+      <created>1728923513450</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728923513450</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -565,6 +576,7 @@
     <MESSAGE value="added depnedencies" />
     <MESSAGE value="Fixed post address" />
     <MESSAGE value="Fixed post address (legit)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed post address (legit)" />
+    <MESSAGE value="Fixed front end again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed front end again" />
   </component>
 </project>
