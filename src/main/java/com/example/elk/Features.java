@@ -3,7 +3,6 @@ package com.example.elk;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.lang.Math.*;
 //import org.json.simple.JSONObject;
 
 public class Features {
@@ -68,12 +67,74 @@ public class Features {
         }
       }
     }
+    condenseFeatureList();
   }
-  public String getFeatureListAsString(){
-    String temp = "";
-    for(Shape item : featureList){
-      temp += item.toString() + "\n";
+
+  /**
+   * Connect arcs and lines together into rounded rectangles, triangles, etc.
+   */
+  private void condenseFeatureList() {
+    //list of arcs/lines which have start/end points which overlap
+    ArrayList<Shape> newFeatureList = new ArrayList<>();
+
+    ArrayList<BasicLine> linePool = new ArrayList<>(); //all lines/arcs
+
+    //temp list for building a single shape (each line connects to the next)
+    ArrayList<BasicLine> singleShapeAsLines = new ArrayList<>();
+
+
+    //add lines to linePool
+    for (Shape shape : featureList) {
+      //ignore shapes which are not arcs or lines, as those are already condensed
+      BasicLine tempLine;
+
+      //typecast to necessary object
+      if (shape instanceof Arc2D) {
+        tempLine = new BasicLine(((Arc2D) shape).getStartPoint(), ((Arc2D) shape).getEndPoint());
+      } else if (shape instanceof Line2D) {
+        tempLine = new BasicLine(((Line2D) shape).getP1(), ((Line2D) shape).getP2());
+      } else {
+        newFeatureList.add(shape);
+        continue;
+      }
+      linePool.add(tempLine);
     }
-    return temp;
+
+      //loop through components to see if shape's start/end points align with current pool
+
+      //keep looping over collection until the number of lines which link together is 1 (essentially empty)
+
+      //add lines from pool to singleShapeAsLines, which represents a collection of lines which all connect to each other
+
+
+
+
+
+//    do{
+//      singleShapeAsLines.clear();
+//      for (BasicLine poolLine : linePool){
+//        for (BasicLine tempLine : linePool){
+//          if (tempLine.isLinkedWith(poolLine)) {
+//          singleShapeAsLines.add(tempLine);
+//
+//          //submit the composite components as a complete shape if all components connect to each other in a loop
+//          if (BasicLine.isOneLinkedShape(singleShapeAsLines)) {
+//            //TODO: assume that we are building a rectangle for now, will need to support several other shapes later
+//            newFeatureList.add(new RoundRectangle2D.Double(10, 20, 30, 40, 50, 60));
+//            break;
+//          }
+//        }
+//      }
+//    }
+//    while (singleShapeAsLines.size() > 1);
+    featureList = newFeatureList;
   }
-}
+  //public String getFeatureListAsString(){
+//    String temp = "";
+//    for(Shape item : featureList){
+//      temp += item.toString() + "\n";
+//    }
+//    return temp;
+//  }
+  }
+
