@@ -96,7 +96,6 @@ public class Features {
         double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent())));
         double radius = ((Arc2D.Double) shape).width/2*Math.sin(angleRad/2);
         double arcLength = radius * angleRad;
-
       ele1.put("length", arcLength);
       ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
       ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
@@ -104,7 +103,8 @@ public class Features {
       ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
       ele1.put("radius", radius);
       ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
-
+      ele1.put("rotation", ((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent());
+      ele1.put("angle", ((Arc2D.Double) shape).extent);
       ele1.put("type", className);
       }case "Ellipse2D" -> {
         double a = ((Ellipse2D.Double) shape).height/2;
