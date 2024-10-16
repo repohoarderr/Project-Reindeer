@@ -103,8 +103,8 @@ public class Features {
       ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
       ele1.put("radius", radius);
       ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
-      ele1.put("rotation", ((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent());
-      ele1.put("angle", ((Arc2D.Double) shape).extent);
+      ele1.put("rotation", -(((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent()));
+      ele1.put("angle", -((Arc2D.Double) shape).extent);
       ele1.put("type", className);
       }case "Ellipse2D" -> {
         double a = ((Ellipse2D.Double) shape).height/2;
