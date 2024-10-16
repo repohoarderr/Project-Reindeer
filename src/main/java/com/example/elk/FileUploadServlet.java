@@ -46,10 +46,10 @@ public class FileUploadServlet extends HttpServlet {
     Shape[] shapesList;
     try {
       shapesList = new DXFReader().parseFile(file, 14, 3);
+      JSONArray array = new JSONArray();
       for (Shape s : shapesList) {
-        JSONArray array = Features.featureJSON(s);
 
-        out.print(array);
+        array.add(Features.featureJSON(s));
 
 
 //        JSONArray arr = new JSONArray();
@@ -59,6 +59,8 @@ public class FileUploadServlet extends HttpServlet {
 //        System.out.println(s);
 //        out.print(obj1;
       }
+
+      out.print(array);
     } catch (IOException e) {
       System.out.println("Error opening file :(");
     }

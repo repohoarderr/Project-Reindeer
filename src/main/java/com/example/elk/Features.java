@@ -80,10 +80,9 @@ public class Features {
     return temp;
   }
 
-  public static JSONArray featureJSON(Shape shape){
+  public static JSONObject featureJSON(Shape shape){
     String className = shape.getClass().getName().substring(shape.getClass().getName().lastIndexOf(".") + 1, shape.getClass().getName().lastIndexOf("$"));
     JSONObject ele1 = new JSONObject();
-    JSONArray array = new JSONArray();
     switch(className){
       case "Line2D" -> {
         ele1.put("length", Math.sqrt((Math.pow(((Line2D.Double) shape).x2 - ((Line2D.Double) shape).x1, 2)) + Math.pow(((Line2D.Double) shape).y2 - ((Line2D.Double) shape).y1, 2)));
@@ -138,7 +137,6 @@ public class Features {
         ele1.put("type", className);
       }
     }
-    array.add(ele1);
-    return array;
+    return ele1;
   }
 }
