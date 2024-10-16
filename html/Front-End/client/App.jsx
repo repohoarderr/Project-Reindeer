@@ -25,9 +25,9 @@ export default function App() {
       <DisplayResults results={uploadResults} /> {/* Display results here */}
         <ManualFeatureSelection />
 
-        {/*{uploadResults && (*/}
-        {/*    <VisualizeShapes shapesData={JSON.parse(uploadResults)} />*/}
-        {/*)}*/}
+        {uploadResults && (
+            <VisualizeShapes shapesData={JSON.parse(uploadResults)} />
+        )}
     </div>
   );
 }

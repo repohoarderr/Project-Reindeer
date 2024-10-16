@@ -22,8 +22,20 @@ const VisualizeShapes = ({ shapesData }) => {
                         angle={shape.arcType === 0 ? 180 : 360}
                         innerRadius={shape.radius * 100}
                         outerRadius={shape.radius * 100}
-                        rotation={0}
+                        rotation={shape.rotation}
                         stroke="red"
+                        strokeWidth={2}
+                    />
+                );
+            } else if (shape.type === 'circle') {
+                // Drawing a circle
+                return (
+                    <Circle
+                        key={index}
+                        x={shape.centerX * 100}  // Scale the centerX position
+                        y={shape.centerY * 100}  // Scale the centerY position
+                        radius={shape.radius * 100}  // Scale the radius
+                        stroke="blue"  // Circle outline color
                         strokeWidth={2}
                     />
                 );
