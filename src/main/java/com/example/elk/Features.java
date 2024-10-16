@@ -45,7 +45,7 @@ public class Features {
         }case "Arc2D" -> {
           System.out.print(ANSI_GREEN + className + ANSI_RESET);
           double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) feature).getAngleStart() - ((Arc2D.Double) feature).getAngleExtent())));
-          double radius = ((Arc2D.Double) feature).width/2*Math.sin(angleRad/2);
+          double radius = (((Arc2D.Double) feature).width*((Arc2D.Double) feature).width)/(8*(((Arc2D.Double) feature).height))+(((Arc2D.Double) feature).height/2);
           double arcLength = radius * angleRad;
           System.out.println("\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength);
           out += "\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength;
@@ -94,16 +94,18 @@ public class Features {
       }case "Arc2D" -> {
 //TODO Figure out how to send rounded triangle.
         double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent())));
-        double radius = ((Arc2D.Double) shape).width/2*Math.sin(angleRad/2);
+        double radius = (((Arc2D.Double) shape).width*((Arc2D.Double) shape).width)/(8*(((Arc2D.Double) shape).height))+(((Arc2D.Double) shape).height/2);
         double arcLength = radius * angleRad;
       ele1.put("length", arcLength);
       ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
       ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
       ele1.put("endX", ((Arc2D.Double) shape).getEndPoint().getX());
       ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
+      ele1.put("centerX", ((Arc2D.Double) shape).getCenterX());
+      ele1.put("centerY", ((Arc2D.Double) shape).getCenterY());
       ele1.put("radius", radius);
       ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
-      ele1.put("rotation", -(((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent()));
+      ele1.put("rotation", (((Arc2D.Double) shape).getAngleStart()));
       ele1.put("angle", -((Arc2D.Double) shape).extent);
       ele1.put("type", className);
       }case "Ellipse2D" -> {
@@ -112,7 +114,7 @@ public class Features {
         double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
         ele1.put("circumference", circum);
         if(((Ellipse2D.Double) shape).getWidth() == ((Ellipse2D.Double) shape).getHeight()){
-          ele1.put("radius", ((Ellipse2D.Double) shape).getHeight());
+          ele1.put("radius", ((Ellipse2D.Double) shape).getHeight()/2);
           if(((Ellipse2D.Double) shape).getHeight()>=1){
             ele1.put("type", "punch");
           }else{
