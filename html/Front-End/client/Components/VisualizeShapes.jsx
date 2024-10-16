@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stage, Layer, Line, Arc, Circle } from 'react-konva';
 
-const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
+const VisualizeShapes = ({ shapesData, scaleFactor = 200 }) => {
     const renderShapes = () => {
         return shapesData.map((shape, index) => {
             if (shape.type === 'Line2D') {
@@ -22,11 +22,11 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
                 return (
                     <Arc
                         key={index}
-                        x={shape.startX * scaleFactor}
-                        y={shape.startY * scaleFactor}
-                        angle={-shape.angle}
-                        innerRadius={shape.radius * scaleFactor}
-                        outerRadius={shape.radius * scaleFactor}
+                        x={shape.centerX * scaleFactor}
+                        y={shape.centerY * scaleFactor}
+                        angle={shape.angle}
+                        innerRadius={Math.abs(shape.radius * scaleFactor)}
+                        outerRadius={Math.abs(shape.radius * scaleFactor)}
                         rotation={shape.rotation}
                         stroke="red"
                         strokeWidth={2}
