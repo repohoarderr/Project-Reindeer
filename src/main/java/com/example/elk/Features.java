@@ -109,9 +109,7 @@ public class Features {
       }case "Ellipse2D" -> {
         double a = ((Ellipse2D.Double) shape).height/2;
         double b = ((Ellipse2D.Double) shape).width/2;
-
         double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
-
         ele1.put("circumference", circum);
         if(((Ellipse2D.Double) shape).getWidth() == ((Ellipse2D.Double) shape).getHeight()){
           ele1.put("radius", ((Ellipse2D.Double) shape).getHeight());
@@ -132,6 +130,10 @@ public class Features {
           area = Math.PI * a * b;
         }
         ele1.put("area", area);
+        double centerX = ((Ellipse2D.Double) shape).getCenterX();
+        double centerY = ((Ellipse2D.Double) shape).getCenterY();
+        ele1.put("centerX", centerX);
+        ele1.put("centerY", centerY);
       } default -> {
         System.out.println(className);
         ele1.put("type", className);

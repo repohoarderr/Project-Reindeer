@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Started JSON of shapes">
+    <list default="true" id="7c85fe90-ee80-4998-8842-dd63bc63ab24" name="Changes" comment="Fixed JSON to return a single array">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/elk/Features.java" afterDir="false" />
@@ -73,44 +73,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Attach to Node.js/Chrome.Node.executor&quot;: &quot;Debug&quot;,
-    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.post-requests | Send a form with the text and file fields.executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.elk.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.claen.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.compile.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.install.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.Node (Server).executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.30 (1).executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 10.1.30.executor&quot;: &quot;Run&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.client:dev.executor&quot;: &quot;Run&quot;,
-    &quot;npm.server:dev.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15429688&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DXFReader.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Attach to Node.js/Chrome.Node.executor": "Debug",
+    "HTTP Request.generated-requests | #3.executor": "Run",
+    "HTTP Request.post-requests | Send a form with the text and file fields.executor": "Run",
+    "JAR Application.elk.jar.executor": "Run",
+    "Maven.Unnamed.executor": "Run",
+    "Maven.claen.executor": "Run",
+    "Maven.compile.executor": "Run",
+    "Maven.install.executor": "Run",
+    "Node.js.Node (Server).executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Tomcat Server.Tomcat 10.1.30 (1).executor": "Run",
+    "Tomcat Server.Tomcat 10.1.30.executor": "Run",
+    "jdk.selected.JAVA_MODULE": "22",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "npm.client:dev.executor": "Run",
+    "npm.server:dev.executor": "Run",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15429688",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 10.1.30">
-    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+    <configuration name="DXFReader" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.elk.DXFReader" />
       <module name="elk" />
-      <option name="PROGRAM_PARAMETERS" value="$USER_HOME$/Downloads/Example-003.dxf" />
+      <option name="PROGRAM_PARAMETERS" value="$USER_HOME$/Downloads/hatch.dxf" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -412,7 +413,7 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.DXFReader" />
       <item itemvalue="Attach to Node.js/Chrome.Node" />
       <item itemvalue="HTTP Request.generated-requests | #3" />
       <item itemvalue="HTTP Request.post-requests | Send a form with the text and file fields" />
@@ -452,7 +453,8 @@
       <workItem from="1728313525302" duration="836000" />
       <workItem from="1728314366660" duration="538000" />
       <workItem from="1728661067320" duration="2056000" />
-      <workItem from="1728918451057" duration="5656000" />
+      <workItem from="1728918451057" duration="6440000" />
+      <workItem from="1729091709252" duration="1442000" />
     </task>
     <task id="LOCAL-00001" summary="inital commit">
       <option name="closed" value="true" />
@@ -542,7 +544,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728923283774</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added arcs to JSON response">
+      <option name="closed" value="true" />
+      <created>1728924137282</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728924137282</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Fixed JSON to return a single array">
+      <option name="closed" value="true" />
+      <created>1729092516017</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1729092516017</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -570,6 +588,8 @@
     <MESSAGE value="Fixed post address" />
     <MESSAGE value="Fixed post address (legit)" />
     <MESSAGE value="Started JSON of shapes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started JSON of shapes" />
+    <MESSAGE value="Added arcs to JSON response" />
+    <MESSAGE value="Fixed JSON to return a single array" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed JSON to return a single array" />
   </component>
 </project>
