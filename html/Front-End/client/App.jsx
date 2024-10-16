@@ -3,6 +3,7 @@ import "../public/styles.css";
 import FileUploadForm from "./Components/UploadForm.jsx";
 import DisplayResults from "./Components/DisplayResults.jsx";
 import ManualFeatureSelection from "./Components/ManualFeatureSelection.jsx";
+import VisualizeShapes from "./Components/VisualizeShapes.jsx";
 
 export default function App() {
   const [uploadResults, setUploadResults] = useState("");
@@ -23,6 +24,10 @@ export default function App() {
       <FileUploadForm onUploadComplete={handleUploadComplete} />
       <DisplayResults results={uploadResults} /> {/* Display results here */}
         <ManualFeatureSelection />
+
+        {/*{uploadResults && (*/}
+        {/*    <VisualizeShapes shapesData={JSON.parse(uploadResults)} />*/}
+        {/*)}*/}
     </div>
   );
 }
