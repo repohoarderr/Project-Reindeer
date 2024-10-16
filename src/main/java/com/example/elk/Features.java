@@ -80,10 +80,9 @@ public class Features {
     return temp;
   }
 
-  public static JSONArray featureJSON(Shape shape){
+  public static JSONObject featureJSON(Shape shape){
     String className = shape.getClass().getName().substring(shape.getClass().getName().lastIndexOf(".") + 1, shape.getClass().getName().lastIndexOf("$"));
     JSONObject ele1 = new JSONObject();
-    JSONArray array = new JSONArray();
     switch(className){
       case "Line2D" -> {
         ele1.put("length", Math.sqrt((Math.pow(((Line2D.Double) shape).x2 - ((Line2D.Double) shape).x1, 2)) + Math.pow(((Line2D.Double) shape).y2 - ((Line2D.Double) shape).y1, 2)));
@@ -110,9 +109,7 @@ public class Features {
       }case "Ellipse2D" -> {
         double a = ((Ellipse2D.Double) shape).height/2;
         double b = ((Ellipse2D.Double) shape).width/2;
-
         double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
-
         ele1.put("circumference", circum);
         if(((Ellipse2D.Double) shape).getWidth() == ((Ellipse2D.Double) shape).getHeight()){
           ele1.put("radius", ((Ellipse2D.Double) shape).getHeight());
@@ -133,12 +130,15 @@ public class Features {
           area = Math.PI * a * b;
         }
         ele1.put("area", area);
+        double centerX = ((Ellipse2D.Double) shape).getCenterX();
+        double centerY = ((Ellipse2D.Double) shape).getCenterY();
+        ele1.put("centerX", centerX);
+        ele1.put("centerY", centerY);
       } default -> {
         System.out.println(className);
         ele1.put("type", className);
       }
     }
-    array.add(ele1);
-    return array;
+    return ele1;
   }
 }
