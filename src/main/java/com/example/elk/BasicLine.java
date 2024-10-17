@@ -27,11 +27,23 @@ public class BasicLine
         return endPoint;
     }
 
+    public boolean nearlyEquals(Point2D point1, Point2D point2, double tolerance){
+        return Math.abs(point1.getX() - point2.getX()) < tolerance &&
+                Math.abs(point1.getY() - point2.getY()) < tolerance;
+    }
+
     public boolean isLinkedWith(BasicLine other){
-        return this.startPoint.equals(other.startPoint) ||
-                this.startPoint.equals(other.endPoint) ||
-                this.endPoint.equals(other.startPoint) ||
-                this.endPoint.equals(other.endPoint);
+//        return this.startPoint.equals(other.startPoint) ||
+//                this.startPoint.equals(other.endPoint) ||
+//                this.endPoint.equals(other.startPoint) ||
+//                this.endPoint.equals(other.endPoint);
+
+        final double TOLERANCE = 0.001;
+        return this != other &&
+                (nearlyEquals(this.startPoint, other.startPoint, TOLERANCE) ||
+                nearlyEquals(this.startPoint, other.endPoint, TOLERANCE) ||
+                nearlyEquals(this.endPoint, other.startPoint, TOLERANCE) ||
+                nearlyEquals(this.endPoint, other.endPoint, TOLERANCE));
     }
     public static boolean isOneLinkedShape(List<BasicLine> compositeShapeComponents) {
         //cannot be true with fewer than three lines
