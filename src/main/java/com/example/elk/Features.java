@@ -1,5 +1,8 @@
 package com.example.elk;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
@@ -19,9 +22,9 @@ public class Features {
     private ArrayList<Shape> featureList;
     public static ArrayList<Shape> staticFeatureList;
 
-    public Features() {
-        featureList = null;
-    }
+  public Features(){
+    featureList = null;
+  }
 
 //  public com.example.mathiasdiepricingtool.Features(ArrayList<Shape> shapeList){
 //    featureList = (Shape[]) shapeList.toArray();
@@ -53,27 +56,90 @@ public class Features {
                     double a = ((Ellipse2D.Double) feature).height / 2;
                     double b = ((Ellipse2D.Double) feature).width / 2;
 
-                    double circum = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2)) / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
-                    System.out.print(ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum);
-                    out += ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum;
+          double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
+          System.out.print(ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum );
+          out += ANSI_BLUE + "\n\tCircumference: " + ANSI_RESET + circum;
 
-                    double area;
-                    if (a == b) {
-                        area = Math.PI * Math.pow(a, 2);
-                    } else {
-                        area = Math.PI * a * b;
-                    }
-                    System.out.println(ANSI_BLUE + "\n\tArea: " + ANSI_RESET + area);
-                }
-                default -> {
-                    System.out.println(className);
-                    out += className;
-                }
-            }
+          double area;
+          if(a==b){
+            area = Math.PI * Math.pow(a,2);
+          }else{
+            area = Math.PI * a * b;
+          }
+          System.out.println(ANSI_BLUE + "\n\tArea: " + ANSI_RESET + area );
+        } default -> {
+          System.out.println(className);
+          out += className;
         }
+      }
+    }
         condenseFeatureList();
+
     }
 
+public static JSONObject featureJSON(Shape shape){
+    String className = shape.getClass().getName().substring(shape.getClass().getName().lastIndexOf(".") + 1, shape.getClass().getName().lastIndexOf("$"));
+    JSONObject ele1 = new JSONObject();
+    switch(className){
+        case "Line2D" -> {
+            ele1.put("length", Math.sqrt((Math.pow(((Line2D.Double) shape).x2 - ((Line2D.Double) shape).x1, 2)) + Math.pow(((Line2D.Double) shape).y2 - ((Line2D.Double) shape).y1, 2)));
+            ele1.put("startX", ((Line2D.Double) shape).x1);
+            ele1.put("startY", ((Line2D.Double) shape).y1);
+            ele1.put("endX", ((Line2D.Double) shape).x2);
+            ele1.put("endY", ((Line2D.Double) shape).y2);
+            ele1.put("type", className);
+        }case "Arc2D" -> {
+//TODO Figure out how to send rounded triangle.
+            double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent())));
+            double radius = (((Arc2D.Double) shape).width*((Arc2D.Double) shape).width)/(8*(((Arc2D.Double) shape).height))+(((Arc2D.Double) shape).height/2);
+            double arcLength = radius * angleRad;
+            ele1.put("length", arcLength);
+            ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
+            ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
+            ele1.put("endX", ((Arc2D.Double) shape).getEndPoint().getX());
+            ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
+            ele1.put("centerX", ((Arc2D.Double) shape).getCenterX());
+            ele1.put("centerY", ((Arc2D.Double) shape).getCenterY());
+            ele1.put("radius", radius);
+            ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
+            ele1.put("rotation", (((Arc2D.Double) shape).getAngleStart()));
+            ele1.put("angle", -((Arc2D.Double) shape).extent);
+            ele1.put("type", className);
+        }case "Ellipse2D" -> {
+            double a = ((Ellipse2D.Double) shape).height/2;
+            double b = ((Ellipse2D.Double) shape).width/2;
+            double circum = Math.PI*(a+b)*(3*(Math.pow(a-b,2))/(Math.pow(a+b,2))*(Math.sqrt(-3*(Math.pow(a-b,2)/Math.pow(a+b,2))+4)+10)+1);
+            ele1.put("circumference", circum);
+            if(((Ellipse2D.Double) shape).getWidth() == ((Ellipse2D.Double) shape).getHeight()){
+                ele1.put("radius", ((Ellipse2D.Double) shape).getHeight()/2);
+                if(((Ellipse2D.Double) shape).getHeight()>=1){
+                    ele1.put("type", "punch");
+                }else{
+                    ele1.put("type", "circle");
+                }
+            }else{
+                ele1.put("width", ((Ellipse2D.Double) shape).getWidth());
+                ele1.put("height", ((Ellipse2D.Double) shape).getHeight());
+                ele1.put("type", "ellipse");
+            }
+            double area;
+            if(a==b){
+                area = Math.PI * Math.pow(a,2);
+            }else{
+                area = Math.PI * a * b;
+            }
+            ele1.put("area", area);
+            double centerX = ((Ellipse2D.Double) shape).getCenterX();
+            double centerY = ((Ellipse2D.Double) shape).getCenterY();
+            ele1.put("centerX", centerX);
+            ele1.put("centerY", centerY);
+        } default -> {
+            System.out.println(className);
+            ele1.put("type", className);
+        }
+    }
+    return ele1;
+}
     private void condenseFeatureList() {
         ArrayList<Shape> newFeatureList = new ArrayList<>();
         ArrayList<BasicLine> linePool = new ArrayList<>();
@@ -129,12 +195,11 @@ public class Features {
         featureList = newFeatureList;
     }
 
-    //public String getFeatureListAsString(){
-//    String temp = "";
-//    for(Shape item : featureList){
-//      temp += item.toString() + "\n";
-//    }
-//    return temp;
-//  }
+  public String getFeatureListAsString(){
+    String temp = "";
+    for(Shape item : featureList){
+      temp += item.toString() + "\n";
+    }
+    return temp;
+  }
 }
-
