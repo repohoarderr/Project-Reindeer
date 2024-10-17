@@ -48,16 +48,7 @@ public class FileUploadServlet extends HttpServlet {
       shapesList = new DXFReader().parseFile(file, 14, 3);
       JSONArray array = new JSONArray();
       for (Shape s : shapesList) {
-
         array.add(Features.featureJSON(s));
-
-
-//        JSONArray arr = new JSONArray();
-//        JSONObject ele1 = new JSONObject();
-//        JSONArray arrayEle1 = new JSONArray();
-//        obj1.put("shape", s.getClass().getName().substring(s.getClass().getName().lastIndexOf("."),s.getClass().getName().lastIndexOf("$")));
-//        System.out.println(s);
-//        out.print(obj1;
       }
 
       out.print(array);

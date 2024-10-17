@@ -1437,7 +1437,11 @@ public class DXFReader {
       }
     }
     Features feature = new Features();
+
     feature.setFeatureList(shapes);
+    feature.condenseFeatureList();
+    feature.printFeatures();
+
     Shape[] sOut = new Shape[shapes.size()];
     for (int ii = 0; ii < shapes.size(); ii++) {
       sOut[ii] = shapes.get(ii);
