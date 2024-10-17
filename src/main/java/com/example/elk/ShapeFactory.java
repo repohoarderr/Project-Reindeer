@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapeFactory {
+    private ShapeFactory(){
+        //hide useless constructor
+    }
+
     public static Shape createShape(List<BasicLine> singleShapeAsLines) {
         int numArcs = 0;
         int numStraightLines = 0;
@@ -72,6 +76,7 @@ public class ShapeFactory {
             }
         }
 
+        //TODO: fix temp values
         double xCord = 0;
         double yCord = 0;
         double width = 2;

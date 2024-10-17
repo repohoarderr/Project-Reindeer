@@ -136,8 +136,11 @@ public static JSONObject featureJSON(Shape shape) {
 
 public void condenseFeatureList() {
     ArrayList<Shape> newFeatureList = new ArrayList<>();
+
+    //all lines which aren't complete shapes (ellipses, circles, etc. are excluded)
     ArrayList<BasicLine> linePool = new ArrayList<>();
 
+    //used to build one shape out of several lines
     ArrayList<BasicLine> singleShapeAsLines = new ArrayList<>();
 
     //add all lines to line pool
@@ -153,15 +156,17 @@ public void condenseFeatureList() {
 
     BasicLine poolLine;
     BasicLine shapeLine;
+
+    //may cause infinite looping if there are lines which don't connect to anything
+    //TODO: while (!linePool.isEmpty() && linePool.size() changed from last iteration?)
     while (!linePool.isEmpty()) {
         for (int i = 0; i < linePool.size(); i++) {
             poolLine = linePool.get(i);
 
+            //if singleShapeAsLines is empty, we won't have anything to compare poolLine to
             if (singleShapeAsLines.isEmpty()) {
                 singleShapeAsLines.add(poolLine);
                 linePool.remove(poolLine);
-                i--;
-                continue;
             }
 
             for (int ii = 0; ii < singleShapeAsLines.size(); ii++) {
@@ -172,7 +177,7 @@ public void condenseFeatureList() {
                 if (poolLine.isLinkedWith(shapeLine)) {
                     singleShapeAsLines.add(poolLine);
                     linePool.remove(poolLine);
-                    break;
+                    break;//Java doesn't like iterating through an ArrayList while modifying it
                 }
             }
 
