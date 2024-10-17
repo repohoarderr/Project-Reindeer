@@ -1,5 +1,8 @@
 package com.example.elk;
 
+import java.awt.*;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +16,21 @@ public class BasicLine
 {
     private Point2D startPoint;
     private Point2D endPoint;
+    private Shape source; //either a Line2D or Arc2D
 
-    public BasicLine(Point2D startPoint, Point2D endPoint){
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
+    public BasicLine(Line2D src){
+        source = src;
+        startPoint = src.getP1();
+        endPoint = src.getP2();
+    }
+    public BasicLine(Arc2D src){
+        source = src;
+        startPoint = src.getStartPoint();
+        endPoint = src.getEndPoint();
+    }
+
+    public Shape getSource(){
+        return source;
     }
 
     public Point2D getStartPoint(){

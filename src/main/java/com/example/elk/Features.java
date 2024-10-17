@@ -83,10 +83,10 @@ public class Features {
         //add all lines to line pool
         for (Shape feature : featureList) {
             if (feature instanceof Arc2D){
-                linePool.add(new BasicLine(((Arc2D) feature).getStartPoint(), ((Arc2D) feature).getEndPoint()));
+                linePool.add(new BasicLine((Arc2D) feature));
             }
             else if (feature instanceof Line2D){
-                linePool.add(new BasicLine(((Line2D) feature).getP1(), ((Line2D) feature).getP2()));
+                linePool.add(new BasicLine((Line2D) feature));
             }
             else{
                 newFeatureList.add(feature); //feature is already condensed (ellipse, circle, etc.)
@@ -120,7 +120,7 @@ public class Features {
 
                 if (BasicLine.isOneLinkedShape(singleShapeAsLines)){
                     //TODO: very much a temp value
-                    newFeatureList.add(new RoundRectangle2D.Double(10, 20, 30, 40, 50, 60));
+                    newFeatureList.add(ShapeFactory.createShape(singleShapeAsLines));
                     singleShapeAsLines.clear();
                 }
             }
