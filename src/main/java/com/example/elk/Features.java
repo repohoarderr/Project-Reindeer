@@ -35,15 +35,13 @@ public class Features {
             if (feature instanceof Line2D) {
                 System.out.print(ANSI_GREEN + "Line2D" + ANSI_RESET);
                 System.out.println("\n\t" + ANSI_BLUE + "Length: " + ANSI_RESET + Math.sqrt((Math.pow(((Line2D.Double) feature).x2 - ((Line2D.Double) feature).x1, 2)) + Math.pow(((Line2D.Double) feature).y2 - ((Line2D.Double) feature).y1, 2)));
-            }
-            else if (feature instanceof Arc2D) {
+            } else if (feature instanceof Arc2D) {
                 System.out.print(ANSI_GREEN + "Arc2D" + ANSI_RESET);
                 double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) feature).getAngleStart() - ((Arc2D.Double) feature).getAngleExtent())));
                 double radius = ((Arc2D.Double) feature).width / 2 * Math.sin(angleRad / 2);
                 double arcLength = radius * angleRad;
                 System.out.println("\n\t" + ANSI_BLUE + "Radius: " + ANSI_RESET + radius + ANSI_BLUE + "\n\tArc Length: " + ANSI_RESET + arcLength);
-            }
-            else if (feature instanceof Ellipse2D) {
+            } else if (feature instanceof Ellipse2D) {
                 System.out.print(ANSI_GREEN + "Ellipse2D" + ANSI_RESET);
                 double a = ((Ellipse2D.Double) feature).height / 2;
                 double b = ((Ellipse2D.Double) feature).width / 2;
@@ -54,84 +52,77 @@ public class Features {
                 double area = Math.PI * a * b;
 
                 System.out.println(ANSI_BLUE + "\n\tArea: " + ANSI_RESET + area);
-            }
-            else {
-                String fullClassName = new String(feature.getClass().getName());
+            } else {
+                String fullClassName = feature.getClass().getName();
 
                 //remove "java.awt."
-                String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1, fullClassName.length());
+                String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
                 System.out.println(ANSI_GREEN + shortenedClassName + ANSI_RESET);
                 System.out.println("\t No further information.");
             }
         }
     }
 
-public static JSONObject featureJSON(Shape shape) {
-    //TODO: classname switch needs to change because not every shape (ex. regular rectangles) has a $ in the class name
-    String className = shape.getClass().getName().substring(shape.getClass().getName().lastIndexOf(".") + 1, shape.getClass().getName().lastIndexOf("$"));
-    JSONObject ele1 = new JSONObject();
-    switch (className) {
-        case "Line2D" -> {
-            ele1.put("length", Math.sqrt((Math.pow(((Line2D.Double) shape).x2 - ((Line2D.Double) shape).x1, 2)) + Math.pow(((Line2D.Double) shape).y2 - ((Line2D.Double) shape).y1, 2)));
-            ele1.put("startX", ((Line2D.Double) shape).x1);
-            ele1.put("startY", ((Line2D.Double) shape).y1);
-            ele1.put("endX", ((Line2D.Double) shape).x2);
-            ele1.put("endY", ((Line2D.Double) shape).y2);
-            ele1.put("type", className);
+    public static JSONObject featureJSON(Shape shape) {
+        JSONObject jsonWriter = new JSONObject();
+        if (shape instanceof Line2D.Double line2D) {
+            jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
+            jsonWriter.put("startX", line2D.x1);
+            jsonWriter.put("startY", line2D.y1);
+            jsonWriter.put("endX", line2D.x2);
+            jsonWriter.put("endY", line2D.y2);
+            jsonWriter.put("type", "Line2D");
         }
-        case "Arc2D" -> {
+        else if (shape instanceof Arc2D.Double arc2D) {
 //TODO Figure out how to send rounded triangle.
-            double angleRad = Math.toRadians(Math.abs((((Arc2D.Double) shape).getAngleStart() - ((Arc2D.Double) shape).getAngleExtent())));
-            double radius = (((Arc2D.Double) shape).width * ((Arc2D.Double) shape).width) / (8 * (((Arc2D.Double) shape).height)) + (((Arc2D.Double) shape).height / 2);
+            double angleRad = Math.toRadians(Math.abs((arc2D.getAngleStart() - arc2D.getAngleExtent())));
+            double radius = (arc2D.width * arc2D.width) / (8 * (arc2D.height)) + (arc2D.height / 2);
             double arcLength = radius * angleRad;
-            ele1.put("length", arcLength);
-            ele1.put("startX", ((Arc2D.Double) shape).getStartPoint().getX());
-            ele1.put("startY", ((Arc2D.Double) shape).getStartPoint().getY());
-            ele1.put("endX", ((Arc2D.Double) shape).getEndPoint().getX());
-            ele1.put("endY", ((Arc2D.Double) shape).getEndPoint().getY());
-            ele1.put("centerX", ((Arc2D.Double) shape).getCenterX());
-            ele1.put("centerY", ((Arc2D.Double) shape).getCenterY());
-            ele1.put("radius", radius);
-            ele1.put("arcType", ((Arc2D.Double) shape).getArcType());
-            ele1.put("rotation", (((Arc2D.Double) shape).getAngleStart()));
-            ele1.put("angle", -((Arc2D.Double) shape).extent);
-            ele1.put("type", className);
+            jsonWriter.put("length", arcLength);
+            jsonWriter.put("startX", arc2D.getStartPoint().getX());
+            jsonWriter.put("startY", arc2D.getStartPoint().getY());
+            jsonWriter.put("endX", arc2D.getEndPoint().getX());
+            jsonWriter.put("endY", arc2D.getEndPoint().getY());
+            jsonWriter.put("centerX", arc2D.getCenterX());
+            jsonWriter.put("centerY", arc2D.getCenterY());
+            jsonWriter.put("radius", radius);
+            jsonWriter.put("arcType", arc2D.getArcType());
+            jsonWriter.put("rotation", (arc2D.getAngleStart()));
+            jsonWriter.put("angle", -arc2D.extent);
+            jsonWriter.put("type", "Arc2D");
         }
-        case "Ellipse2D" -> {
-            double a = ((Ellipse2D.Double) shape).height / 2;
-            double b = ((Ellipse2D.Double) shape).width / 2;
+        else if (shape instanceof Ellipse2D.Double ellipse2D) {
+            double a = ellipse2D.height / 2;
+            double b = ellipse2D.width / 2;
             double circum = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2)) / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
-            ele1.put("circumference", circum);
-            if (((Ellipse2D.Double) shape).getWidth() == ((Ellipse2D.Double) shape).getHeight()) {
-                ele1.put("radius", ((Ellipse2D.Double) shape).getHeight() / 2);
+            jsonWriter.put("circumference", circum);
+            if (ellipse2D.getWidth() == ellipse2D.getHeight()) {
+                jsonWriter.put("radius", ((Ellipse2D.Double) shape).getHeight() / 2);
                 if (((Ellipse2D.Double) shape).getHeight() >= 1) {
-                    ele1.put("type", "punch");
+                    jsonWriter.put("type", "punch");
                 } else {
-                    ele1.put("type", "circle");
+                    jsonWriter.put("type", "circle");
                 }
             } else {
-                ele1.put("width", ((Ellipse2D.Double) shape).getWidth());
-                ele1.put("height", ((Ellipse2D.Double) shape).getHeight());
-                ele1.put("type", "ellipse");
+                jsonWriter.put("width", ellipse2D.getWidth());
+                jsonWriter.put("height", ellipse2D.getHeight());
+                jsonWriter.put("type", "ellipse");
             }
-            double area;
-            if (a == b) {
-                area = Math.PI * Math.pow(a, 2);
-            } else {
-                area = Math.PI * a * b;
-            }
-            ele1.put("area", area);
-            double centerX = ((Ellipse2D.Double) shape).getCenterX();
-            double centerY = ((Ellipse2D.Double) shape).getCenterY();
-            ele1.put("centerX", centerX);
-            ele1.put("centerY", centerY);
+            double area = Math.PI * a * b;
+            jsonWriter.put("area", area);
+            double centerX = ellipse2D.getCenterX();
+            double centerY = ellipse2D.getCenterY();
+            jsonWriter.put("centerX", centerX);
+            jsonWriter.put("centerY", centerY);
         }
-        default -> {
-            System.out.println(className);
-            ele1.put("type", className);
+        else {
+            String fullClassName = shape.getClass().getName();
+
+            //remove "java.awt."
+            String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
+            jsonWriter.put("type", shortenedClassName);
         }
-    }
-    return ele1;
+    return jsonWriter;
 }
 
 public void condenseFeatureList() {
@@ -197,5 +188,14 @@ public String getFeatureListAsString() {
         temp += item.toString() + "\n";
     }
     return temp;
+}
+
+public Shape[] getFeatures() {
+    Shape[] features = new Shape[featureList.size()];
+    for (int i = 0; i < featureList.size(); ++i) {
+        features[i] = featureList.get(i);
+    }
+
+    return features;
 }
 }
