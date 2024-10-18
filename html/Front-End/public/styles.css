@@ -1,18 +1,23 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
+    background-color: #f3f3fb;
     margin: 0;
     padding: 0;
-    padding-top: 1in;
-    display: block; /* Switch from flex to block for natural page flow */
-    min-height: 100vh; /* Ensure it takes full viewport height */
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    display: flex; /*Use flexbox for centering*/
+    justify-content: center; /*Horizontal centering*/
+    align-items: center; /*Vertical centering*/
+    min-height: 100vh; /*Full viewport height*/
+    overflow-x: hidden; /*Prevent horizontal scroll*/
 }
 
-h1 {
-    color: #333;
+h1, h2{
+    color: #37467a;
     text-align: center;
     margin-bottom: 20px;
+}
+
+p, span {
+    color: #55779e; /*Lighter blue for secondary text*/
 }
 
 form {
@@ -23,11 +28,11 @@ form {
     max-width: 400px;
     width: 100%;
     box-sizing: border-box;
-    margin: 0 auto; /* Center form */
+    margin: 0 auto; /*Center form*/
 }
 
 input[type="file"] {
-    width: calc(100% - 20px); /* Adjust for padding and borders */
+    width: calc(100% - 20px); /*Adjust for padding and borders*/
     padding: 10px;
     margin-bottom: 15px;
     border: 2px solid #ccc;
@@ -43,7 +48,7 @@ input[type="file"] {
 }
 
 button {
-    background-color: #0e5d95;
+    background-color: #37467a;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -56,8 +61,10 @@ button {
 }
 
 button:hover {
-    background-color: #0b4c7a;
-}
+    transform: scale(1.10);
+    transition: transform 0.2s ease-in-out;
+    background-color: #5a71a6;
+  }  
 
 .remove-button {
     background-color: #f44336;
@@ -65,6 +72,13 @@ button:hover {
 
 .remove-button:hover {
     background-color: #e41f1f;
+}
+
+form, .results, .manual-feature-selection {
+    background-color: #c5cddf; /*Apply a light color for containers*/
+    border: 1px solid #bcbccc; /*Subtle border with a light grey*/
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .container {
@@ -82,9 +96,14 @@ button:hover {
 
 .manual-feature-selection {
     display: inline-grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /*3 columns*/
     grid-gap: 1px;
-    margin: 20px 0;
+    padding: 20px;
+    background-color: #c5cddf; /*Keep background color*/
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*Optional shadow*/
+    width: fit-content;
+    margin: 0; /*No extra margin*/
 }
 
 .results {
@@ -97,8 +116,120 @@ button:hover {
     overflow-x: auto;
 }
 
-
 /*TODO: figure out how to turn buttons into icons*/
 /*.group1A{*/
-/*    background-image: url("icons/Grp6.jpg");*/
+/*   background-image: url("icons/Grp6.jpg");*/
 /*}*/
+
+/*UPDATE for the shape panel*/
+/*Button to toggle shape panel*/
+/*Button to toggle shape panel, now targeting only the icon*/
+.panel-toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 10px; /*Adjust this value to move it closer to the right edge*/
+    background-color: transparent; /*Keep background transparent*/
+    border: none;
+    padding: 0; /*Remove padding for a tighter hover area*/
+    cursor: pointer;
+    color: #5a71a6;
+    font-size: 24px; /*Adjust the icon size*/
+}
+
+.panel-toggle-button i {
+    font-size: 24px; /*Set icon size*/
+    transition: transform 0.3s ease, color 0.3s ease; /*Smooth transition*/
+}
+
+.panel-toggle-button:hover i {
+    transform: scale(1.1); /*Slight scaling on hover*/
+    color: #719bcd; /*Change icon color on hover*/
+}
+
+.panel-toggle-button:hover {
+    background-color: transparent; /*Ensure background stays transparent on hover*/
+}
+
+/*Page Layout*/
+.page-layout {
+    display: flex;
+    width: 100%;
+    transition: margin-right 0.5s ease; /*Smooth transition when panel opens*/
+}
+
+.page-layout.panel-open .main-content {
+    margin-right: 300px; /*Adjust content when panel is open*/
+}
+
+/*Main Content*/
+.main-content {
+    flex: 1;
+    padding: 20px;
+    transition: margin-right 0.5s ease-in-out; /*Slide content to the left*/
+}
+
+
+/*Shape Panel*/
+.shape-panel {
+    position: fixed;
+    top: 20%; /*Adjust the top position as needed*/
+    width: 750px; /*Increase the width of the panel*/
+    height: 900px; /*Increase the height of the panel*/
+    background-color: white;
+    border: 1px solid #bcbccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px; /*Add padding for content spacing*/
+    transition: right 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.shape-panel.show {
+    right: 0; /*Slide into view*/
+    opacity: 1;
+}
+
+.shape-panel.hide {
+    right: -400px; /*Slide out of view with adjusted width*/
+    opacity: 0;
+}
+
+/*Shape Selection Area*/
+.shape-selection {
+    display: flex;
+    gap: 20px; /*Increase the space between shapes*/
+    margin-top: 20px;
+    justify-content: center; /*Center the shapes horizontally*/
+}
+
+.mock-shape {
+    width: 60px; /*Increase shape size*/
+    height: 60px; /*Increase shape size*/
+    border-radius: 4px;
+    background-color: #5c84b1;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.mock-shape:hover {
+    transform: scale(1.1);
+}
+
+.circle {
+    border-radius: 50%;
+    background-color: #37467a;
+}
+
+.square {
+    background-color: #719bcd;
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 60px solid #a5b4d0;
+    background-color: transparent;
+}
+
