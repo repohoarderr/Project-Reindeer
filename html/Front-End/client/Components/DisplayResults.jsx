@@ -14,7 +14,7 @@ export default function DisplayResults({ results }) {
     const shapesToNodes = () => {
         if (!results) return [];
 
-        return JSON.parse(results)
+        return Object.values(JSON.parse(results)
             .map((shape, index) => {
                 if (shape.type === 'Line2D' || shape.type === 'Arc2D' || shape.type === 'circle') {
                     return {
@@ -31,12 +31,42 @@ export default function DisplayResults({ results }) {
                 }
                 return null;
             })
-            .filter(node => node !== null);// Remove null values
+            .filter(node => node !== null) // Remove null values
+            .reduce((acc, node) =>{
+                const shape = node.data;
+                // Generate a unique key for the group
+                const key = `${shape.type}`;
 
+                // If the group doesn't exist in the accumulator, create it
+                if (!acc[key]) {
+                    acc[key] = {
+                        key: node.key,
+                        data: {
+                            type: shape.type
+                        },
+                        children: []
+                    };
+                }
+
+                // Add the shape to the group's children
+                acc[key].children.push({
+                    key: `${key}-${acc[key].children.length}`,
+                    data: {
+                        type: shape.type,
+                        centerX: shape.centerX ? round(shape.centerX) : 'N/A',
+                        centerY: shape.centerY ? round(shape.centerY) : 'N/A',
+                        area: shape.area ? round(shape.area) : 'N/A',
+                        radius: shape.radius ? round(shape.radius) : 'N/A',
+                        circumference: shape.circumference ? round(shape.circumference) : 'N/A'
+                    },
+                });
+                return acc; // Return the updated accumulator
+            }, {})); // Start with an empty object as the accumulator
     };
 
     const treeTableData = shapesToNodes();
     console.log("Transformed Data:", treeTableData);
+
 
     return (
         <div className="results">
@@ -60,3 +90,164 @@ export default function DisplayResults({ results }) {
         </div>
     );
 }
+
+// const exampleTreeData = [
+//     {
+//         key: '0',
+//         data: {
+//             type: 'Arc2D',
+//             centerX: ' ',
+//             centerY: '',
+//             area: ' ',
+//             radius: ' ',
+//             circumference: ' '
+//         },
+//         children: [
+//             {
+//                 key: 'Arc2D-0',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 11.2651,
+//                     centerY: 0.755,
+//                     area: ' ',
+//                     radius: 0.9375,
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Arc2D-1',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 6.0147,
+//                     centerY: 0.755,
+//                     area: ' ',
+//                     radius: 0.9375,
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Arc2D-2',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 6.0004,
+//                     centerY: 4.2,
+//                     area: ' ',
+//                     radius: 0.9375,
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Arc2D-3',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 0.75,
+//                     centerY: 4.2,
+//                     area: ' ',
+//                     radius: 0.9375,
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Arc2D-4',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 8.6399,
+//                     centerY: 3.1078,
+//                     area: ' ',
+//                     radius: 2.3088,
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Arc2D-5',
+//                 data: {
+//                     type: 'Arc2D',
+//                     centerX: 3.3752,
+//                     centerY: 1.8472,
+//                     area: ' ',
+//                     radius: 2.3088,
+//                     circumference: ' '
+//                 }
+//             }
+//         ]
+//     },
+//     {
+//         key: '1',
+//         data: {
+//             type: 'Line2D',
+//             centerX: ' ',
+//             centerY: '',
+//             area: ' ',
+//             radius: ' ',
+//             circumference: ' '
+//         },
+//         children: [
+//             {
+//                 key: 'Line2D-0',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Line2D-1',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Line2D-2',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Line2D-3',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Line2D-4',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             },
+//             {
+//                 key: 'Line2D-5',
+//                 data: {
+//                     type: 'Line2D',
+//                     centerX: '',
+//                     centerY: '',
+//                     area: ' ',
+//                     radius: ' ',
+//                     circumference: ' '
+//                 }
+//             }
+//         ]
+//     }
+// ];

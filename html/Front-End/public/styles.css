@@ -97,6 +97,17 @@ button:hover {
     overflow-x: auto;
 }
 
+/*Expander buttons in file upload results table*/
+.p-treetable-toggler {
+    background-color: #8a8a8a;
+    min-width: 15px;
+}
+
+.p-treetable-toggler:hover {
+    background-color: #45a049;
+}
+
+
 
 /*TODO: figure out how to turn buttons into icons*/
 /*.group1A{*/
