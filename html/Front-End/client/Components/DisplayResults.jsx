@@ -1,6 +1,6 @@
 import React from "react";
-import { TreeTable } from 'primereact/treetable';
-import { Column } from 'primereact/column';
+import {TreeTable} from 'primereact/treetable';
+import {Column} from 'primereact/column';
 
 /**
  * DisplayResults component renders the results received from the backend
@@ -8,7 +8,7 @@ import { Column } from 'primereact/column';
  * @param {Object} props - The props passed to the component
  * @param {string} props.results - The results data to display
  */
-export default function DisplayResults({ results }) {
+export default function DisplayResults({results}) {
     const round = (num) => parseFloat(num.toFixed(4));
 
     const shapesToNodes = () => {
@@ -16,23 +16,20 @@ export default function DisplayResults({ results }) {
 
         return Object.values(JSON.parse(results)
             .map((shape, index) => {
-                if (shape.type === 'Line2D' || shape.type === 'Arc2D' || shape.type === 'circle') {
-                    return {
-                        key: index.toString(),
-                        data: {
-                            type: shape.type,
-                            centerX: shape.centerX ? round(shape.centerX) : '',
-                            centerY: shape.centerY ? round(shape.centerY) : '',
-                            area: shape.area ? round(shape.area): '',
-                            circumference: shape.circumference ? round(shape.circumference) : '',
-                            radius: shape.radius ? round(shape.radius) : ''
-                        },
-                    };
-                }
-                return null;
+                return {
+                    key: index.toString(),
+                    data: {
+                        type: shape.type,
+                        centerX: shape.centerX ? round(shape.centerX) : '',
+                        centerY: shape.centerY ? round(shape.centerY) : '',
+                        area: shape.area ? round(shape.area) : '',
+                        circumference: shape.circumference ? round(shape.circumference) : '',
+                        radius: shape.radius ? round(shape.radius) : ''
+                    },
+                };
             })
             .filter(node => node !== null) // Remove null values
-            .reduce((acc, node) =>{
+            .reduce((acc, node) => {
                 const shape = node.data;
                 // Generate a unique key for the group
                 const key = `${shape.type}`;
@@ -40,7 +37,7 @@ export default function DisplayResults({ results }) {
                 // If the group doesn't exist in the accumulator, create it
                 if (!acc[key]) {
                     acc[key] = {
-                        key: node.key,
+                        key: `${shape.type}-${shape.area}-${shape.radius}-${shape.circumference}`,
                         data: {
                             type: shape.type
                         },
@@ -73,7 +70,7 @@ export default function DisplayResults({ results }) {
             {results ? (
                 <div>
                     <h2>File Upload Results:</h2>
-                    <TreeTable value={treeTableData} tableStyle={{ minWidth: '50rem' }}>
+                    <TreeTable value={treeTableData} tableStyle={{minWidth: '50rem'}}>
                         <Column field="type" header="Type" expander></Column>
                         <Column field="centerX" header="Center X"></Column>
                         <Column field="centerY" header="Center Y"></Column>
