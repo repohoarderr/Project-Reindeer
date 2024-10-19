@@ -1,13 +1,10 @@
 package com.example.elk;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-//import org.json.simple.JSONObject;
 
 public class Features {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -25,7 +22,6 @@ public class Features {
     public Features() {
         featureList = null;
     }
-
     public void setFeatureList(ArrayList<Shape> shapeArrayList) { // set feature list variable to the shapes list in DXFReader
         featureList = shapeArrayList;
     }
@@ -182,13 +178,6 @@ public void condenseFeatureList() {
     featureList = newFeatureList;
 }
 
-public String getFeatureListAsString() {
-    String temp = "";
-    for (Shape item : featureList) {
-        temp += item.toString() + "\n";
-    }
-    return temp;
-}
 
 public Shape[] getFeatures() {
     Shape[] features = new Shape[featureList.size()];
