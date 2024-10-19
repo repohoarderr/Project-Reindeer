@@ -1437,12 +1437,21 @@ public class DXFReader {
       }
     }
     Features feature = new Features();
+
     feature.setFeatureList(shapes);
+    feature.condenseFeatureList();
+    feature.printFeatures();
+
+//    return feature.getFeatures();
+
+    //uncomment this to give arcs and lines instead of condensed shapes (rectangles, triangles, etc.)
     Shape[] sOut = new Shape[shapes.size()];
     for (int ii = 0; ii < shapes.size(); ii++) {
       sOut[ii] = shapes.get(ii);
     }
     return sOut;
+
+
     //ignore transformations for now
 //    if (shapes.size() > 0) {
 //      for (Shape shape : shapes) {
