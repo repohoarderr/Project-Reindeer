@@ -22,7 +22,7 @@ export default function App() {
       />
       <h1>Upload a File</h1>
       <FileUploadForm onUploadComplete={handleUploadComplete} />
-      <DisplayResults results={uploadResults} /> {/* Display results here */}
+      <DisplayResults results={uploadResults} />
         <ManualFeatureSelection />
 
         {uploadResults && (
