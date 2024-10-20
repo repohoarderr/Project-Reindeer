@@ -107,6 +107,25 @@ button:hover {
     background-color: #45a049;
 }
 
+/* Add grid lines to the TreeTable */
+.p-treetable th,
+.p-treetable td {
+    border: 1px solid #ddd; /* Add borders for cells */
+    padding: 10px; /* Add some padding */
+}
+
+.p-treetable th {
+    background-color: #f2f2f2; /* Background color for headers */
+}
+
+.p-treetable td {
+    background-color: #fff; /* Background color for data cells */
+}
+
+/* Optionally, change the hover effect */
+.p-treetable tr:hover td {
+    background-color: #f1f1f1; /* Background color on hover */
+}
 
 
 /*TODO: figure out how to turn buttons into icons*/

@@ -2,6 +2,9 @@ import React from "react";
 import {TreeTable} from 'primereact/treetable';
 import {Column} from 'primereact/column';
 
+import 'primereact/resources/themes/saga-blue/theme.css';  // Choose a theme
+import 'primereact/resources/primereact.min.css';
+
 /**
  * DisplayResults component renders the results received from the backend
  *
@@ -70,7 +73,7 @@ export default function DisplayResults({results}) {
             {results ? (
                 <div>
                     <h2>File Upload Results:</h2>
-                    <TreeTable value={treeTableData} tableStyle={{minWidth: '50rem'}}>
+                    <TreeTable value={treeTableData} columnResizeMode={"expand"} tableStyle={{minWidth: '50rem'}}>
                         <Column field="type" header="Type" expander></Column>
                         <Column field="centerX" header="Center X"></Column>
                         <Column field="centerY" header="Center Y"></Column>

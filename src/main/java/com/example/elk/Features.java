@@ -111,6 +111,25 @@ public class Features {
             jsonWriter.put("centerX", centerX);
             jsonWriter.put("centerY", centerY);
         }
+        //***********************************************************************************
+        //starting parsing full shapes
+        else if(shape instanceof Rectangle2D.Double rect){
+            jsonWriter.put("width", rect.width);
+            jsonWriter.put("height", rect.height);
+            jsonWriter.put("centerX", rect.getCenterX());
+            jsonWriter.put("centerY", rect.getCenterY());
+            jsonWriter.put("area", rect.width * rect.height);
+            jsonWriter.put("type", "Rectangle");
+        }
+        else if(shape instanceof RoundRectangle2D.Double roundRect){
+            jsonWriter.put("width", roundRect.width);
+            jsonWriter.put("height", roundRect.height);
+            jsonWriter.put("centerX", roundRect.getCenterX());
+            jsonWriter.put("centerY", roundRect.getCenterY());
+            jsonWriter.put("area", roundRect.width * roundRect.height);
+            jsonWriter.put("cornerRadius", roundRect.getArcHeight());
+            jsonWriter.put("type", "RoundRectangle");
+        }
         else {
             String fullClassName = shape.getClass().getName();
 

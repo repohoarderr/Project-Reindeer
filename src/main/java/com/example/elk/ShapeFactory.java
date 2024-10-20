@@ -118,6 +118,8 @@ public class ShapeFactory {
     }
 
     private static double calculateWidth(List<BasicLine> singleShapeAsLines) {
+        //TODO: provides incorrect width if rectangle is rotated?
+        // Do we want longest side or distance between leftmost and rightmost points?
         double maxX = 0;
         double minX = Double.MAX_VALUE;
 

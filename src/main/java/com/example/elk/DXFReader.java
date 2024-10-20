@@ -8,6 +8,7 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -1316,6 +1317,64 @@ public class DXFReader {
   }
 
   Shape[] parseFile(File file, double maxSize, double minSize) throws IOException {
+    readFile(file);//puts info into entities ArrayList
+
+    ArrayList<Shape> shapes = new ArrayList<>();
+    for (DrawItem entity : entities) {
+      if (doDraw(entity)) {
+        Shape shape = entity.getShape();
+        if (shape != null) {
+          shapes.add(shape);
+        }
+      }
+    }
+
+    Features feature = new Features();
+
+    feature.setFeatureList(shapes);
+    feature.condenseFeatureList();
+    feature.printFeatures();
+
+    return feature.getFeatures();
+
+    //uncomment this to give arcs and lines instead of condensed shapes (rectangles, triangles, etc.)
+//    Shape[] sOut = new Shape[shapes.size()];
+//    for (int ii = 0; ii < shapes.size(); ii++) {
+//      sOut[ii] = shapes.get(ii);
+//    }
+//    return sOut;
+
+
+    //ignore transformations for now
+//    if (shapes.size() > 0) {
+//      for (Shape shape : shapes) {
+//        bounds = bounds == null ? shape.getBounds2D() : bounds.createUnion(shape.getBounds2D());
+//      }
+//      double scale = 1;
+//      double maxAxis = Math.max(bounds.getWidth(), bounds.getHeight());
+//      // Limit size to maxSize inches on max dimension
+//      if (maxSize > 0 && maxAxis > maxSize) {
+//        scale = maxSize / maxAxis;
+//        scaled = true;
+//      }
+//      // If minSize specified, scale up max dimension to match
+//      if (minSize > 0 && maxAxis < minSize) {
+//        scale = minSize / maxAxis;
+//        scaled = true;
+//      }
+//      // Scale, as needed, and flip Y axis
+//      AffineTransform at = new AffineTransform();
+//      at.scale(scale, -scale);
+//      at.translate(-bounds.getMinX(), -bounds.getHeight() - bounds.getMinY());
+//      for (int ii = 0; ii < shapes.size(); ii++) {
+//        sOut[ii] = at.createTransformedShape(shapes.get(ii));
+//      }
+//
+//    }
+//    return sOut;
+  }
+
+  private void readFile(File file) throws FileNotFoundException {
     stack = new ArrayList<>();
     cEntity = null;
     Scanner lines = new Scanner(new FileInputStream(file));
@@ -1427,58 +1486,6 @@ public class DXFReader {
         }
       }
     }
-    ArrayList<Shape> shapes = new ArrayList<>();
-    for (DrawItem entity : entities) {
-      if (doDraw(entity)) {
-        Shape shape = entity.getShape();
-        if (shape != null) {
-          shapes.add(shape);
-        }
-      }
-    }
-    Features feature = new Features();
-
-    feature.setFeatureList(shapes);
-    feature.condenseFeatureList();
-    feature.printFeatures();
-
-//    return feature.getFeatures();
-
-    //uncomment this to give arcs and lines instead of condensed shapes (rectangles, triangles, etc.)
-    Shape[] sOut = new Shape[shapes.size()];
-    for (int ii = 0; ii < shapes.size(); ii++) {
-      sOut[ii] = shapes.get(ii);
-    }
-    return sOut;
-
-
-    //ignore transformations for now
-//    if (shapes.size() > 0) {
-//      for (Shape shape : shapes) {
-//        bounds = bounds == null ? shape.getBounds2D() : bounds.createUnion(shape.getBounds2D());
-//      }
-//      double scale = 1;
-//      double maxAxis = Math.max(bounds.getWidth(), bounds.getHeight());
-//      // Limit size to maxSize inches on max dimension
-//      if (maxSize > 0 && maxAxis > maxSize) {
-//        scale = maxSize / maxAxis;
-//        scaled = true;
-//      }
-//      // If minSize specified, scale up max dimension to match
-//      if (minSize > 0 && maxAxis < minSize) {
-//        scale = minSize / maxAxis;
-//        scaled = true;
-//      }
-//      // Scale, as needed, and flip Y axis
-//      AffineTransform at = new AffineTransform();
-//      at.scale(scale, -scale);
-//      at.translate(-bounds.getMinX(), -bounds.getHeight() - bounds.getMinY());
-//      for (int ii = 0; ii < shapes.size(); ii++) {
-//        sOut[ii] = at.createTransformedShape(shapes.get(ii));
-//      }
-//
-//    }
-//    return sOut;
   }
 
   /*
