@@ -7,6 +7,9 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
+        //flip y-axis
+        ctx.transform(1, 0, 0, -1, 0, canvas.height);
+
         // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
