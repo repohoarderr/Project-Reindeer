@@ -12,12 +12,10 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
 
         // Function to draw all shapes
         const drawShapes = () => {
-            var test = true
             shapesData.forEach((shape) => {
                 if (shape.type === 'Line2D') {
                     drawLine(ctx, shape, scaleFactor);
-                } else if (shape.type === 'Arc2D' && test) {
-                    test = false;
+                } else if (shape.type === 'Arc2D') {
                     console.log("rotation: " + shape.rotation)
                     console.log("angle: " + shape.angle)
                     drawArc(ctx, shape, scaleFactor);
@@ -47,9 +45,9 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
                 shape.centerY * scaleFactor,
                 shape.radius * scaleFactor,
                 // Start point of the arc in radians
-                shape.rotation,
+                -(shape.angle),
                 // End of the drawn arc in radians
-                shape.angle,
+                -(shape.rotation),
                 true
             );
             ctx.strokeStyle = 'red';
