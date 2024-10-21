@@ -8,7 +8,7 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
         const ctx = canvas.getContext('2d');
 
         //flip y-axis
-        ctx.transform(1, 0, 0, -1, 0, canvas.height);
+        ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
 
         // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -22,7 +22,8 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
                     console.log("rotation: " + shape.rotation)
                     console.log("angle: " + shape.angle)
                     drawArc(ctx, shape, scaleFactor);
-                } else if (shape.type === 'circle') {
+                } else if (shape.type === 'circle' ||
+                            shape.type === 'punch') {
                     drawCircle(ctx, shape, scaleFactor);
                 }
             });

@@ -1335,14 +1335,14 @@ public class DXFReader {
     feature.condenseFeatureList();
     feature.printFeatures();
 
-    return feature.getFeatures();
+//    return feature.getFeatures();
 
     //uncomment this to give arcs and lines instead of condensed shapes (rectangles, triangles, etc.)
-//    Shape[] sOut = new Shape[shapes.size()];
-//    for (int ii = 0; ii < shapes.size(); ii++) {
-//      sOut[ii] = shapes.get(ii);
-//    }
-//    return sOut;
+    Shape[] sOut = new Shape[shapes.size()];
+    for (int ii = 0; ii < shapes.size(); ii++) {
+      sOut[ii] = shapes.get(ii);
+    }
+    return sOut;
 
 
     //ignore transformations for now
