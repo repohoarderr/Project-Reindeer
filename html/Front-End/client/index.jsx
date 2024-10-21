@@ -11,6 +11,7 @@ import App from "./App.jsx";
 document.addEventListener("DOMContentLoaded", () => {
   const rootElement = document.getElementById("root");
 
+  // Check if root element exists before rendering the app
   if (rootElement) {
     const root = createRoot(rootElement);
     root.render(<App />);
