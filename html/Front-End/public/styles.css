@@ -104,13 +104,9 @@ button:hover {
     margin: 20px 0; /* Add some spacing above and below */
 }
 
-/*canvas {*/
-/*    border: 1px solid #ccc; !* Optional: Add a border to the canvas *!*/
-/*    max-width: 100%; !* Make sure canvas is responsive *!*/
-/*    height: auto; !* Maintain aspect ratio *!*/
-/*}*/
-
-
+#container {
+    overflow:scroll;
+}
 
 /*TODO: figure out how to turn buttons into icons*/
 /*.group1A{*/

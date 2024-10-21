@@ -1,159 +1,99 @@
 import React, { useEffect, useRef } from 'react';
 
 const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
+    // Reference to the canvas element
     const canvasRef = useRef(null);
 
+    // Get the window's width to scale the canvas size
+    const windowWidth = window.innerWidth;
+
+    // useEffect hook is used to handle the drawing logic when the component mounts or when shapesData or scaleFactor changes
     useEffect(() => {
+        // Get the canvas and context for drawing
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
-        //flip y-axis
+        // Set canvas width to 80% of the window width
+        canvas.width = windowWidth * 0.8;
+
+        // Flip the y-axis to mimic a coordinate system where (0, 0) is at the bottom-left of the canvas
         ctx.transform(1, 0, 0, -1, 0, canvas.height);
 
-        // Clear the canvas
+        // Clear the canvas before drawing to avoid overlapping previous drawings
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Function to draw all shapes
+        // Outline the entire canvas for visual clarity
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+        // Function to draw shapes by iterating over the shapesData
         const drawShapes = () => {
             shapesData.forEach((shape) => {
+                // Check the shape type and call the appropriate function to draw it
                 if (shape.type === 'Line2D') {
-                    drawLine(ctx, shape, scaleFactor);
+                    drawLine(ctx, shape, scaleFactor); // Draw a line
                 } else if (shape.type === 'Arc2D') {
-                    console.log("rotation: " + shape.rotation)
-                    console.log("angle: " + shape.angle)
-                    drawArc(ctx, shape, scaleFactor);
+                    drawArc(ctx, shape, scaleFactor); // Draw an arc
                 } else if (shape.type === 'circle') {
-                    drawCircle(ctx, shape, scaleFactor);
+                    drawCircle(ctx, shape, scaleFactor); // Draw a circle
                 }
             });
         };
 
-        // Helper functions to draw different shapes
+        // Function to draw a Line2D shape
         const drawLine = (ctx, shape, scaleFactor) => {
             ctx.beginPath();
+            // Move to the start coordinates of the line, scaled by scaleFactor
             ctx.moveTo(shape.startX * scaleFactor, shape.startY * scaleFactor);
+            // Draw the line to the end coordinates
             ctx.lineTo(shape.endX * scaleFactor, shape.endY * scaleFactor);
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.strokeStyle = 'black'; // Set line color to black
+            ctx.lineWidth = 2; // Set line width
+            ctx.stroke(); // Render the line
         };
 
+        // Function to draw an Arc2D shape
         const drawArc = (ctx, shape, scaleFactor) => {
-            // const startAngle = (shape.rotation);
-            // const endAngle = (shape.angle);
-
             ctx.beginPath();
+            // Draw the arc using the center point, radius, and start/end angles
             ctx.arc(
-                shape.centerX * scaleFactor,
-                shape.centerY * scaleFactor,
-                shape.radius * scaleFactor,
-                // Start point of the arc in radians
-                -(shape.angle),
-                // End of the drawn arc in radians
-                -(shape.rotation),
-                true
+                shape.centerX * scaleFactor, // Center X coordinate, scaled
+                shape.centerY * scaleFactor, // Center Y coordinate, scaled
+                shape.radius * scaleFactor,  // Arc radius, scaled
+                -(shape.angle),              // Start angle, converted from degrees to radians and flipped
+                -(shape.rotation),           // End angle, converted and flipped
+                true                         // Draw the arc in a counter-clockwise direction
             );
-            ctx.strokeStyle = 'red';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.strokeStyle = 'red'; // Set arc color to red
+            ctx.lineWidth = 2; // Set line width
+            ctx.stroke(); // Render the arc
         };
 
-
+        // Function to draw a Circle shape
         const drawCircle = (ctx, shape, scaleFactor) => {
             ctx.beginPath();
+            // Draw the circle using the center point and radius
             ctx.arc(
-                shape.centerX * scaleFactor,
-                shape.centerY * scaleFactor,
-                shape.radius * scaleFactor,
-                0,
-                2 * Math.PI
+                shape.centerX * scaleFactor, // Center X coordinate, scaled
+                shape.centerY * scaleFactor, // Center Y coordinate, scaled
+                shape.radius * scaleFactor,  // Circle radius, scaled
+                0,                           // Start angle (0 for a full circle)
+                2 * Math.PI                  // End angle (2π radians for a full circle)
             );
-            ctx.strokeStyle = 'blue';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.strokeStyle = 'blue'; // Set circle color to blue
+            ctx.lineWidth = 2; // Set line width
+            ctx.stroke(); // Render the circle
         };
 
-        // Draw the shapes
+        // Call the function to draw all the shapes on the canvas
         drawShapes();
-    }, [shapesData, scaleFactor]);
+    }, [shapesData, scaleFactor]); // Re-run the effect if shapesData or scaleFactor changes
 
     return (
-        // <div className="visualize-container">
-        //     <canvas ref={canvasRef} width={800} height={600} />
-        // </div>
-        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
+        <div id="container">
+            {/* Render a canvas element and attach the reference to canvasRef */}
+            <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
+        </div>
     );
 };
 
 export default VisualizeShapes;
-
-
-// import React from 'react';
-// import { Stage, Layer, Line, Arc, Circle } from 'react-konva';
-//
-//
-// const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
-//     var switched = 0;
-//     const renderShapes = () => {
-//         return shapesData.map((shape, index) => {
-//             if (shape.type === 'Line2D') {
-//                 return (
-//                     <Line
-//                         key={index}
-//                         points={[
-//                             shape.startX * scaleFactor,
-//                             shape.startY * scaleFactor,
-//                             shape.endX * scaleFactor,
-//                             shape.endY * scaleFactor
-//                         ]}
-//                         stroke="black"
-//                         strokeWidth={2}
-//                     />
-//                 );
-//             } else if (shape.type === 'Arc2D' && switched<4) {
-//                 // shape.rotation = (-shape.rotation + 90)%360;
-//                 // shape.angle = -shape.angle
-//                 switched++;
-//                 console.log("angle: " + (-shape.rotation+360)%360);
-//                 console.log("rotation: " + (shape.rotation-shape.angle));
-//                 return (
-//                     <Arc
-//                         key={index}
-//                         x={shape.centerX * scaleFactor}
-//                         y={shape.centerY * scaleFactor}
-//                         // Renders the rotation, not the angle
-//                         rotation={(-shape.rotation+360)%360}
-//                         angle={shape.rotation}
-//                         innerRadius={shape.radius * scaleFactor}
-//                         outerRadius={shape.radius * scaleFactor}
-//                         stroke="red"
-//                         strokeWidth={2}
-//                     />
-//                 );
-//             } else if (shape.type === 'circle') {
-//                 // Drawing a circle with scaled inches to pixels
-//                 return (
-//                     <Circle
-//                         key={index}
-//                         x={shape.centerX * scaleFactor}  // Scale the centerX position
-//                         y={shape.centerY * scaleFactor}  // Scale the centerY position
-//                         radius={shape.radius * scaleFactor}  // Scale the radius
-//                         stroke="blue"  // Circle outline color
-//                         strokeWidth={2}
-//                     />
-//                 );
-//             }
-//             return null;
-//         });
-//     };
-//
-//     return (
-//         <Stage width={window.innerWidth} height={window.innerHeight}>
-//             <Layer>
-//                 {renderShapes()}
-//             </Layer>
-//         </Stage>
-//     );
-// };
-//
-// export default VisualizeShapes;
