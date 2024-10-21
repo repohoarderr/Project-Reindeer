@@ -97,35 +97,19 @@ button:hover {
     overflow-x: auto;
 }
 
-/*Expander buttons in file upload results table*/
-.p-treetable-toggler {
-    background-color: #8a8a8a;
-    min-width: 15px;
+.visualize-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 20px 0; /* Add some spacing above and below */
 }
 
-.p-treetable-toggler:hover {
-    background-color: #45a049;
-}
+/*canvas {*/
+/*    border: 1px solid #ccc; !* Optional: Add a border to the canvas *!*/
+/*    max-width: 100%; !* Make sure canvas is responsive *!*/
+/*    height: auto; !* Maintain aspect ratio *!*/
+/*}*/
 
-/* Add grid lines to the TreeTable */
-.p-treetable th,
-.p-treetable td {
-    border: 1px solid #ddd; /* Add borders for cells */
-    padding: 10px; /* Add some padding */
-}
-
-.p-treetable th {
-    background-color: #f2f2f2; /* Background color for headers */
-}
-
-.p-treetable td {
-    background-color: #fff; /* Background color for data cells */
-}
-
-/* Optionally, change the hover effect */
-.p-treetable tr:hover td {
-    background-color: #f1f1f1; /* Background color on hover */
-}
 
 
 /*TODO: figure out how to turn buttons into icons*/
