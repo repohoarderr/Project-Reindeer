@@ -127,6 +127,20 @@ button:hover {
     background-color: #f1f1f1; /* Background color on hover */
 }
 
+.visualize-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 20px 0; /* Add some spacing above and below */
+}
+
+/*canvas {*/
+/*    border: 1px solid #ccc; !* Optional: Add a border to the canvas *!*/
+/*    max-width: 100%; !* Make sure canvas is responsive *!*/
+/*    height: auto; !* Maintain aspect ratio *!*/
+/*}*/
+
+
 
 /*TODO: figure out how to turn buttons into icons*/
 /*.group1A{*/
