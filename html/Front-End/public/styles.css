@@ -1,11 +1,13 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f0f4f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -15,46 +17,47 @@ h1 {
 }
 
 form {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
     width: 100%;
-    box-sizing: border-box; /* Ensures the form width accounts for padding */
+    margin: 20px auto;
 }
 
 input[type="file"] {
-    width: calc(100% - 20px); /* Adjust the width to account for padding and border */
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 2px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    box-sizing: border-box; /* Ensures the padding is included in the width */
 }
 
 .button-group {
     display: flex;
     justify-content: space-between;
-    gap: 15px; /* Adds 15px of space between the buttons */
+    gap: 10px;
+    transform: scale(1.05); /* Add hover effect */
+
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #0e5d95;
+    color: #fff;
+    padding: 10px;
     border: none;
-    padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
+    width: 48%;
     font-size: 16px;
-    width: 48%; /* Modify this width */
-    min-width: 150px; /* Ensure the button is wide enough for text */
-    box-sizing: border-box; /* Ensures even padding and width for buttons */
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0b4c7a;
+    transform: scale(1.1); /* Enlarge on hover */
 }
 
 .remove-button {
@@ -66,14 +69,233 @@ button:hover {
 }
 
 .container {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    width: 100%;
 }
 
-/* Styling for the image */
 .centered-image {
     display: block;
-    margin: 0 auto 20px auto; /* Center the image and add margin below it */
-    max-width: 100%; /* Ensures the image is responsive */
-    height: auto;
-    width: 150px; /* Set the width, you can adjust this */
+    margin: 0 auto 20px;
+    max-width: 150px;
 }
+
+.results {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+.p-treetable th,
+.p-treetable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.p-treetable th {
+    background-color: #f2f2f2;
+}
+
+.p-treetable tr:hover td {
+    background-color: #f1f1f1;
+}
+
+.visualize-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+#container {
+    width: 80%;
+    max-height: 400px;
+    overflow: auto;
+}
+
+
+
+
+
+
+
+
+
+/* Panel that contains the grid of buttons, sliding from the right */
+.fade-out-panel {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 500px; /* Adjust width as needed */
+    background-color: #f4f4f4;
+    padding: 10px;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    transform: translateX(0);
+    opacity: 1;
+
+    /* Use grid layout to have 3 buttons per row */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Use equal fractional units for each column */
+    grid-gap: 10px; /* Reduce the gap between the buttons */
+}
+
+/* Hidden state of the panel */
+.fade-out-panel.hidden {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+/* Feature buttons */
+.feature-button {
+    background-color: #0e5d95; /* Darker blue for better contrast */
+    border: none; /* Remove borders */
+    padding: 15px; /* Increase padding for a larger button */
+    margin: 10px; /* Space out buttons a little more */
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    width: 100px; /* Increase button width */
+    height: 100px; /* Increase button height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+  }
+  
+  /* Thumbnail styling */
+  .thumbnail {
+    width: 80%; /* Adjust size relative to button */
+    height: 80%; /* Keep aspect ratio */
+    object-fit: contain; /* Ensure the thumbnail maintains its aspect ratio */
+    filter: brightness(2); /* Increase brightness for better visibility */
+  }
+  
+  .feature-button:hover {
+    background-color: #0b4c7a; /* Slightly darker blue on hover */
+    transform: scale(1.05); /* Add hover effect */
+  }
+  
+
+
+
+
+
+
+/* Button to toggle the panel with an icon */
+.toggle-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #0e5d95;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 50%; /* Make the button round */
+    cursor: pointer;
+    z-index: 100;
+    font-size: 24px; /* Adjust font size for the icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .toggle-button:hover {
+    background-color: #0b4c7a;
+  }
+  
+  .toggle-button i {
+    color: white; /* Make the icon white */
+  }
+  
+  
+  
+
+/* Manual button that stays at the bottom-right corner and is round */
+.manual-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #0e5d95;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 50%; /* Make the button round */
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+/* Add smooth scrolling for better user experience */
+.manual-dialog::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .manual-button:hover {
+    background-color: #0b4c7a;
+  }
+  
+ /* Manual dialog box with fade-in effect and "Times New Roman" font */
+.manual-dialog {
+    position: fixed;
+    bottom: 80px;
+    right: 40px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    max-height: 500px;
+    overflow-y: auto; /* Allow vertical scrolling */
+    z-index: 999;
+    animation: fadeIn 0.5s ease forwards;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+  }
+  
+  /* WebKit (Chrome, Safari) scrollbar styling */
+  .manual-dialog::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .manual-dialog::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4); /* Darker scrollbar */
+    border-radius: 10px;
+  }
+  
+  .manual-dialog::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1); /* Lighter track */
+  }
+  
+  /* Firefox scrollbar styling */
+  .manual-dialog {
+    scrollbar-width: thin; /* Make scrollbar thinner in Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.1); /* Thumb and track colors for Firefox */
+  }
+  
+  /* Fade in effect */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+
+  

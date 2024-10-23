@@ -1,29 +1,40 @@
 const apiService = {
   /**
-   * Uploads a file directly to the external server.
+   * Uploads a file to the backend server using a POST request.
    *
-   * @param {File} file - The file to be uploaded
-   * @returns {Promise<string>} The response data from the server as a string
+   * @param {File} file - The file to be uploaded. This is expected to be a .dxf file, as specified in the form.
+   * @returns {Promise<string>} - A promise that resolves to the server's response data as a string.
+   *                              This response will be passed back to the calling function in the front-end.
+   * @throws {Error} - If the server responds with a non-OK status, an error is thrown.
    */
   uploadFile: async (file) => {
+    // Create a new FormData object, which allows us to send files and other data as a form submission.
     const formData = new FormData();
-    formData.append("file", file); // Append the file to form data
 
-    // Send the file directly to the external server (localhost:8080)
+    // Append the selected file to the FormData object under the "file" key.
+    formData.append("file", file);
+
+    // Send the form data to the server via a POST request.
+    // Replace "http://localhost:8080/elk_war_exploded/fileuploadservlet" with the correct server endpoint.
     const response = await fetch(
-      "http://localhost:8080/elk_war_exploded/fileuploadservlet",
-      {
-        method: "POST",
-        body: formData,
-      },
+        "http://localhost:8080/elk_war_exploded/fileuploadservlet",
+        {
+          method: "POST", // Use the POST method for sending the file.
+          body: formData, // Attach the formData object as the body of the request.
+        }
     );
 
+    // Check if the server responded with a status other than OK (status 200-299).
     if (!response.ok) {
+      // If not OK, throw an error, which will be caught in the calling function (e.g., UploadForm).
       throw new Error("File upload failed");
     }
 
-    const data = await response.text(); // Get response as plain text (string)
-    return data; // Return the response data as a string
+    // If the upload is successful, extract the response as plain text (since we expect a string response).
+    const data = await response.text();
+
+    // Return the server's response, which will be used by the front-end to display the upload results.
+    return data;
   },
 };
 
