@@ -61,7 +61,11 @@ public class Features {
     }
   }
 
-  public static JSONObject JSONifyShapes(Shape shape) { //Add the shape to the feature list in JSON format
+  public static JSONObject shapeToJSON(Shape shape){
+    return shapeToJSON(shape, -1);
+  }
+
+  public static JSONObject shapeToJSON(Shape shape, int id) { //Add the shape to the feature list in JSON format
     JSONObject jsonWriter = new JSONObject();
     if (shape instanceof Line2D.Double line2D) { //if the shape is a line
       jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
@@ -141,6 +145,8 @@ public class Features {
       String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
       jsonWriter.put("type", shortenedClassName);
     }
+
+    jsonWriter.put("id", id);
     return jsonWriter;
   }
 
@@ -209,5 +215,14 @@ public class Features {
     }
 
     return features;
+  }
+
+  public JSONShape[] getJSONFeatures() {
+    JSONShape[] jsonFeatures = new JSONShape[jsonFeatureList.size()];
+    for (int i = 0; i < jsonFeatureList.size(); ++i) {
+      jsonFeatures[i] = jsonFeatureList.get(i);
+    }
+
+    return jsonFeatures;
   }
 }

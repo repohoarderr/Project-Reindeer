@@ -40,12 +40,12 @@ public class FileUploadServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
 
     File file = new File(path+fileName);
-    Shape[] shapesList;
+    JSONShape[] shapesList;
     try {
       shapesList = new DXFReader().parseFile(file);
       JSONArray array = new JSONArray();
-      for (Shape s : shapesList) {
-        array.add(Features.JSONifyShapes(s));
+      for (JSONShape s : shapesList) {
+        array.add(s.writeJSON());
       }
 
       out.print(array);
