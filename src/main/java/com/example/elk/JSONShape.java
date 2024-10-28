@@ -42,6 +42,7 @@ public class JSONShape {
 
     public JSONObject writeJSON(){
         JSONObject jsonWriter = new JSONObject();
+        JSONArray arr = new JSONArray();
         //shape was parsed from a group of lines
         if (!lines.isEmpty()){
             //output full shape data (table data)
@@ -49,15 +50,18 @@ public class JSONShape {
 
             //output individual line data (drawing data)
             //TODO: figure out why polygons don't have line data
+            arr = new JSONArray();
             for (BasicLine line : lines){
-                jsonWriter.put("drawing", Features.shapeToJSON(line.getSource(), id));
+                arr.add(Features.shapeToJSON(line.getSource(), id));
             }
+            jsonWriter.put("drawing", arr);
         }
         //shape was already condensed when parsed from file (circle, ellipse, etc.)
         else{
             //table data and drawing data are the same
             jsonWriter.put("table", Features.shapeToJSON(source, id));
-            jsonWriter.put("drawing", Features.shapeToJSON(source, id));
+            arr.add(Features.shapeToJSON(source, id));
+            jsonWriter.put("drawing", arr);
         }
 
         return jsonWriter;

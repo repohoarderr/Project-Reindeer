@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 
-const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
+const VisualizeShapes = ({shapesData, scaleFactor = 100}) => {
     // Reference to the canvas element
     const canvasRef = useRef(null);
 
@@ -30,23 +30,23 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
         // Function to draw shapes by iterating over the shapesData
         const drawShapes = () => {
             shapesData
-                .map((object) =>{
+                .map((object) => {
                     return object.drawing;
                 })
-                .forEach((shape) => {
-                // Check the shape type and call the appropriate function to draw it
-                if (shape.type === 'Line2D') {
-                    drawLine(ctx, shape, scaleFactor); // Draw a line
-                } else if (shape.type === 'Arc2D') {
-                    drawArc(ctx, shape, scaleFactor);
-                } else if (shape.type === 'circle' ||
+                .forEach((drawArr) => {
+                    for (let i = 0; i < drawArr.length; i++){
+                        const shape = drawArr[i];
+                        // Check the shape type and call the appropriate function to draw it
+                        if (shape.type === 'Line2D') {
+                            drawLine(ctx, shape, scaleFactor); // Draw a line
+                        } else if (shape.type === 'Arc2D') {
+                            drawArc(ctx, shape, scaleFactor);
+                        } else if (shape.type === 'circle' ||
                             shape.type === 'punch') {
-                    drawCircle(ctx, shape, scaleFactor);
-                    drawArc(ctx, shape, scaleFactor); // Draw an arc
-                } else if (shape.type === 'circle') {
-                    drawCircle(ctx, shape, scaleFactor); // Draw a circle
-                }
-            });
+                            drawCircle(ctx, shape, scaleFactor);
+                        }
+                    }
+                });
         };
 
         // Function to draw a Line2D shape
@@ -63,7 +63,6 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
 
         // Function to draw an Arc2D shape
         const drawArc = (ctx, shape, scaleFactor) => {
-            console.log(shape);
             ctx.beginPath();
             // Draw the arc using the center point, radius, and start/end angles
             ctx.arc(
@@ -102,7 +101,7 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
     return (
         <div id="container">
             {/* Render a canvas element and attach the reference to canvasRef */}
-            <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
+            <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}/>
         </div>
     );
 };
