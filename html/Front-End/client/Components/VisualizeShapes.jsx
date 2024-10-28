@@ -29,7 +29,11 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
 
         // Function to draw shapes by iterating over the shapesData
         const drawShapes = () => {
-            shapesData.forEach((shape) => {
+            shapesData
+                .map((object) =>{
+                    return object.drawing;
+                })
+                .forEach((shape) => {
                 // Check the shape type and call the appropriate function to draw it
                 if (shape.type === 'Line2D') {
                     drawLine(ctx, shape, scaleFactor); // Draw a line
@@ -59,6 +63,7 @@ const VisualizeShapes = ({ shapesData, scaleFactor = 100 }) => {
 
         // Function to draw an Arc2D shape
         const drawArc = (ctx, shape, scaleFactor) => {
+            console.log(shape);
             ctx.beginPath();
             // Draw the arc using the center point, radius, and start/end angles
             ctx.arc(

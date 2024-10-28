@@ -20,6 +20,9 @@ export default function DisplayResults({results}) {
         if (!results) return [];
 
         return Object.values(JSON.parse(results)
+            .map((object) =>{
+                return object.table;
+            })
             .map((shape, index) => {
                 return {
                     key: index.toString(),

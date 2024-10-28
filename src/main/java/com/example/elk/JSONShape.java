@@ -11,7 +11,7 @@ import java.util.Optional;
 public class JSONShape {
     //required parameters
     private ShapeType type;
-    private List<BasicLine> lines;
+    private List<BasicLine> lines = new ArrayList<>();
     private int id;
 
     //optional parameters
@@ -29,7 +29,7 @@ public class JSONShape {
 
     public JSONShape(Shape shape, List<BasicLine> visualLines) {
         source = shape;
-        lines = visualLines;
+        lines.addAll(visualLines);
         id = UNIQUE_ID;
         UNIQUE_ID++;
     }
@@ -43,7 +43,7 @@ public class JSONShape {
     public JSONObject writeJSON(){
         JSONObject jsonWriter = new JSONObject();
         //shape was parsed from a group of lines
-        if (lines != null){
+        if (!lines.isEmpty()){
             //output full shape data (table data)
             jsonWriter.put("table", Features.shapeToJSON(source, id)); //todo: won't work for trapezoids, etc.
 
