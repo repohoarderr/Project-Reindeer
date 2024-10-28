@@ -1316,7 +1316,7 @@ public class DXFReader {
     System.out.println(value);
   }
 
-  Shape[] parseFile(File file, double maxSize, double minSize) throws IOException {
+  Shape[] parseFile(File file) throws IOException {
     readFile(file);//puts info into entities ArrayList
 
     ArrayList<Shape> shapes = new ArrayList<>();
@@ -1330,9 +1330,7 @@ public class DXFReader {
     }
 
     Features feature = new Features();
-
     feature.setFeatureList(shapes);
-    feature.condenseFeatureList();
     feature.printFeatures();
 
 //    return feature.getFeatures();
@@ -1500,9 +1498,9 @@ public class DXFReader {
     private final DXFReader dxf;
     private Rectangle2D bounds;
 
-    DXFViewer(String fileName, double maxSize, double minSize) throws IOException {
+    DXFViewer(String fileName) throws IOException {
       dxf = new DXFReader();
-      shapes = dxf.parseFile(new File(fileName), maxSize, minSize);
+      shapes = dxf.parseFile(new File(fileName));
       if (shapes.length > 0) {
         // Create a bounding box that's the union of all shapes in the shapes array
         for (Shape shape : shapes) {
@@ -1600,12 +1598,12 @@ public class DXFReader {
       JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
       fileChooser.showOpenDialog(null);
       try {
-        new DXFViewer(fileChooser.getSelectedFile().toString(), 14, 3);
+        new DXFViewer(fileChooser.getSelectedFile().toString());
       }catch (NullPointerException e){
         System.exit(0);
       }
     } else {
-      new DXFViewer(args[0], 14, 3);
+      new DXFViewer(args[0]);
     }
   }
 }

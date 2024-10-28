@@ -8,14 +8,12 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Double.isInfinite;
-
-public class ShapeFactory {
-    private ShapeFactory(){
+public class JSONShapeFactory {
+    private JSONShapeFactory(){
         //hide useless constructor
     }
 
-    public static Shape createShape(List<BasicLine> singleShapeAsLines) {
+    public static JSONShape createJSONShape(List<BasicLine> singleShapeAsLines) {
         int numArcs = 0;
         int numStraightLines = 0;
 
@@ -33,16 +31,16 @@ public class ShapeFactory {
         }
 
         if (numStraightLines == 4 && numArcs == 4) {
-            return parseRoundRectangle(singleShapeAsLines);
+            return new JSONShape(parseRoundRectangle(singleShapeAsLines), singleShapeAsLines);
         }
 
         if (numStraightLines == 4 && numArcs == 0) {
-            return new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calulateYCoord(singleShapeAsLines),
-                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines));
+            return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calulateYCoord(singleShapeAsLines),
+                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), singleShapeAsLines);
         }
 
         //TODO: obvs finish
-        return new Polygon();
+        return new JSONShape(new Polygon(), singleShapeAsLines);
     }
 
     //TODO: need to verify that we are parsing a rectangle and not a trapezoid
@@ -133,6 +131,10 @@ public class ShapeFactory {
             }
         }
         return maxX - minX;
+    }
+
+    public static JSONShape createJSONShapeFromCondensedShape(Shape feature) {
+        return new JSONShape(feature);
     }
 
     //leaving this code here because it will be useful later

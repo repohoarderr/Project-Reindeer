@@ -6,12 +6,9 @@ import jakarta.servlet.annotation.*;
 
 import org.json.simple.*;
 
-import org.glassfish.jersey.*;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 @WebServlet(name = "FileUploadServlet", urlPatterns = { "/fileuploadservlet" })
@@ -45,10 +42,10 @@ public class FileUploadServlet extends HttpServlet {
     File file = new File(path+fileName);
     Shape[] shapesList;
     try {
-      shapesList = new DXFReader().parseFile(file, 14, 3);
+      shapesList = new DXFReader().parseFile(file);
       JSONArray array = new JSONArray();
       for (Shape s : shapesList) {
-        array.add(Features.featureJSON(s));
+        array.add(Features.JSONifyShapes(s));
       }
 
       out.print(array);
