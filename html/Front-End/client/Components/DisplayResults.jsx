@@ -70,8 +70,7 @@ export default function DisplayResults({results}) {
     };
 
     const treeTableData = shapesToNodes();
-    console.log("Transformed Data:", treeTableData);
-
+    //console.log("Transformed Data:", treeTableData);
 
     return (
         <div className="results">

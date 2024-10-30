@@ -5,7 +5,6 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JSONShapeFactory {
@@ -45,32 +44,24 @@ public class JSONShapeFactory {
 
     //TODO: need to verify that we are parsing a rectangle and not a trapezoid
     private static RoundRectangle2D.Double parseRoundRectangle(List<BasicLine> singleShapeAsLines) {
-        ArrayList<Arc2D> curves = new ArrayList<>();
 
-        //populate straights & curves lists
-        singleShapeAsLines.forEach(line -> {
-            if (line.getSource() instanceof Arc2D){
-                curves.add((Arc2D) line.getSource());
-            }
-        });
+        //find arc width. If arcs have differing width, take the largest one
+        double arcWidth = singleShapeAsLines.stream()
+                .map(BasicLine::getSource)
+                .filter(source -> source instanceof Arc2D)
+                .map(line -> (Arc2D) line)
+                .reduce((arc1, arc2) -> arc1.getWidth() > arc2.getHeight() ? arc1 : arc2)
+                .get().getWidth();
 
+        //find arc height. If arcs have differing height, take the largest one
+        double arcHeight = singleShapeAsLines.stream()
+                .map(BasicLine::getSource)
+                .filter(source -> source instanceof Arc2D)
+                .map(line -> (Arc2D) line)
+                .reduce((arc1, arc2) -> arc1.getHeight() > arc2.getHeight() ? arc1 : arc2)
+                .get().getHeight();
 
-        //check if arc widths/heights are consistent
-        boolean isArcWidthConsistent = true;
-        boolean isArcHeightConsistent = true;
-
-        //TODO: verify that getWidth() is the correct function
-        double arcWidth = curves.get(0).getWidth();
-        double arcHeight = curves.get(0).getHeight();
-        final double TOLERANCE = 0.01;
-        for (Arc2D arc : curves) {
-            if (Math.abs(arc.getWidth()  - arcWidth) < TOLERANCE){
-                isArcWidthConsistent = false;
-            }
-            if (Math.abs(arc.getHeight()  - arcHeight) < TOLERANCE){
-                isArcHeightConsistent = false;
-            }
-        }
+        //if arc radius differs across arcs, this will be noted in the JSONShape constructor
 
         double xCord = calculateXCoord(singleShapeAsLines);
         double yCord = calulateYCoord(singleShapeAsLines);

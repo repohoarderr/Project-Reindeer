@@ -1,7 +1,5 @@
 package com.example.elk;
 
-import org.json.simple.JSONObject;
-
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class Features {
 
   public void setFeatureList(ArrayList<Shape> shapeList) { // set feature list variable to the shapes list in DXFReader
     featureList = shapeList;
-    jsonFeatureList = condenseFeatureList(shapeList); //TODO: some magic here idk
+    jsonFeatureList = condenseFeatureList(shapeList);
   }
 
   public void printFeatures() { //Debug to console
@@ -59,95 +57,6 @@ public class Features {
         System.out.println("\t No further information.");
       }
     }
-  }
-
-  public static JSONObject shapeToJSON(Shape shape){
-    return shapeToJSON(shape, -1);
-  }
-
-  public static JSONObject shapeToJSON(Shape shape, int id) { //Add the shape to the feature list in JSON format
-    JSONObject jsonWriter = new JSONObject();
-    if (shape instanceof Line2D.Double line2D) { //if the shape is a line
-      jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
-      jsonWriter.put("startX", line2D.x1);
-      jsonWriter.put("startY", line2D.y1);
-      jsonWriter.put("endX", line2D.x2);
-      jsonWriter.put("endY", line2D.y2);
-      jsonWriter.put("type", "Line2D");
-    } else if (shape instanceof Arc2D.Double arc2D) { //if the shape is an arc2d
-      double startAngleRad = Math.toRadians(arc2D.getAngleStart());
-      double extentRad = Math.toRadians(arc2D.extent);
-      double endAngleRad = startAngleRad + extentRad;
-
-      double radius = arc2D.width / 2;
-      double angleRad = Math.abs(extentRad);
-      double arcLength = radius * angleRad;
-
-      jsonWriter.put("length", arcLength);
-      jsonWriter.put("startX", arc2D.getStartPoint().getX());
-      jsonWriter.put("startY", arc2D.getStartPoint().getY());
-      jsonWriter.put("endX", arc2D.getEndPoint().getX());
-      jsonWriter.put("endY", arc2D.getEndPoint().getY());
-      jsonWriter.put("centerX", arc2D.getCenterX());
-      jsonWriter.put("centerY", arc2D.getCenterY());
-      jsonWriter.put("radius", radius);
-      jsonWriter.put("arcType", arc2D.getArcType());
-      jsonWriter.put("rotation", startAngleRad);  // Keep the start angle (rotation) the same
-      jsonWriter.put("angle", endAngleRad);  // Now send the end angle as an absolute value
-
-      jsonWriter.put("type", "Arc2D");
-    }
-    // ***********************************************************************************
-    // starting parsing full shapes
-    else if (shape instanceof Ellipse2D.Double ellipse2D) { //if the shape is an ellipse
-      double a = ellipse2D.height / 2;
-      double b = ellipse2D.width / 2;
-      double circum = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2)) / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
-      jsonWriter.put("circumference", circum);
-      if (ellipse2D.getWidth() == ellipse2D.getHeight()) { //check to see if the shape is a circle or oval
-        jsonWriter.put("radius", ((Ellipse2D.Double) shape).getHeight() / 2);
-        if (((Ellipse2D.Double) shape).getHeight() <= 0.5) {
-          jsonWriter.put("type", "punch");
-        } else {
-          jsonWriter.put("type", "circle");
-        }
-      } else {
-        jsonWriter.put("width", ellipse2D.getWidth());
-        jsonWriter.put("height", ellipse2D.getHeight());
-        jsonWriter.put("type", "ellipse");
-      }
-      double area = Math.PI * a * b;
-      jsonWriter.put("area", area);
-      double centerX = ellipse2D.getCenterX();
-      double centerY = ellipse2D.getCenterY();
-      jsonWriter.put("centerX", centerX);
-      jsonWriter.put("centerY", centerY);
-    }
-    else if (shape instanceof Rectangle2D.Double rect) { //if the shape is a rectangle
-      jsonWriter.put("width", rect.width);
-      jsonWriter.put("height", rect.height);
-      jsonWriter.put("centerX", rect.getCenterX());
-      jsonWriter.put("centerY", rect.getCenterY());
-      jsonWriter.put("area", rect.width * rect.height);
-      jsonWriter.put("type", "Rectangle");
-    } else if (shape instanceof RoundRectangle2D.Double roundRect) { //if the shape is a rectangle with radius corners
-      jsonWriter.put("width", roundRect.width);
-      jsonWriter.put("height", roundRect.height);
-      jsonWriter.put("centerX", roundRect.getCenterX());
-      jsonWriter.put("centerY", roundRect.getCenterY());
-      jsonWriter.put("area", roundRect.width * roundRect.height);
-      jsonWriter.put("cornerRadius", roundRect.getArcHeight());
-      jsonWriter.put("type", "RoundRectangle");
-    } else { // default to this if the shape does not fall under any category
-      String fullClassName = shape.getClass().getName();
-
-      //remove "java.awt."
-      String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
-      jsonWriter.put("type", shortenedClassName);
-    }
-
-    jsonWriter.put("id", id);
-    return jsonWriter;
   }
 
   public ArrayList<JSONShape> condenseFeatureList(ArrayList<Shape> features) {

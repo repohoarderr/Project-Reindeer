@@ -6,7 +6,6 @@ import jakarta.servlet.annotation.*;
 
 import org.json.simple.*;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +44,7 @@ public class FileUploadServlet extends HttpServlet {
       shapesList = new DXFReader().parseFile(file);
       JSONArray array = new JSONArray();
       for (JSONShape s : shapesList) {
-        array.add(s.writeJSON());
+        array.add(s.writeJSONShape());
       }
 
       out.print(array);
