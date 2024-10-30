@@ -131,7 +131,7 @@ public class JSONShape {
             jsonWriter.put("startY", line2D.y1);
             jsonWriter.put("endX", line2D.x2);
             jsonWriter.put("endY", line2D.y2);
-            jsonWriter.put("type", "Line2D");
+            jsonWriter.put("type", "line2D");
         } else if (shape instanceof Arc2D.Double arc2D) { //if the shape is an arc2d
             double startAngleRad = Math.toRadians(arc2D.getAngleStart());
             double extentRad = Math.toRadians(arc2D.extent);
@@ -153,7 +153,7 @@ public class JSONShape {
             jsonWriter.put("rotation", startAngleRad);  // Keep the start angle (rotation) the same
             jsonWriter.put("angle", endAngleRad);  // Now send the end angle as an absolute value
 
-            jsonWriter.put("type", "Arc2D");
+            jsonWriter.put("type", "arc2D");
         }
         // ***********************************************************************************
         // starting parsing full shapes
@@ -187,7 +187,7 @@ public class JSONShape {
             jsonWriter.put("centerX", rect.getCenterX());
             jsonWriter.put("centerY", rect.getCenterY());
             jsonWriter.put("area", rect.width * rect.height);
-            jsonWriter.put("type", "Rectangle");
+            jsonWriter.put("type", "rectangle");
         } else if (shape instanceof RoundRectangle2D.Double roundRect) { //if the shape is a rectangle with radius corners
             jsonWriter.put("width", roundRect.width);
             jsonWriter.put("height", roundRect.height);
@@ -195,12 +195,15 @@ public class JSONShape {
             jsonWriter.put("centerY", roundRect.getCenterY());
             jsonWriter.put("area", roundRect.width * roundRect.height);
             jsonWriter.put("cornerRadius", roundRect.getArcHeight());
-            jsonWriter.put("type", "RoundRectangle");
+            jsonWriter.put("type", "roundRectangle");
         } else { // default to this if the shape does not fall under any category
             String fullClassName = shape.getClass().getName();
 
             //remove "java.awt."
             String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
+
+            //set first char to lowercase
+            shortenedClassName = Character.toLowerCase(shortenedClassName.charAt(0)) + shortenedClassName.substring(1);
             jsonWriter.put("type", shortenedClassName);
         }
 

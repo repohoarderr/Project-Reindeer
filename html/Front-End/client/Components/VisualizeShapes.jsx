@@ -36,12 +36,12 @@ const VisualizeShapes = ({shapesData, scaleFactor = 100}) => {
                     .forEach((drawArr) => {
                         drawArr.forEach((shape) => {
                             // Check the shape type and call the appropriate function to draw it
-                            if (shape.type === 'Line2D') {
+                            if (shape.type.toLowerCase() === 'Line2D'.toLowerCase()) {
                                 drawLine(ctx, shape, scaleFactor); // Draw a line
-                            } else if (shape.type === 'Arc2D') {
+                            } else if (shape.type.toLowerCase() === 'Arc2D'.toLowerCase()) {
                                 drawArc(ctx, shape, scaleFactor); // Draw an arc
-                            } else if (shape.type === 'circle' ||
-                                shape.type === 'punch') {
+                            } else if (shape.type.toLowerCase() === 'circle'.toLowerCase() ||
+                                shape.type.toLowerCase() === 'punch'.toLowerCase()) {
                                 drawCircle(ctx, shape, scaleFactor); // Draw a circle
                             }
                         })
