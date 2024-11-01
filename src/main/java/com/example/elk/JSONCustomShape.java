@@ -17,6 +17,9 @@ public class JSONCustomShape extends JSONShape {
         this.lines.addAll(visualLines);
 
         this.assignMultipleRadius();
+
+        this.centerX = JSONShapeFactory.calculateXCoord(lines);
+        this.centerY = JSONShapeFactory.calculateYCoord(lines);
     }
 
     public static JSONObject writeJSONComponent(JSONCustomShape customShape, int id) { //Add the shape to the feature list in JSON format
