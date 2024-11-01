@@ -14,13 +14,18 @@ import 'primereact/resources/primereact.min.css';
  * @param {string} props.results - The results data to display. If no results are available, a message or table is shown.
  */
 export default function DisplayResults({results}) {
-    const round = (num) => parseFloat(num.toFixed(4));
+    const round = (num) => {
+        if(num === undefined || isNaN(num)){
+            return "";
+        }
+        return parseFloat(num.toFixed(4));
+    }
 
     const shapesToNodes = () => {
         if (!results) return [];
 
         return Object.values(JSON.parse(results)
-            .map((object) =>{
+            .map((object) => {
                 return object.table;
             })
             .map((shape, index) => {
@@ -28,11 +33,11 @@ export default function DisplayResults({results}) {
                     key: index.toString(),
                     data: {
                         type: shape.type,
-                        centerX: shape.centerX ? round(shape.centerX) : '',
-                        centerY: shape.centerY ? round(shape.centerY) : '',
-                        area: shape.area ? round(shape.area) : '',
-                        circumference: shape.circumference ? round(shape.circumference) : '',
-                        radius: shape.radius ? round(shape.radius) : ''
+                        centerX: round(shape.centerX),
+                        centerY: round(shape.centerY),
+                        area: round(shape.area),
+                        circumference: round(shape.circumference),
+                        radius: round(shape.radius)
                     },
                 };
             })
@@ -58,11 +63,13 @@ export default function DisplayResults({results}) {
                     key: `${key}-${acc[key].children.length}`,
                     data: {
                         type: shape.type,
-                        centerX: shape.centerX ? round(shape.centerX) : 'N/A',
-                        centerY: shape.centerY ? round(shape.centerY) : 'N/A',
-                        area: shape.area ? round(shape.area) : 'N/A',
-                        radius: shape.radius ? round(shape.radius) : 'N/A',
-                        circumference: shape.circumference ? round(shape.circumference) : 'N/A'
+
+                        //we have already rounded, so we don't need to round again
+                        centerX: shape.centerX !=="" ? shape.centerX : 'N/A',
+                        centerY: shape.centerY !=="" ? shape.centerY : 'N/A',
+                        area: shape.area !=="" ? shape.area : 'N/A',
+                        radius: shape.radius !=="" ? shape.radius : 'N/A',
+                        circumference: shape.circumference !=="" ? shape.circumference : 'N/A'
                     },
                 });
                 return acc; // Return the updated accumulator
@@ -79,7 +86,8 @@ export default function DisplayResults({results}) {
                 <div>
                     {/* If results are available, display them inside a <pre> tag to preserve formatting */}
                     <h2>File Upload Results:</h2>
-                    <pre>{results}</pre> {/* Using <pre> tag for formatting the results output (e.g., JSON or text) */}
+                    <pre>{results}</pre>
+                    {/* Using <pre> tag for formatting the results output (e.g., JSON or text) */}
                     <TreeTable value={treeTableData} columnResizeMode={"expand"} tableStyle={{minWidth: '50rem'}}>
                         <Column field="type" header="Type" expander></Column>
                         <Column field="centerX" header="Center X"></Column>

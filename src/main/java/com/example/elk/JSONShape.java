@@ -9,21 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class represents JSON shapes which have a java.awt.Shape counterpart.
+ */
 public class JSONShape {
     //required parameters
-    private ShapeType type;
-    private List<BasicLine> lines = new ArrayList<>();
-    private int id;
+    protected List<BasicLine> lines = new ArrayList<>();
+    protected int id;
 
-    //optional parameters
-    private Shape source; //if a shape has a java.awt version (such as circle or rectangle, but not trapezoid or freehand), store it here
-    private boolean kissCut = false;
+    private Shape source; //if a shape has a java.awt counterpart (such as circle or rectangle, but not trapezoid or freehand), store it here
 
-    private boolean multipleRadius = false;//used for shapes where different corners may have different angle radii
+    protected boolean multipleRadius = false;//used for shapes where different corners may have different angle radii
 
-    static int UNIQUE_ID = 0;
+    protected static int UNIQUE_ID = 0;
 
-    private JSONShape(){
+    protected double centerX;
+    protected double centerY;
+
+    protected JSONShape(){
         //hide useless constructor
     }
 
@@ -31,7 +34,10 @@ public class JSONShape {
         source = shape;
         lines.addAll(visualLines);
 
-        checkForMultipleRadius(visualLines);
+        assignMultipleRadius();
+
+        this.centerX = JSONShapeFactory.calculateXCoord(visualLines);
+        this.centerY = JSONShapeFactory.calculateYCoord(visualLines);
 
         id = UNIQUE_ID;
         UNIQUE_ID++;
@@ -39,14 +45,18 @@ public class JSONShape {
 
     public JSONShape(Shape feature) {//used for features where the draw data and table data is the same (circles)
         source = feature;
+
+        centerX = feature.getBounds2D().getCenterX();
+        centerY = feature.getBounds2D().getCenterY();
+
         id = UNIQUE_ID;
         UNIQUE_ID++;
     }
 
-    private void checkForMultipleRadius(List<BasicLine> visualLines) {
+    protected void assignMultipleRadius() {
         //populate curves list
         ArrayList<Arc2D> curves = new ArrayList<>();
-        visualLines.forEach(line -> {
+        lines.forEach(line -> {
             if (line.getSource() instanceof Arc2D){
                 curves.add((Arc2D) line.getSource());
             }
@@ -109,11 +119,7 @@ public class JSONShape {
         return jsonWriter;
     }
 
-    public void enableKissCut(){
-        kissCut = true;
-    }
-
-    Optional<Shape> getShape(){
+    public Optional<Shape> getShape(){
         return Optional.of(source);
     }
 
@@ -209,5 +215,13 @@ public class JSONShape {
 
         jsonWriter.put("id", id);
         return jsonWriter;
+    }
+
+    public double getCenterX(){
+        return centerX;
+    }
+
+    public double getCenterY(){
+        return centerY;
     }
 }

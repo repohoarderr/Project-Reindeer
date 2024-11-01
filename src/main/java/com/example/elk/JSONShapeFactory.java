@@ -1,11 +1,9 @@
 package com.example.elk;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.*;
 import java.util.List;
+import java.util.Optional;
 
 public class JSONShapeFactory {
     private JSONShapeFactory(){
@@ -34,46 +32,47 @@ public class JSONShapeFactory {
         }
 
         if (numStraightLines == 4 && numArcs == 0) {
-            return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calulateYCoord(singleShapeAsLines),
+            return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calculateYCoord(singleShapeAsLines),
                     calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), singleShapeAsLines);
         }
 
         //TODO: obvs finish
-        return new JSONShape(new Polygon(), singleShapeAsLines);
+        return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
     }
 
     //TODO: need to verify that we are parsing a rectangle and not a trapezoid
     private static RoundRectangle2D.Double parseRoundRectangle(List<BasicLine> singleShapeAsLines) {
 
         //find arc width. If arcs have differing width, take the largest one
-        double arcWidth = singleShapeAsLines.stream()
+        Optional<Arc2D> arc = singleShapeAsLines.stream()
                 .map(BasicLine::getSource)
-                .filter(source -> source instanceof Arc2D)
-                .map(line -> (Arc2D) line)
-                .reduce((arc1, arc2) -> arc1.getWidth() > arc2.getHeight() ? arc1 : arc2)
-                .get().getWidth();
+                .filter(Arc2D.class::isInstance)
+                .map(Arc2D.class::cast)
+                .reduce((arc1, arc2) -> arc1.getWidth() > arc2.getWidth() ? arc1 : arc2);
+
+        double arcWidth = arc.map(RectangularShape::getWidth).orElse(0.0);
 
         //find arc height. If arcs have differing height, take the largest one
-        double arcHeight = singleShapeAsLines.stream()
+        Optional<Arc2D> secondArc = singleShapeAsLines.stream()
                 .map(BasicLine::getSource)
-                .filter(source -> source instanceof Arc2D)
-                .map(line -> (Arc2D) line)
-                .reduce((arc1, arc2) -> arc1.getHeight() > arc2.getHeight() ? arc1 : arc2)
-                .get().getHeight();
+                .filter(Arc2D.class::isInstance)
+                .map(Arc2D.class::cast)
+                .reduce((arc1, arc2) -> arc1.getHeight() > arc2.getHeight() ? arc1 : arc2);
+
+        double arcHeight = secondArc.map(RectangularShape::getWidth).orElse(0.0);
 
         //if arc radius differs across arcs, this will be noted in the JSONShape constructor
 
         double xCord = calculateXCoord(singleShapeAsLines);
-        double yCord = calulateYCoord(singleShapeAsLines);
+        double yCord = calculateYCoord(singleShapeAsLines);
 
         double width = calculateWidth(singleShapeAsLines);
         double height = calculateHeight(singleShapeAsLines);
 
-        //TODO: use booleans isArcHeightConsistant and isArcWidthConsistent to create flags later
         return new RoundRectangle2D.Double(xCord, yCord, width, height, arcWidth, arcHeight);
     }
 
-    private static double calulateYCoord(List<BasicLine> singleShapeAsLines) {
+    public static double calculateYCoord(List<BasicLine> singleShapeAsLines) {
         double yCoord = 0;
         for (BasicLine line : singleShapeAsLines){
             yCoord += line.getSource().getBounds2D().getCenterY();
@@ -81,7 +80,7 @@ public class JSONShapeFactory {
         return yCoord / singleShapeAsLines.size();
     }
 
-    private static double calculateXCoord(List<BasicLine> singleShapeAsLines) {
+    public static double calculateXCoord(List<BasicLine> singleShapeAsLines) {
         double xCoord = 0;
         for (BasicLine line : singleShapeAsLines){
             xCoord += line.getSource().getBounds2D().getCenterX();
@@ -89,7 +88,7 @@ public class JSONShapeFactory {
         return xCoord / singleShapeAsLines.size();
     }
 
-    private static double calculateHeight(List<BasicLine> singleShapeAsLines) {
+    public static double calculateHeight(List<BasicLine> singleShapeAsLines) {
         double maxY = 0;
         double minY = Double.MAX_VALUE;
 
