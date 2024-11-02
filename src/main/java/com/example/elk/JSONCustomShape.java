@@ -26,26 +26,27 @@ public class JSONCustomShape extends JSONShape {
         JSONObject jsonWriter = new JSONObject();
         switch(customShape.getShapeType()){
             case TRIANGLE -> {
+                jsonWriter.put("type", "triangle");
             }
             case ROUND_TRIANGLE -> {
+                jsonWriter.put("multipleRadius", customShape.multipleRadius);
+                jsonWriter.put("type", "roundTriangle");
             }
             case TRAPEZOID -> {
             }
             case ROUND_TRAPEZOID -> {
             }
             case OBLONG ->{
-                jsonWriter.put("centerX", customShape.getCenterX());
-                jsonWriter.put("centerY", customShape.getCenterY());
                 jsonWriter.put("multipleRadius", customShape.multipleRadius);
                 jsonWriter.put("type", "oblong");
             }
             case FREEHAND -> {
-                jsonWriter.put("centerX", customShape.getCenterX());
-                jsonWriter.put("centerY", customShape.getCenterY());
                 jsonWriter.put("type", "freehand");
             }
         }
 
+        jsonWriter.put("centerX", customShape.getCenterX());
+        jsonWriter.put("centerY", customShape.getCenterY());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
