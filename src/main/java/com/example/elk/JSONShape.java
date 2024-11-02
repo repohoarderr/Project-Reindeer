@@ -21,7 +21,7 @@ public class JSONShape {
 
     protected boolean multipleRadius = false;//used for shapes where different corners may have different angle radii
 
-    protected static int UNIQUE_ID = 0;
+    protected static int idCounter = 0; //increment this counter every time a shape is created
 
     protected double centerX;
     protected double centerY;
@@ -34,13 +34,13 @@ public class JSONShape {
         source = shape;
         lines.addAll(visualLines);
 
-        assignMultipleRadius();
+        this.multipleRadius = isMultipleRadius();
 
         this.centerX = JSONShapeFactory.calculateXCoord(visualLines);
         this.centerY = JSONShapeFactory.calculateYCoord(visualLines);
 
-        id = UNIQUE_ID;
-        UNIQUE_ID++;
+        id = idCounter;
+        idCounter++;
     }
 
     public JSONShape(Shape feature) {//used for features where the draw data and table data is the same (circles)
@@ -49,43 +49,38 @@ public class JSONShape {
         centerX = feature.getBounds2D().getCenterX();
         centerY = feature.getBounds2D().getCenterY();
 
-        id = UNIQUE_ID;
-        UNIQUE_ID++;
+        id = idCounter;
+        idCounter++;
     }
 
-    protected void assignMultipleRadius() {
+    protected boolean isMultipleRadius() {
         //populate curves list
         ArrayList<Arc2D> curves = new ArrayList<>();
         lines.forEach(line -> {
-            if (line.getSource() instanceof Arc2D){
-                curves.add((Arc2D) line.getSource());
+            if (line.getSource() instanceof Arc2D arc2D){
+                curves.add(arc2D);
             }
         });
 
         if (curves.isEmpty()){
-            return;
+            return false;
         }
 
-        //check if arc widths/heights are consistent
-        boolean isArcWidthConsistent = true;
-        boolean isArcHeightConsistent = true;
-
-        //TODO: verify that getWidth() is the correct function
+        //check if arc angle extent, arc width, and arc height are consistent
+        double arcExtent = curves.get(0).getAngleExtent();
         double arcWidth = curves.get(0).getWidth();
         double arcHeight = curves.get(0).getHeight();
+
         final double TOLERANCE = 0.01;
         for (Arc2D arc : curves) {
-            if (Math.abs(arc.getWidth()  - arcWidth) < TOLERANCE){
-                isArcWidthConsistent = false;
-            }
-            if (Math.abs(arc.getHeight()  - arcHeight) < TOLERANCE){
-                isArcHeightConsistent = false;
+            if (Math.abs(arc.getAngleExtent()  - arcExtent) > TOLERANCE ||
+                    Math.abs(arc.getWidth()  - arcWidth) > TOLERANCE ||
+                    Math.abs(arc.getHeight()  - arcHeight) > TOLERANCE){
+                return true;
             }
         }
 
-        if (!isArcHeightConsistent || !isArcWidthConsistent){
-            multipleRadius = true;
-        }
+       return false;
     }
 
     /**
@@ -99,7 +94,7 @@ public class JSONShape {
         //shape was parsed from a group of lines
         if (!lines.isEmpty()){
             //output full shape data (table data)
-            jsonWriter.put("table", writeJSONComponent(source, id)); //todo: won't work for trapezoids, etc.
+            jsonWriter.put("table", writeJSONComponent(this, id));
 
             //output individual line data (drawing data)
             arr = new JSONArray();
@@ -129,7 +124,7 @@ public class JSONShape {
      * @param id the id of the component. A full shape shares an id with all of its line components.
      * @return the JSON data as a JSONObject
      */
-    public static JSONObject writeJSONComponent(Shape shape, int id) { //Add the shape to the feature list in JSON format
+    public static JSONObject writeJSONComponent(Shape shape, int id) {
         JSONObject jsonWriter = new JSONObject();
         if (shape instanceof Line2D.Double line2D) { //if the shape is a line
             jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
@@ -161,8 +156,6 @@ public class JSONShape {
 
             jsonWriter.put("type", "arc2D");
         }
-        // ***********************************************************************************
-        // starting parsing full shapes
         else if (shape instanceof Ellipse2D.Double ellipse2D) { //if the shape is an ellipse
             double a = ellipse2D.height / 2;
             double b = ellipse2D.width / 2;
@@ -187,7 +180,25 @@ public class JSONShape {
             jsonWriter.put("centerX", centerX);
             jsonWriter.put("centerY", centerY);
         }
-        else if (shape instanceof Rectangle2D.Double rect) { //if the shape is a rectangle
+        else { // default to this if the shape does not fall under any category
+            String fullClassName = shape.getClass().getName();
+
+            //remove "java.awt."
+            String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
+
+            //set first char to lowercase
+            shortenedClassName = Character.toLowerCase(shortenedClassName.charAt(0)) + shortenedClassName.substring(1);
+            jsonWriter.put("type", shortenedClassName);
+        }
+
+        jsonWriter.put("id", id);
+        return jsonWriter;
+    }
+
+    public static JSONObject writeJSONComponent(JSONShape jsonShape, int id) {
+        JSONObject jsonWriter = new JSONObject();
+        Shape shape = jsonShape.getShape().get();
+        if (shape instanceof Rectangle2D.Double rect) { //if the shape is a rectangle
             jsonWriter.put("width", rect.width);
             jsonWriter.put("height", rect.height);
             jsonWriter.put("centerX", rect.getCenterX());
@@ -201,6 +212,7 @@ public class JSONShape {
             jsonWriter.put("centerY", roundRect.getCenterY());
             jsonWriter.put("area", roundRect.width * roundRect.height);
             jsonWriter.put("cornerRadius", roundRect.getArcHeight());
+            jsonWriter.put("multipleRadius", jsonShape.multipleRadius);
             jsonWriter.put("type", "roundRectangle");
         } else { // default to this if the shape does not fall under any category
             String fullClassName = shape.getClass().getName();

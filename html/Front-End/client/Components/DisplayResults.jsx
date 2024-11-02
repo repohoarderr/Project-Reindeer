@@ -37,7 +37,8 @@ export default function DisplayResults({results}) {
                         centerY: round(shape.centerY),
                         area: round(shape.area),
                         circumference: round(shape.circumference),
-                        radius: round(shape.radius)
+                        radius: round(shape.radius),
+                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius : ""
                     },
                 };
             })
@@ -69,7 +70,8 @@ export default function DisplayResults({results}) {
                         centerY: shape.centerY !=="" ? shape.centerY : 'N/A',
                         area: shape.area !=="" ? shape.area : 'N/A',
                         radius: shape.radius !=="" ? shape.radius : 'N/A',
-                        circumference: shape.circumference !=="" ? shape.circumference : 'N/A'
+                        circumference: shape.circumference !=="" ? shape.circumference : 'N/A',
+                        multipleRadius: shape.multipleRadius !=="" ? shape.multipleRadius.toString() : 'N/A'
                     },
                 });
                 return acc; // Return the updated accumulator
@@ -95,6 +97,7 @@ export default function DisplayResults({results}) {
                         <Column field="area" header="Area"></Column>
                         <Column field="circumference" header="Circumference"></Column>
                         <Column field="radius" header="Radius"></Column>
+                        <Column field="multipleRadius" header="Multiple Radius"></Column>
                     </TreeTable>
                 </div>
             ) : (

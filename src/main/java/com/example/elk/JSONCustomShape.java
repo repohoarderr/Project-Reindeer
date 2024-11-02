@@ -16,7 +16,7 @@ public class JSONCustomShape extends JSONShape {
         this.shapeType = type;
         this.lines.addAll(visualLines);
 
-        this.assignMultipleRadius();
+        this.multipleRadius = isMultipleRadius();
 
         this.centerX = JSONShapeFactory.calculateXCoord(lines);
         this.centerY = JSONShapeFactory.calculateYCoord(lines);
@@ -36,6 +36,7 @@ public class JSONCustomShape extends JSONShape {
             case OBLONG ->{
                 jsonWriter.put("centerX", customShape.getCenterX());
                 jsonWriter.put("centerY", customShape.getCenterY());
+                jsonWriter.put("multipleRadius", customShape.multipleRadius);
                 jsonWriter.put("type", "oblong");
             }
             case FREEHAND -> {
