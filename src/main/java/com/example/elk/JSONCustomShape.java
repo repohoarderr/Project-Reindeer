@@ -22,22 +22,24 @@ public class JSONCustomShape extends JSONShape {
         this.centerY = JSONShapeFactory.calculateYCoord(lines);
     }
 
-    public static JSONObject writeJSONComponent(JSONCustomShape customShape, int id) { //Add the shape to the feature list in JSON format
+    public JSONObject writeTableData() { //Add the shape to the feature list in JSON format
         JSONObject jsonWriter = new JSONObject();
-        switch(customShape.getShapeType()){
+        switch(this.getShapeType()){
             case TRIANGLE -> {
                 jsonWriter.put("type", "triangle");
             }
             case ROUND_TRIANGLE -> {
-                jsonWriter.put("multipleRadius", customShape.multipleRadius);
+                jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "roundTriangle");
             }
             case TRAPEZOID -> {
+                jsonWriter.put("type", "trapezoid");
             }
             case ROUND_TRAPEZOID -> {
+                jsonWriter.put("type", "roundTrapezoid");
             }
             case OBLONG ->{
-                jsonWriter.put("multipleRadius", customShape.multipleRadius);
+                jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "oblong");
             }
             case FREEHAND -> {
@@ -45,8 +47,8 @@ public class JSONCustomShape extends JSONShape {
             }
         }
 
-        jsonWriter.put("centerX", customShape.getCenterX());
-        jsonWriter.put("centerY", customShape.getCenterY());
+        jsonWriter.put("centerX", this.getCenterX());
+        jsonWriter.put("centerY", this.getCenterY());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -57,11 +59,11 @@ public class JSONCustomShape extends JSONShape {
         JSONArray arr = new JSONArray();
 
         //output full shape data (table data)
-        jsonWriter.put("table", writeJSONComponent(this, id));
+        jsonWriter.put("table", writeTableData());
 
         //output individual line data (drawing data)
         for (BasicLine line : lines){
-            arr.add(writeJSONComponent(line.getSource(), id));
+            arr.add(writeDrawData(line.getSource(), id));
         }
         jsonWriter.put("drawing", arr);
 

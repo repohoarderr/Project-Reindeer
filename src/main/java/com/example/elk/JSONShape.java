@@ -91,23 +91,23 @@ public class JSONShape {
     public JSONObject writeJSONShape(){
         JSONObject jsonWriter = new JSONObject();
         JSONArray arr = new JSONArray();
-        //shape was parsed from a group of lines
+        //if shape was parsed from a group of lines
         if (!lines.isEmpty()){
             //output full shape data (table data)
-            jsonWriter.put("table", writeJSONComponent(this, id));
+            jsonWriter.put("table", writeTableData());
 
             //output individual line data (drawing data)
             arr = new JSONArray();
             for (BasicLine line : lines){
-                arr.add(writeJSONComponent(line.getSource(), id));
+                arr.add(writeDrawData(line.getSource(), id));
             }
             jsonWriter.put("drawing", arr);
         }
         //shape was already condensed when parsed from file (circle, ellipse, etc.)
         else{
             //table data and drawing data are the same
-            jsonWriter.put("table", writeJSONComponent(source, id));
-            arr.add(writeJSONComponent(source, id));
+            jsonWriter.put("table", writeDrawData(source, id));
+            arr.add(writeDrawData(source, id));
             jsonWriter.put("drawing", arr);
         }
 
@@ -118,13 +118,7 @@ public class JSONShape {
         return Optional.of(source);
     }
 
-    /**
-     * Write the JSON data for a single component within a full shape.
-     * @param shape the shape being parsed into JSON
-     * @param id the id of the component. A full shape shares an id with all of its line components.
-     * @return the JSON data as a JSONObject
-     */
-    public static JSONObject writeJSONComponent(Shape shape, int id) {
+    public static JSONObject writeDrawData(Shape shape, int id) {
         JSONObject jsonWriter = new JSONObject();
         if (shape instanceof Line2D.Double line2D) { //if the shape is a line
             jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
@@ -195,27 +189,26 @@ public class JSONShape {
         return jsonWriter;
     }
 
-    public static JSONObject writeJSONComponent(JSONShape jsonShape, int id) {
+    public JSONObject writeTableData() {
         JSONObject jsonWriter = new JSONObject();
-        Shape shape = jsonShape.getShape().get();
-        if (shape instanceof Rectangle2D.Double rect) { //if the shape is a rectangle
+        if (source instanceof Rectangle2D.Double rect) { //if the shape is a rectangle
             jsonWriter.put("width", rect.width);
             jsonWriter.put("height", rect.height);
             jsonWriter.put("centerX", rect.getCenterX());
             jsonWriter.put("centerY", rect.getCenterY());
             jsonWriter.put("area", rect.width * rect.height);
             jsonWriter.put("type", "rectangle");
-        } else if (shape instanceof RoundRectangle2D.Double roundRect) { //if the shape is a rectangle with radius corners
+        } else if (source instanceof RoundRectangle2D.Double roundRect) { //if the shape is a rectangle with radius corners
             jsonWriter.put("width", roundRect.width);
             jsonWriter.put("height", roundRect.height);
             jsonWriter.put("centerX", roundRect.getCenterX());
             jsonWriter.put("centerY", roundRect.getCenterY());
             jsonWriter.put("area", roundRect.width * roundRect.height);
             jsonWriter.put("cornerRadius", roundRect.getArcHeight());
-            jsonWriter.put("multipleRadius", jsonShape.multipleRadius);
+            jsonWriter.put("multipleRadius", this.multipleRadius);
             jsonWriter.put("type", "roundRectangle");
         } else { // default to this if the shape does not fall under any category
-            String fullClassName = shape.getClass().getName();
+            String fullClassName = source.getClass().getName();
 
             //remove "java.awt."
             String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
