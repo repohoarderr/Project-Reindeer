@@ -74,7 +74,10 @@ public class Features {
         linePool.add(new BasicLine(arc2d));
       } else if (feature instanceof Line2D line2d) {
         linePool.add(new BasicLine(line2d));
-      } else {
+      }
+      else if (feature instanceof Path2D.Double path2d){
+        linePool.addAll(BasicLine.path2DToLines(path2d));
+      }else {
         newFeatureList.add(JSONShapeFactory.createJSONShapeFromCondensedShape(feature)); //feature is already condensed (ellipse, circle, etc.)
       }
     }
@@ -82,9 +85,8 @@ public class Features {
     BasicLine poolLine;
     BasicLine shapeLine;
 
-    //may cause infinite looping if there are lines which don't connect to anything
-    //TODO: while (!linePool.isEmpty() && linePool.size() changed from last iteration?)
     while (!linePool.isEmpty()) {
+      int oldSize = linePool.size();
       for (int i = 0; i < linePool.size(); i++) {
         poolLine = linePool.get(i);
 
@@ -110,6 +112,10 @@ public class Features {
           newFeatureList.add(JSONShapeFactory.createJSONShape(singleShapeAsLines));
           singleShapeAsLines.clear();
         }
+      }
+      //we've stopped categorizing lines and would be stuck in an infinite loop trying to categorize lines which don't connect, so break
+      if (linePool.size() == oldSize){
+        break;
       }
     }
 
