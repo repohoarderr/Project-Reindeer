@@ -52,14 +52,19 @@ public class BasicLine
                     lines.add(new BasicLine(new Line2D.Double(prevPoint, new Point2D.Double(coords[0], coords[1]))));
                     prevPoint = new Point2D.Double(coords[0], coords[1]);
                     break;
-//                case PathIterator.SEG_QUADTO: //TODO: not sure if we need support for this
-//                    System.out.printf("quad to x1=%f, y1=%f, x2=%f, y2=%f\n",
-//                            coords[0], coords[1], coords[2], coords[3]);
-//                    break;
+                case PathIterator.SEG_QUADTO:
+                    System.out.printf("quad to x1=%f, y1=%f, x2=%f, y2=%f\n",
+                            coords[0], coords[1], coords[2], coords[3]);
+                    lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
+                    prevPoint = new Point2D.Double(coords[4], coords[5]);
+                    break;
                 case PathIterator.SEG_CUBICTO:
                     System.out.printf("cubic to x1=%f, y1=%f, x2=%f, y2=%f, x3=%f, y3=%f\n",
                             coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
                     lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
+
+                    //uncomment this line to approximate curves w/ straight lines
+                    //lines.add(new BasicLine(new Line2D.Double(prevPoint, new Point2D.Double(coords[4], coords[5]))));
                     prevPoint = new Point2D.Double(coords[4], coords[5]);
                     break;
                 case PathIterator.SEG_CLOSE:
