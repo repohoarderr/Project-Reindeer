@@ -2,9 +2,8 @@ package com.example.elk;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.Double.isInfinite;
 
@@ -61,10 +60,10 @@ public class JSONShapeFactory {
         }
 
         //TODO: obvs finish
+        Collections.sort(singleShapeAsLines);
         return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
     }
 
-    //TODO: need to verify that we are parsing a rectangle and not a trapezoid
     private static RoundRectangle2D.Double parseRoundRectangle(List<BasicLine> singleShapeAsLines) {
         //find arc width. If arcs have differing width, take the largest one
         Optional<Arc2D> arc = singleShapeAsLines.stream()

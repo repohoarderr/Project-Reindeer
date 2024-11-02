@@ -11,11 +11,11 @@ import java.util.List;
  * Used to simplify comparison between these two classes and
  * help condense collections of lines into composite objects such as RoundRectangle2D.Double.
  */
-public class BasicLine
+public class BasicLine implements Comparable<BasicLine>
 {
     private Point2D startPoint;
     private Point2D endPoint;
-    private Shape source; //either a Line2D, Arc2D, or Path2D
+    private Shape source;
 
     public BasicLine(Line2D src){
         source = src;
@@ -128,5 +128,39 @@ public class BasicLine
             }
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(BasicLine o) {
+        if (this.getLength() > o.getLength()){
+            return 1;
+        }
+        else if (this.getLength() < o.getLength()){
+            return -1;
+        }
+
+        return 0;
+    }
+
+    private double getLength() {
+        if (source instanceof Line2D line){
+            return line.getP1().distance(line.getP2());
+        }
+        else if (source instanceof Arc2D.Double arc){
+            //arc length = angle * radius        angle in radians
+            //radius is dist(p1, p2) * (sqrt(2) / 2)
+
+            double angleDegs = arc.getAngleExtent();
+            if (angleDegs < 0){
+                angleDegs += 360;//need to account for negative angles
+            }
+            double angleRads = Math.toRadians(angleDegs);
+
+            double pointDist = arc.getStartPoint().distance(arc.getEndPoint());
+            double radius = pointDist * (Math.sqrt(2) / 2.0);
+
+            return angleRads * radius;
+        }
+        return 0;
     }
 }
