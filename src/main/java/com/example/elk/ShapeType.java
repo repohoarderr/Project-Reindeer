@@ -8,5 +8,7 @@ public enum ShapeType {
     TRAPEZOID,
     ROUND_TRAPEZOID,
 
+    OBLONG,
+
     FREEHAND
 }

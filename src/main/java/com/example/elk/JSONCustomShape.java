@@ -33,6 +33,11 @@ public class JSONCustomShape extends JSONShape {
             }
             case ROUND_TRAPEZOID -> {
             }
+            case OBLONG ->{
+                jsonWriter.put("centerX", customShape.getCenterX());
+                jsonWriter.put("centerY", customShape.getCenterY());
+                jsonWriter.put("type", "oblong");
+            }
             case FREEHAND -> {
                 jsonWriter.put("centerX", customShape.getCenterX());
                 jsonWriter.put("centerY", customShape.getCenterY());

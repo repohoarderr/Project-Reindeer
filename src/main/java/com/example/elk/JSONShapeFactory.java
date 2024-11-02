@@ -23,6 +23,13 @@ public class JSONShapeFactory {
             }
         }
 
+        if (numStraightLines == 2 && numArcs == 2){
+            return new JSONCustomShape(ShapeType.OBLONG, singleShapeAsLines);
+        }
+
+        //TODO: idea for checking for chamfered corners
+        //check to see if there are two sets of two lines which are parallel with each other --> these are the sides of the non-chamfered rectangle
+        //additional lines are chamfered corners?
         if (numStraightLines == 3 && numArcs == 3) {
             //TODO: triangle w/ rounded corners
         }
