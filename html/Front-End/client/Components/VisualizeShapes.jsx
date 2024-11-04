@@ -1,11 +1,55 @@
 import React, {useEffect, useRef} from 'react';
 
-const VisualizeShapes = ({shapesData, scaleFactor = 100}) => {
+function findMaxY(shapesData) {
+    return 100; //todo: fix later
+}
+
+function findMaxX(shapesData) {
+    return shapesData
+        .map((object) =>{
+            return object.drawing;
+        })
+        .reduce((a, b) =>{ //find the largest value between all x values (start and end) of all drawing lines
+            let maxFromA = Math.max(a.reduce((c, d) => c.startX > d.startX ? c : d).startX,
+                a.reduce((c, d) => c.endX > d.endY ? c : d).endX);
+
+            let maxFromB = Math.max(b.reduce((c, d) => c.startX > d.startX ? c : d).startX,
+                b.reduce((c, d) => c.endX > d.endY ? c : d).endX);
+
+            return maxFromA > maxFromB ? a : b;
+        })
+}
+
+const VisualizeShapes = ({shapesData}) => {
     // Reference to the canvas element
     const canvasRef = useRef(null);
 
     // Get the window's width to scale the canvas size
     const windowWidth = window.innerWidth;
+
+    let scaleFactor = 100;
+
+    function calculateScaleFactor(shapesData) {
+        let minX = Infinity;
+        let maxX = 0;
+        let minY = Infinity;
+        let maxY = 0;
+        shapesData
+            .map((object) =>{
+                return object.table;
+            })
+            .forEach((shape) => {
+                //approximate min and max x using centerX, same thing for y
+                minX = Math.min(minX, shape.centerX);
+                minY = Math.min(minY, shape.centerY);
+                maxX = Math.max(maxX, shape.centerX);
+                maxY = Math.max(maxY, shape.centerY);
+            })
+        console.log("Max X", maxX);
+        console.log("Max Y", maxY);
+        console.log("Min X", minX);
+        console.log("Min Y", minY);
+    }
 
     // useEffect hook is used to handle the drawing logic when the component mounts or when shapesData or scaleFactor changes
     useEffect(() => {
@@ -13,16 +57,21 @@ const VisualizeShapes = ({shapesData, scaleFactor = 100}) => {
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
 
-            //flip y-axis
-            ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
-            // Set canvas width to 80% of the window width
-            canvas.width = windowWidth * 0.8;
-
-            // Flip the y-axis to mimic a coordinate system where (0, 0) is at the bottom-left of the canvas
-            ctx.transform(1, 0, 0, -1, 0, canvas.height);
-
             // Clear the canvas before drawing to avoid overlapping previous drawings
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            scaleFactor =  Math.abs(600 / Math.max(findMaxX(shapesData), findMaxY(shapesData)));
+
+            canvas.height = findMaxY(shapesData) * 2 * scaleFactor;
+            canvas.width = findMaxX(shapesData)* 2 * scaleFactor;
+
+            //flip y-axis, need to apply transforms after changing canvas width and height
+            ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
+
+
+            console.log("Canvas width: ", canvas.width);
+            console.log("Canvas height: ", canvas.height);
+            console.log("-----------------------------------");
 
             // Outline the entire canvas for visual clarity
             ctx.strokeRect(0, 0, canvas.width, canvas.height);
@@ -95,6 +144,8 @@ const VisualizeShapes = ({shapesData, scaleFactor = 100}) => {
 
             // Call the function to draw all the shapes on the canvas
             drawShapes();
+
+            calculateScaleFactor(shapesData);
         },
         [shapesData, scaleFactor]); // Re-run the effect if shapesData or scaleFactor changes
 
