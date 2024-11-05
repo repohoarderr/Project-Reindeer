@@ -15,6 +15,7 @@ import java.util.Optional;
 public class JSONShape {
     //required parameters
     protected List<BasicLine> lines = new ArrayList<>();
+    protected List<JSONShape> subFeatures = new ArrayList<>(); //hold list of notches, chamfered corners, etc
     protected int id;
 
     private Shape source; //if a shape has a java.awt counterpart (such as circle or rectangle, but not trapezoid or freehand), store it here
