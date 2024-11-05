@@ -3,7 +3,6 @@ package com.example.elk;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -96,11 +95,6 @@ public class BasicLine implements Comparable<BasicLine>
     }
 
     public boolean isLinkedWith(BasicLine other){
-//        return this.startPoint.equals(other.startPoint) ||
-//                this.startPoint.equals(other.endPoint) ||
-//                this.endPoint.equals(other.startPoint) ||
-//                this.endPoint.equals(other.endPoint);
-
         final double TOLERANCE = 0.001;
         return this != other &&
                 (nearlyEquals(this.startPoint, other.startPoint, TOLERANCE) ||
@@ -142,7 +136,7 @@ public class BasicLine implements Comparable<BasicLine>
         return 0;
     }
 
-    private double getLength() {
+    public double getLength() {
         if (source instanceof Line2D line){
             return line.getP1().distance(line.getP2());
         }

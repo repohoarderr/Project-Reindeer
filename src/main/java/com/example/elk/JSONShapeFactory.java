@@ -29,10 +29,6 @@ public class JSONShapeFactory {
             return new JSONCustomShape(ShapeType.OBLONG, singleShapeAsLines);
         }
 
-        //TODO: idea for checking for chamfered corners
-        //check to see if there are two sets of two lines which are parallel with each other --> these are the sides of the non-chamfered rectangle
-        //additional lines are chamfered corners?
-
         if (numStraightLines == 3 && numArcs == 3) {
             return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, singleShapeAsLines);
         }
@@ -61,7 +57,91 @@ public class JSONShapeFactory {
 
         //TODO: obvs finish
         Collections.sort(singleShapeAsLines);
+        //check to see if shape has notch features, chamfered corners, etc.
+        //TODO: idea for checking for chamfered corners
+        //check to see if there are two sets of two lines which are parallel with each other --> these are the sides of the non-chamfered rectangle
+        //additional lines are chamfered corners?
+
+        //create copy of singleShapeAsLines (shapeLinesCopy)
+        //check to see if shapeLinesCopy has radius notch
+        //if it does, remove those lines from copy
+        //check to see if remaining lines meet parameters of a JSONShape
+        //if they do:
+            //create the shape, add the notch features to it
+        //if they don't:
+            //repeat the process until the shape can be parsed or until shapeLinesCopy is empty --> return freehand
+
+        List<List<BasicLine>> equalLengthLines = getEqualLengthLines(singleShapeAsLines);
+        List<JSONShape> likelyRadiusNotches = new ArrayList<>();
+
+        for (List<BasicLine> list : equalLengthLines){
+            if (list.size() != 2){
+                //TODO: what happens when list.size() != 2? We don't know how to deal with this yet
+                continue;
+            }
+            //if the two lines have an arc connecting them,
+            //and that arc has an angle extent >= 180 degrees,
+            //it is likely a radius notch
+
+            //loop through arcs which have an angle extent > 180
+            for (BasicLine arc : singleShapeAsLines.stream()
+                    .filter(shape -> shape.getSource() instanceof Arc2D)
+                    .filter(shape -> isAngleExtentSufficient((Arc2D)shape.getSource(), 180))
+                    .toList()) {
+                boolean connected = true;
+                for (BasicLine line : list){
+                    if (!arc.isLinkedWith(line)){
+                        connected = false;
+                    }
+                    else{
+                        System.out.println("at least these are connected");
+                    }
+                }
+                if (connected){
+                    List<BasicLine> radiusNotchLines = new ArrayList<>(list);
+                    radiusNotchLines.add(arc);
+                    likelyRadiusNotches.add(new JSONCustomShape(ShapeType.RADIUS_NOTCH,radiusNotchLines));
+                }
+            }
+        }
+
         return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
+    }
+
+    private static boolean isAngleExtentSufficient(Arc2D arc, double targetExtent) {
+        double extent = arc.getAngleExtent();
+        if (extent < 0){
+            extent *= -1;
+        }
+        return extent > targetExtent;
+    }
+
+    private static List<List<BasicLine>> getEqualLengthLines(List<BasicLine> lines) {
+        List<List<BasicLine>> equalLengthLines = new ArrayList<>();
+        goHere:
+        for (BasicLine line : lines){
+            if (!(line.getSource() instanceof Line2D)){
+                continue;
+            }
+            if (equalLengthLines.isEmpty()){
+                equalLengthLines.add(new ArrayList<>());
+                equalLengthLines.get(0).add(line);
+                continue;
+            }
+
+            final double TOLERANCE = 0.001;
+            for (List<BasicLine> list : equalLengthLines){
+                if (Math.abs(line.getLength() - list.get(0).getLength()) < TOLERANCE){
+                    list.add(line);
+                    continue goHere;
+                }
+            }
+            equalLengthLines.add(new ArrayList<>());
+            equalLengthLines.get(equalLengthLines.size() - 1).add(line);
+        }
+
+        equalLengthLines.removeIf(list -> list.size() == 1);
+        return equalLengthLines;
     }
 
     private static RoundRectangle2D.Double parseRoundRectangle(List<BasicLine> singleShapeAsLines) {
