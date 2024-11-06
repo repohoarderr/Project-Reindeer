@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,34 @@ public class JSONShape {
 
         id = idCounter;
         idCounter++;
+    }
+
+    /**
+     * Add the sub feature, usually a notch or other incision, to the shape.
+     * @param feature The feature being added to the shape.
+     * @return The set of lines in this which aren't part of any sub feature.
+     */
+    public List<BasicLine> addSubFeature(JSONShape feature){
+        feature.setId(this.id);
+        this.subFeatures.add(feature);
+
+        List<BasicLine> subFeatureLines = new ArrayList<>();
+        for (JSONShape shape : subFeatures){
+            subFeatureLines.addAll(shape.lines);
+        }
+        List<BasicLine> linesWithoutFeatures = new ArrayList<>(this.lines);
+        linesWithoutFeatures.removeAll(subFeatureLines);
+
+        return linesWithoutFeatures;
+    }
+
+    private void setId(int id) {
+        this.id = id;
+        if (this.subFeatures != null && !this.subFeatures.isEmpty()){
+            for (JSONShape shape : subFeatures){
+                shape.setId(id);
+            }
+        }
     }
 
     protected boolean isMultipleRadius() {
@@ -113,6 +142,15 @@ public class JSONShape {
         }
 
         return jsonWriter;
+    }
+
+    public List<JSONObject> writeJSONSubfeatures() {
+        ArrayList<JSONObject> objects = new ArrayList<>();
+        for (JSONShape subFeature : subFeatures){
+            objects.add(subFeature.writeJSONShape());
+        }
+
+        return objects;
     }
 
     public Optional<Shape> getShape(){
@@ -209,7 +247,7 @@ public class JSONShape {
             jsonWriter.put("multipleRadius", this.multipleRadius);
             jsonWriter.put("type", "roundRectangle");
         } else { // default to this if the shape does not fall under any category
-            String fullClassName = source.getClass().getName();
+            String fullClassName = source != null ? source.getClass().getName() : "unknown";
 
             //remove "java.awt."
             String shortenedClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);

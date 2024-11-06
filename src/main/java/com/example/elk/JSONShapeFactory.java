@@ -93,9 +93,6 @@ public class JSONShapeFactory {
                     if (!arc.isLinkedWith(line)){
                         connected = false;
                     }
-                    else{
-                        System.out.println("at least these are connected");
-                    }
                 }
                 if (connected){
                     List<BasicLine> radiusNotchLines = new ArrayList<>(list);
@@ -105,7 +102,26 @@ public class JSONShapeFactory {
             }
         }
 
-        return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
+        List<BasicLine> nonFeatureLines = new ArrayList<>(singleShapeAsLines); //list of lines which don't draw a specific feature
+        for (JSONShape subFeature : likelyRadiusNotches){
+            nonFeatureLines.removeAll(subFeature.lines);
+        }
+
+        JSONShape newShape;
+        //if we've removed some lines, check again to see if we can make our base shape
+        if (nonFeatureLines.size() < singleShapeAsLines.size()){
+            newShape = JSONShapeFactory.createJSONShape(nonFeatureLines);
+            //return newShape with additional subfeatures if they exist
+            for (JSONShape subFeature : likelyRadiusNotches){
+                newShape.addSubFeature(subFeature);
+            }
+
+            return newShape;
+        }
+        else{
+            //if we haven't removed lines this time around, probably a freehand shape
+            return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
+        }
     }
 
     private static boolean isAngleExtentSufficient(Arc2D arc, double targetExtent) {
@@ -225,6 +241,11 @@ public class JSONShapeFactory {
         return maxX - minX;
     }
 
+    /**
+     * Create a JSONShape from an object which is already fully parsed by the .dxf reader, such as a circle or ellipse.
+     * @param feature the feature
+     * @return the JSONShape created from the passed in feature
+     */
     public static JSONShape createJSONShapeFromCondensedShape(Shape feature) {
         return new JSONShape(feature);
     }
