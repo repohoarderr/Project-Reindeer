@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 
 import static java.lang.Double.isInfinite;
+import static java.util.stream.Collectors.groupingBy;
 
 public class JSONShapeFactory {
     private JSONShapeFactory() {
@@ -13,6 +14,19 @@ public class JSONShapeFactory {
     }
 
     public static JSONShape createJSONShape(List<BasicLine> singleShapeAsLines) {
+        //if lines aren't all connected, then we need to "connect" them together
+        //this happens if we are trying to parse a shape which has had lines taken out
+        //ex. a triangle with a radius notch will have the radius notch lines removed so we can recognize the triangle portion
+
+        List<BasicLine> tempRemovedLines = new ArrayList<>();
+        if (!BasicLine.isOneLinkedShape(singleShapeAsLines)){
+            ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(singleShapeAsLines);
+            for (ArrayList<BasicLine> list : linesToCombine){
+                singleShapeAsLines.removeAll(list);
+                tempRemovedLines.addAll(list);
+                singleShapeAsLines.add(BasicLine.createMergedLine(list));
+            }
+        }
         int numArcs = 0;
         int numStraightLines = 0;
 
@@ -25,34 +39,39 @@ public class JSONShapeFactory {
             }
         }
 
+        //add removed lines back to this variable so we can draw all of our lines (without missing the ones removed for feature recognition)
+        ArrayList<BasicLine> tempSingleShapeAsLines = new ArrayList<>(singleShapeAsLines);
+        tempSingleShapeAsLines.addAll(tempRemovedLines);
+
         if (numStraightLines == 2 && numArcs == 2) {
-            return new JSONCustomShape(ShapeType.OBLONG, singleShapeAsLines);
+            return new JSONCustomShape(ShapeType.OBLONG, tempSingleShapeAsLines);
         }
 
         if (numStraightLines == 3 && numArcs == 3) {
-            return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, singleShapeAsLines);
+            return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, tempSingleShapeAsLines);
         }
 
         if (numStraightLines == 3 && numArcs == 0) {
-            return new JSONCustomShape(ShapeType.TRIANGLE, singleShapeAsLines);
+            return new JSONCustomShape(ShapeType.TRIANGLE, tempSingleShapeAsLines);
         }
 
         if (numStraightLines == 4 && numArcs == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
-            ArrayList<ArrayList<Line2D>> parallels = findParallelLines(singleShapeAsLines);
+            //need to not use temp array here so we only find the lines relevant to shape recognition
+            ArrayList<ArrayList<BasicLine>> parallels = findParallelLines(singleShapeAsLines);
 
             if (parallels.size() == 2){
-                return new JSONShape(parseRoundRectangle(singleShapeAsLines), singleShapeAsLines);
+                return new JSONShape(parseRoundRectangle(singleShapeAsLines), tempSingleShapeAsLines);
 
             }
             else{
-                return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, singleShapeAsLines);
+                return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, tempSingleShapeAsLines);
             }
         }
 
         if (numStraightLines == 4 && numArcs == 0) {
             return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calculateYCoord(singleShapeAsLines),
-                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), singleShapeAsLines);
+                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), tempSingleShapeAsLines);
         }
 
         //TODO: obvs finish
@@ -120,8 +139,43 @@ public class JSONShapeFactory {
         }
         else{
             //if we haven't removed lines this time around, probably a freehand shape
-            return new JSONCustomShape(ShapeType.FREEHAND, singleShapeAsLines);
+            return new JSONCustomShape(ShapeType.FREEHAND, tempSingleShapeAsLines);
         }
+    }
+
+    private static ArrayList<ArrayList<BasicLine>> findLinesToCombine(List<BasicLine> singleShapeAsLines) {
+        ArrayList<ArrayList<BasicLine>> parallelLines = findParallelLines(singleShapeAsLines);
+        ArrayList<BasicLine> allLines = new ArrayList<>();
+        parallelLines.forEach(allLines::addAll);
+
+        ArrayList<ArrayList<BasicLine>> linesToCombine = new ArrayList<>();
+
+        //start w/ list of parallel lines
+        //add lines to the same list if the slope between the lines matches the slope of the lines themselves
+        //this means that the lines are "in line" with each other
+        //(they are two line segments which are part of the same line)
+        toHere:
+        for (BasicLine line : allLines){
+            if (linesToCombine.isEmpty()){
+                linesToCombine.add(new ArrayList<>());
+            }
+
+            for (ArrayList<BasicLine> list : linesToCombine){
+                if (list.isEmpty()){
+                    list.add(line);
+                    continue toHere;
+                }
+                if (line.isInLineWith(list.getFirst())){
+                    list.add(line);
+                    continue toHere;
+                }
+            }
+            //if we never added the line to a list, we need to create a new bucket for it
+            linesToCombine.add(new ArrayList<>());
+            linesToCombine.getLast().add(line);
+        }
+        linesToCombine.removeIf(list -> list.size() < 2);
+        return linesToCombine;
     }
 
     private static boolean isAngleExtentSufficient(Arc2D arc, double targetExtent) {
@@ -250,34 +304,35 @@ public class JSONShapeFactory {
         return new JSONShape(feature);
     }
 
-    public static ArrayList<ArrayList<Line2D>> findParallelLines(List<BasicLine> singleShapeAsLines) {
+    public static ArrayList<ArrayList<BasicLine>> findParallelLines(List<BasicLine> singleShapeAsLines) {
 
-        ArrayList<ArrayList<Line2D>> parallels = new ArrayList<>();
+        ArrayList<ArrayList<BasicLine>> parallels = new ArrayList<>();
 
         double straightSlope;
         double parallelLineSlope;
 
         //create deep copy
-        ArrayList<Line2D> straightsCopy = new ArrayList<>(singleShapeAsLines.stream()
+        ArrayList<BasicLine> straightsCopy = new ArrayList<>(singleShapeAsLines.stream()
                 .filter(line -> line.getSource() instanceof Line2D.Double)
-                .map(line -> (Line2D) line.getSource())
                 .toList());
 
         while (!straightsCopy.isEmpty()) {
             goHere:
             for (int i = 0; i < straightsCopy.size(); ++i) {
-                Line2D straight = straightsCopy.get(i);
+                BasicLine straight = straightsCopy.get(i);
+                Line2D straightSource = (Line2D) straight.getSource();
 
-                straightSlope = (straight.getY2() - straight.getY1()) / (straight.getX2() - straight.getX1());
-                for (ArrayList<Line2D> list : parallels) {
+                straightSlope = (straightSource.getY2() - straightSource.getY1()) / (straightSource.getX2() - straightSource.getX1());
+                for (ArrayList<BasicLine> list : parallels) {
                     if (list.isEmpty()) {
                         list.add(straight);
                         straightsCopy.remove(straight);
                         break goHere;
                     }
 
-                    Line2D listLine = list.get(0);
-                    parallelLineSlope = (listLine.getY2() - listLine.getY1()) / (listLine.getX2() - listLine.getX1());
+                    BasicLine listLine = list.get(0);
+                    Line2D listLineSource = (Line2D) listLine.getSource();
+                    parallelLineSlope = (listLineSource.getY2() - listLineSource.getY1()) / (listLineSource.getX2() - listLineSource.getX1());
 
                     boolean bothAreInfinite = isInfinite(parallelLineSlope) && isInfinite(straightSlope); //account for vertical lines (infinite slope)
                     final double TOLERANCE = 0.001;
