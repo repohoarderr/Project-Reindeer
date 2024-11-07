@@ -129,7 +129,9 @@ public class JSONShape {
             //output individual line data (drawing data)
             arr = new JSONArray();
             for (BasicLine line : lines){
-                arr.add(writeDrawData(line.getSource(), id));
+                if (line.draw){
+                    arr.add(writeDrawData(line.getSource(), id));
+                }
             }
             jsonWriter.put("drawing", arr);
         }
@@ -267,5 +269,10 @@ public class JSONShape {
 
     public double getCenterY(){
         return centerY;
+    }
+
+    public JSONShape addRemovedLines(List<BasicLine> tempRemovedLines) {
+        this.lines.addAll(tempRemovedLines);
+        return this;
     }
 }

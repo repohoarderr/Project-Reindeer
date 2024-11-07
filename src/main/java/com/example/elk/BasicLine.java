@@ -10,18 +10,19 @@ import java.util.List;
  * Used to simplify comparison between these two classes and
  * help condense collections of lines into composite objects such as RoundRectangle2D.Double.
  */
-public class BasicLine implements Comparable<BasicLine>
-{
+public class BasicLine implements Comparable<BasicLine> {
     private Point2D startPoint;
     private Point2D endPoint;
     private Shape source;
+    boolean draw = true;
 
-    public BasicLine(Line2D src){
+    public BasicLine(Line2D src) {
         source = src;
         startPoint = src.getP1();
         endPoint = src.getP2();
     }
-    public BasicLine(Arc2D src){
+
+    public BasicLine(Arc2D src) {
         source = src;
         startPoint = src.getStartPoint();
         endPoint = src.getEndPoint();
@@ -77,31 +78,80 @@ public class BasicLine implements Comparable<BasicLine>
         return lines;
     }
 
-    public Shape getSource(){
+    /**
+     * From a list of parallel and in-line lines, return a longer line which connects all lines.
+     * ex. the lines ----    ------            ------ would be merged to --------------------------------
+     *
+     * @param list the lines to be merged
+     * @return the merged line
+     */
+    public static BasicLine createMergedLine(List<BasicLine> list) {
+        Point2D bestStartPoint = list.getFirst().getStartPoint();
+        Point2D bestEndpoint = list.getLast().getEndPoint();
+        double maxDistance = bestStartPoint.distance(bestEndpoint);
+
+        for (BasicLine line : list) {
+            for (BasicLine lineLine : list) {
+                if (line == lineLine) {
+                    continue;
+                }
+                if (line.getStartPoint().distance(lineLine.getStartPoint()) > maxDistance) {
+                    bestStartPoint = line.getStartPoint();
+                    bestEndpoint = lineLine.getStartPoint();
+                    maxDistance = bestStartPoint.distance(bestEndpoint);
+                }
+                if (line.getEndPoint().distance(lineLine.getStartPoint()) > maxDistance) {
+                    bestStartPoint = line.getEndPoint();
+                    bestEndpoint = lineLine.getStartPoint();
+                    maxDistance = bestStartPoint.distance(bestEndpoint);
+                }
+                if (line.getStartPoint().distance(lineLine.getEndPoint()) > maxDistance) {
+                    bestStartPoint = line.getStartPoint();
+                    bestEndpoint = lineLine.getEndPoint();
+                    maxDistance = bestStartPoint.distance(bestEndpoint);
+                }
+                if (line.getEndPoint().distance(lineLine.getEndPoint()) > maxDistance) {
+                    bestStartPoint = line.getEndPoint();
+                    bestEndpoint = lineLine.getEndPoint();
+                    maxDistance = bestStartPoint.distance(bestEndpoint);
+                }
+            }
+        }
+        BasicLine result = new BasicLine(new Line2D.Double(bestStartPoint, bestEndpoint));
+        result.setDraw(false);
+        return result;
+    }
+
+    private void setDraw(boolean b) {
+        draw = b;
+    }
+
+    public Shape getSource() {
         return source;
     }
 
-    public Point2D getStartPoint(){
+    public Point2D getStartPoint() {
         return startPoint;
     }
 
-    public Point2D getEndPoint(){
+    public Point2D getEndPoint() {
         return endPoint;
     }
 
-    public boolean nearlyEquals(Point2D point1, Point2D point2, double tolerance){
+    private boolean nearlyEquals(Point2D point1, Point2D point2, double tolerance) {
         return Math.abs(point1.getX() - point2.getX()) < tolerance &&
                 Math.abs(point1.getY() - point2.getY()) < tolerance;
     }
 
-    public boolean isLinkedWith(BasicLine other){
+    public boolean isLinkedWith(BasicLine other) {
         final double TOLERANCE = 0.001;
         return this != other &&
                 (nearlyEquals(this.startPoint, other.startPoint, TOLERANCE) ||
-                nearlyEquals(this.startPoint, other.endPoint, TOLERANCE) ||
-                nearlyEquals(this.endPoint, other.startPoint, TOLERANCE) ||
-                nearlyEquals(this.endPoint, other.endPoint, TOLERANCE));
+                        nearlyEquals(this.startPoint, other.endPoint, TOLERANCE) ||
+                        nearlyEquals(this.endPoint, other.startPoint, TOLERANCE) ||
+                        nearlyEquals(this.endPoint, other.endPoint, TOLERANCE));
     }
+
     public static boolean isOneLinkedShape(List<BasicLine> compositeShapeComponents) {
         //cannot be true with fewer than three lines
         if (compositeShapeComponents.size() < 3) {
@@ -126,10 +176,9 @@ public class BasicLine implements Comparable<BasicLine>
 
     @Override
     public int compareTo(BasicLine o) {
-        if (this.getLength() > o.getLength()){
+        if (this.getLength() > o.getLength()) {
             return 1;
-        }
-        else if (this.getLength() < o.getLength()){
+        } else if (this.getLength() < o.getLength()) {
             return -1;
         }
 
@@ -137,15 +186,14 @@ public class BasicLine implements Comparable<BasicLine>
     }
 
     public double getLength() {
-        if (source instanceof Line2D line){
+        if (source instanceof Line2D line) {
             return line.getP1().distance(line.getP2());
-        }
-        else if (source instanceof Arc2D.Double arc){
+        } else if (source instanceof Arc2D.Double arc) {
             //arc length = angle * radius        angle in radians
             //radius is dist(p1, p2) * (sqrt(2) / 2)
 
             double angleDegs = arc.getAngleExtent();
-            if (angleDegs < 0){
+            if (angleDegs < 0) {
                 angleDegs += 360;//need to account for negative angles
             }
             double angleRads = Math.toRadians(angleDegs);
@@ -156,5 +204,46 @@ public class BasicLine implements Comparable<BasicLine>
             return angleRads * radius;
         }
         return 0;
+    }
+
+    public boolean isInLineWith(BasicLine listLine) {
+        if (this.source instanceof Arc2D ||
+                listLine.source instanceof Arc2D) {
+            throw new UnsupportedOperationException("Arcs do not have a slope");
+        }
+        //slope of two lines must be the same
+        final double TOLERANCE = 0.001;
+        if (Math.abs(this.getSlope() - listLine.getSlope()) > TOLERANCE) {
+            return false;
+        }
+
+        //slope of one line's point to the other line's point must match the slope of the lines themselves
+        Line2D thisLineSrc = (Line2D) source;
+        Line2D listLineSrc = (Line2D) listLine.source;
+
+        double deltaY = thisLineSrc.getY2() - listLineSrc.getY1();
+        double deltaX = thisLineSrc.getX2() - listLineSrc.getX1();
+
+        if (deltaX == 0) {
+            //check to see if all lines are straight up and down
+            return listLine.getSlope() == Double.POSITIVE_INFINITY;
+        }
+
+        return Math.abs((deltaY / deltaX) - listLine.getSlope()) < TOLERANCE;
+    }
+
+    public double getSlope() {
+        if (this.source instanceof Arc2D) {
+            throw new UnsupportedOperationException("Arcs do not have a slope");
+        }
+        Line2D lineSrc = (Line2D) source;
+        double deltaY = lineSrc.getY2() - lineSrc.getY1();
+        double deltaX = lineSrc.getX2() - lineSrc.getX1();
+
+        if (deltaX == 0) {//straight line up and down
+            return Double.POSITIVE_INFINITY;
+        }
+
+        return deltaY / deltaX;
     }
 }
