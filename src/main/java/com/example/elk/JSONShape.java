@@ -129,7 +129,7 @@ public class JSONShape {
             //output individual line data (drawing data)
             arr = new JSONArray();
             for (BasicLine line : lines){
-                if (line.doDraw()){
+                if (line.draw){
                     arr.add(writeDrawData(line.getSource(), id));
                 }
             }
