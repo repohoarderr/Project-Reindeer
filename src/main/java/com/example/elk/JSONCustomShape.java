@@ -75,7 +75,7 @@ public class JSONCustomShape extends JSONShape {
 
         //output individual line data (drawing data)
         for (BasicLine line : lines){
-            if (line.draw){
+            if (line.doDraw()){
                 arr.add(writeDrawData(line.getSource(), id));
             }
         }

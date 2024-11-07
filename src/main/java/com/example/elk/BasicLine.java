@@ -14,7 +14,7 @@ public class BasicLine implements Comparable<BasicLine> {
     private Point2D startPoint;
     private Point2D endPoint;
     private Shape source;
-    boolean draw = true;
+    private boolean draw = true;
 
     public BasicLine(Line2D src) {
         source = src;
@@ -83,7 +83,7 @@ public class BasicLine implements Comparable<BasicLine> {
      * ex. the lines ----    ------            ------ would be merged to --------------------------------
      *
      * @param list the lines to be merged
-     * @return the merged line
+     * @return the merged line, with its draw boolean set to false
      */
     public static BasicLine createMergedLine(List<BasicLine> list) {
         Point2D bestStartPoint = list.getFirst().getStartPoint();
@@ -118,12 +118,8 @@ public class BasicLine implements Comparable<BasicLine> {
             }
         }
         BasicLine result = new BasicLine(new Line2D.Double(bestStartPoint, bestEndpoint));
-        result.setDraw(false);
+        result.draw = false;
         return result;
-    }
-
-    private void setDraw(boolean b) {
-        draw = b;
     }
 
     public Shape getSource() {
@@ -147,9 +143,9 @@ public class BasicLine implements Comparable<BasicLine> {
         final double TOLERANCE = 0.001;
         return this != other &&
                 (nearlyEquals(this.startPoint, other.startPoint, TOLERANCE) ||
-                        nearlyEquals(this.startPoint, other.endPoint, TOLERANCE) ||
-                        nearlyEquals(this.endPoint, other.startPoint, TOLERANCE) ||
-                        nearlyEquals(this.endPoint, other.endPoint, TOLERANCE));
+                nearlyEquals(this.startPoint, other.endPoint, TOLERANCE) ||
+                nearlyEquals(this.endPoint, other.startPoint, TOLERANCE) ||
+                nearlyEquals(this.endPoint, other.endPoint, TOLERANCE));
     }
 
     public static boolean isOneLinkedShape(List<BasicLine> compositeShapeComponents) {
@@ -245,5 +241,9 @@ public class BasicLine implements Comparable<BasicLine> {
         }
 
         return deltaY / deltaX;
+    }
+
+    public boolean doDraw() {
+        return draw;
     }
 }
