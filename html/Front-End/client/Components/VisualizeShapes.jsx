@@ -42,9 +42,6 @@ const VisualizeShapes = ({shapesData}) => {
     // Reference to the canvas element
     const canvasRef = useRef(null);
 
-    // Get the window's width to scale the canvas size
-    const windowWidth = window.innerWidth;
-
     let scaleFactor = 100;
 
     // useEffect hook is used to handle the drawing logic when the component mounts or when shapesData or scaleFactor changes
