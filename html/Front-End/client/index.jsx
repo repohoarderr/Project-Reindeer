@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 // Import bootstrap for CSS bundling
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import groupShapes from "./services/GroupShapes.js"
 // Root app component
 import App from "./App.jsx";
 

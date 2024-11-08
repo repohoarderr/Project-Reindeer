@@ -9,6 +9,7 @@ import FileUploadForm from "./Components/UploadForm.jsx";
 import DisplayResults from "./Components/DisplayResults.jsx";
 import ManualFeatureSelection from "./Components/ManualFeatureSelection.jsx";
 import VisualizeShapes from "./Components/VisualizeShapes.jsx";
+import LogConsole from "./services/GroupShapes.js"
 
 export default function App() {
     // Define a state variable to store the results of the file upload.
@@ -47,6 +48,10 @@ export default function App() {
             {uploadResults && (
                 // Parse the upload results (assuming they're JSON) and pass them as 'shapesData' to the VisualizeShapes component.
                 <VisualizeShapes shapesData={JSON.parse(uploadResults)} />
+            )}
+
+            {uploadResults && (
+                <LogConsole results={uploadResults} />
             )}
         </div>
     );
