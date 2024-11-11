@@ -45,6 +45,7 @@ public class FileUploadServlet extends HttpServlet {
       JSONArray array = new JSONArray();
       for (JSONShape s : shapesList) {
         array.add(s.writeJSONShape());
+        array.addAll(s.writeJSONSubfeatures());
       }
 
       out.print(array);

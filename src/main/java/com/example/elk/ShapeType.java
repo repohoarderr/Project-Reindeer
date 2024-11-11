@@ -10,5 +10,10 @@ public enum ShapeType {
 
     OBLONG,
 
+    RADIUS_NOTCH,
+    MITERED_NOTCH,
+    CORNER_NOTCH,
+    CHAMFERED_CORNER,
+
     FREEHAND
 }
