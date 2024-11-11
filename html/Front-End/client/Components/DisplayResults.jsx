@@ -27,7 +27,7 @@ export default function DisplayResults({results}) {
     /**
      * Calculate the price of the shape based on its type and size.
      *
-     * This is the messiest function you will ever see. I'm sorry.
+     * There is probably a better way of doing this.
      * @param shape - The shape object to calculate the price for.
      * @returns {*} - The price of the shape.
      */
@@ -142,6 +142,11 @@ export default function DisplayResults({results}) {
     const treeTableData = shapesToNodes();
     //console.log("Transformed Data:", treeTableData);
 
+    // const totalPrice = treeTableData.reduce((sum, node) => {
+    //     const price = parseFloat(node.data.price.replace('$', ''));
+    //     return sum + price;
+    // })
+
     return (
         <div className="results">
             {/* Conditionally render the results or a default message/table based on whether 'results' has data */}
@@ -161,6 +166,8 @@ export default function DisplayResults({results}) {
                         <Column field="multipleRadius" header="Multiple Radius"></Column>
                         <Column field="price" header="Price"></Column>
                     </TreeTable>
+
+                    {/*<div id="totalPrice"> Total Price: ${totalPrice.toFixed(2)}</div>*/}
                 </div>
             ) : (
                 <div>
