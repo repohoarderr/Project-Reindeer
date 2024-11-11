@@ -5,6 +5,7 @@ import {Column} from 'primereact/column';
 
 import 'primereact/resources/themes/saga-blue/theme.css';  // Choose a theme
 import 'primereact/resources/primereact.min.css';
+import settings from '../services/settings.json';
 
 /**
  * DisplayResults component renders the results received from the backend.
@@ -21,6 +22,63 @@ export default function DisplayResults({results}) {
         return parseFloat(num.toFixed(4));
     }
 
+    const sizeThresholds = settings.sizeThresholds;
+    const prices = settings.prices
+    /**
+     * Calculate the price of the shape based on its type and size.
+     *
+     * This is the messiest function you will ever see. I'm sorry.
+     * @param shape - The shape object to calculate the price for.
+     * @returns {*} - The price of the shape.
+     */
+    const calculatePrice = (shape) => {
+        console.log(shape.type.concat(shape.area))
+        let basePrice;
+        if (shape.type === 'circle' || shape.type === 'punch') {
+            // Get size (diameter)
+            const size = 2*(shape.radius);
+
+            // Find the price for the size
+            let threshold = 'small';
+            if (size >= sizeThresholds[`${shape.type}.medium.lower`] && size <= sizeThresholds[`${shape.type}.medium.upper`]) {
+                threshold = 'medium';
+            } else if (size >= sizeThresholds[`${shape.type}.large.lower`] && size <= sizeThresholds[`${shape.type}.large.upper`]) {
+                threshold = 'large';
+            }
+
+            // set basePrise
+            basePrice = prices[`${shape.type}.${threshold}`] || 0;
+        }
+        else if (shape.type === 'rectangle' || shape.type === 'roundRectangle') {
+            let area = shape.area;
+            let threshold = 'small';
+            if (area >= sizeThresholds[`${shape.type}.medium.lower`] && area <= sizeThresholds[`${shape.type}.medium.upper`]) {
+                threshold = 'medium';
+            } else if (area >= sizeThresholds[`${shape.type}.large.lower`] && area <= sizeThresholds[`${shape.type}.large.upper`]) {
+                threshold = 'large';
+            }
+            basePrice = prices[`${shape.type}.${threshold}`] || 0;
+        }
+        // This is commented out because the areas for these shapes is not defined.
+        // else if (shape.type === 'roundTrapezoid' || shape.type === 'roundTriangle' || shape.type === 'oblong') {
+        //     let area = shape.area;
+        //     let threshold = 'small';
+        //     if (area >= sizeThresholds[`${shape.type}.medium.lower`] && area <= sizeThresholds[`${shape.type}.medium.upper`]) {
+        //         threshold = 'medium';
+        //     } else if (area >= sizeThresholds[`${shape.type}.large.lower`] && area <= sizeThresholds[`${shape.type}.large.upper`]) {
+        //         threshold = 'large';
+        //     }
+        //     basePrice = prices[`${shape.type}.${threshold}`] || 0;
+        // }
+
+        else {
+            basePrice = 0
+        }
+
+        return basePrice;
+    };
+
+
     const shapesToNodes = () => {
         if (!results) return [];
 
@@ -29,6 +87,7 @@ export default function DisplayResults({results}) {
                 return object.table;
             })
             .map((shape, index) => {
+                const price = calculatePrice(shape)
                 return {
                     key: index.toString(),
                     data: {
@@ -38,8 +97,9 @@ export default function DisplayResults({results}) {
                         area: round(shape.area),
                         circumference: round(shape.circumference),
                         radius: round(shape.radius),
-                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius : ""
-                    },
+                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius : "",
+                        price: price !== undefined ? `$${price.toFixed(2)}` : 'N/A'
+                }
                 };
             })
             .filter(node => node !== null) // Remove null values
@@ -71,7 +131,8 @@ export default function DisplayResults({results}) {
                         area: shape.area !=="" ? shape.area : 'N/A',
                         radius: shape.radius !=="" ? shape.radius : 'N/A',
                         circumference: shape.circumference !=="" ? shape.circumference : 'N/A',
-                        multipleRadius: shape.multipleRadius !=="" ? shape.multipleRadius.toString() : 'N/A'
+                        multipleRadius: shape.multipleRadius !=="" ? shape.multipleRadius.toString() : 'N/A',
+                        price: shape.price !== undefined ? shape.price: 'N/A'
                     },
                 });
                 return acc; // Return the updated accumulator
@@ -98,6 +159,7 @@ export default function DisplayResults({results}) {
                         <Column field="circumference" header="Circumference"></Column>
                         <Column field="radius" header="Radius"></Column>
                         <Column field="multipleRadius" header="Multiple Radius"></Column>
+                        <Column field="price" header="Price"></Column>
                     </TreeTable>
                 </div>
             ) : (
@@ -117,164 +179,3 @@ export default function DisplayResults({results}) {
         </div>
     );
 }
-
-// const exampleTreeData = [
-//     {
-//         key: '0',
-//         data: {
-//             type: 'Arc2D',
-//             centerX: ' ',
-//             centerY: '',
-//             area: ' ',
-//             radius: ' ',
-//             circumference: ' '
-//         },
-//         children: [
-//             {
-//                 key: 'Arc2D-0',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 11.2651,
-//                     centerY: 0.755,
-//                     area: ' ',
-//                     radius: 0.9375,
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Arc2D-1',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 6.0147,
-//                     centerY: 0.755,
-//                     area: ' ',
-//                     radius: 0.9375,
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Arc2D-2',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 6.0004,
-//                     centerY: 4.2,
-//                     area: ' ',
-//                     radius: 0.9375,
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Arc2D-3',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 0.75,
-//                     centerY: 4.2,
-//                     area: ' ',
-//                     radius: 0.9375,
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Arc2D-4',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 8.6399,
-//                     centerY: 3.1078,
-//                     area: ' ',
-//                     radius: 2.3088,
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Arc2D-5',
-//                 data: {
-//                     type: 'Arc2D',
-//                     centerX: 3.3752,
-//                     centerY: 1.8472,
-//                     area: ' ',
-//                     radius: 2.3088,
-//                     circumference: ' '
-//                 }
-//             }
-//         ]
-//     },
-//     {
-//         key: '1',
-//         data: {
-//             type: 'Line2D',
-//             centerX: ' ',
-//             centerY: '',
-//             area: ' ',
-//             radius: ' ',
-//             circumference: ' '
-//         },
-//         children: [
-//             {
-//                 key: 'Line2D-0',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Line2D-1',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Line2D-2',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Line2D-3',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Line2D-4',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             },
-//             {
-//                 key: 'Line2D-5',
-//                 data: {
-//                     type: 'Line2D',
-//                     centerX: '',
-//                     centerY: '',
-//                     area: ' ',
-//                     radius: ' ',
-//                     circumference: ' '
-//                 }
-//             }
-//         ]
-//     }
-// ];
