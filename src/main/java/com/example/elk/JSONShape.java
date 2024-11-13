@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -275,5 +276,10 @@ public class JSONShape {
 
     public double getCenterY(){
         return centerY;
+    }
+
+    public JSONShape addRemovedLines(List<BasicLine> tempRemovedLines) {
+        this.lines.addAll(tempRemovedLines);
+        return this;
     }
 }

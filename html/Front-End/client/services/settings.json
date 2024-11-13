@@ -1,0 +1,13 @@
+{
+  "prices": {
+    "punch": 110,
+    "circle": 120,
+    "freehand": 130,
+    "oblong": 140,
+    "roundTrapezoid": 150,
+    "roundTriangle": 160,
+    "roundRectangle": 170,
+    "rectangle": 180,
+    "radiusNotch": 190
+  }
+}
