@@ -1,8 +1,6 @@
-import React from "react";
-
+import React, {useEffect, useState} from "react";
 import {TreeTable} from 'primereact/treetable';
 import {Column} from 'primereact/column';
-
 import 'primereact/resources/themes/saga-blue/theme.css';  // Choose a theme
 import 'primereact/resources/primereact.min.css';
 import settings from '../services/settings.json';
@@ -15,6 +13,22 @@ import settings from '../services/settings.json';
  * @param {string} props.results - The results data to display. If no results are available, a message or table is shown.
  */
 export default function DisplayResults({results}) {
+    const [highlightClass, setHighlightClass] = useState("");
+
+    // useEffect hook to handle the animation for the total price display
+    useEffect(() => {
+        if (results) {
+            const delayTimer = setTimeout(() => {
+                setHighlightClass("highlight"); // Add class to trigger animation after 2 seconds
+                const animationTimer = setTimeout(() => setHighlightClass(""), 2000); // Remove class after animation
+                return () => clearTimeout(animationTimer); // Cleanup for animation timeout
+            }, 1500); // 1.5-second delay before animation starts
+
+            return () => clearTimeout(delayTimer); // Cleanup for delay timer
+        }
+    }, [results]);
+
+    // Round a number to 4 decimal places
     const round = (num) => {
         if(num === undefined || isNaN(num)){
             return "";
@@ -22,7 +36,7 @@ export default function DisplayResults({results}) {
         return parseFloat(num.toFixed(4));
     }
 
-    const sizeThresholds = settings.sizeThresholds;
+    // Extract the size thresholds and prices from the settings.json file. All changes in the settings file will be reflected here.
     const prices = settings.prices
     /**
      * Calculate the price of the shape based on its type and size.
@@ -32,64 +46,28 @@ export default function DisplayResults({results}) {
      * @returns {*} - The price of the shape.
      */
     const calculatePrice = (shape) => {
-        console.log(shape.type.concat(shape.area))
         let basePrice;
-        if (shape.type === 'circle' || shape.type === 'punch') {
-            // Get size (diameter)
-            const size = 2*(shape.radius);
+        if (shape.type === "freehand") {
 
-            // Find the price for the size
-            let threshold = 'small';
-            if (size >= sizeThresholds[`${shape.type}.medium.lower`] && size <= sizeThresholds[`${shape.type}.medium.upper`]) {
-                threshold = 'medium';
-            } else if (size >= sizeThresholds[`${shape.type}.large.lower`] && size <= sizeThresholds[`${shape.type}.large.upper`]) {
-                threshold = 'large';
-            }
-
-            // set basePrise
-            basePrice = prices[`${shape.type}.${threshold}`] || 0;
         }
-        else if (shape.type === 'rectangle' || shape.type === 'roundRectangle') {
-            let area = shape.area;
-            let threshold = 'small';
-            if (area >= sizeThresholds[`${shape.type}.medium.lower`] && area <= sizeThresholds[`${shape.type}.medium.upper`]) {
-                threshold = 'medium';
-            } else if (area >= sizeThresholds[`${shape.type}.large.lower`] && area <= sizeThresholds[`${shape.type}.large.upper`]) {
-                threshold = 'large';
-            }
-            basePrice = prices[`${shape.type}.${threshold}`] || 0;
-        }
-        // This is commented out because the areas for these shapes is not defined.
-        // else if (shape.type === 'roundTrapezoid' || shape.type === 'roundTriangle' || shape.type === 'oblong') {
-        //     let area = shape.area;
-        //     let threshold = 'small';
-        //     if (area >= sizeThresholds[`${shape.type}.medium.lower`] && area <= sizeThresholds[`${shape.type}.medium.upper`]) {
-        //         threshold = 'medium';
-        //     } else if (area >= sizeThresholds[`${shape.type}.large.lower`] && area <= sizeThresholds[`${shape.type}.large.upper`]) {
-        //         threshold = 'large';
-        //     }
-        //     basePrice = prices[`${shape.type}.${threshold}`] || 0;
-        // }
-
         else {
-            basePrice = 0
+            basePrice = prices[`${shape.type}`]
         }
-
         return basePrice;
     };
 
-
+    // Function to transform the results JSON into a format suitable for the TreeTable component
     const shapesToNodes = () => {
         if (!results) return [];
 
-        return Object.values(JSON.parse(results)
-            .map((object) => {
-                return object.table;
-            })
-            .map((shape, index) => {
-                const price = calculatePrice(shape)
-                return {
-                    key: index.toString(),
+        // Parse the results JSON and extract the shape data
+        const shapeGroups = JSON.parse(results)
+            .map((object) => object.table)
+            .reduce((acc, shape, index) => {
+                const price = calculatePrice(shape);
+                // Create a data object for the shape
+                const shapeData = {
+                    key: `${shape.type}-${index}`,
                     data: {
                         type: shape.type,
                         centerX: round(shape.centerX),
@@ -97,59 +75,39 @@ export default function DisplayResults({results}) {
                         area: round(shape.area),
                         circumference: round(shape.circumference),
                         radius: round(shape.radius),
-                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius : "",
+                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A',
                         price: price !== undefined ? `$${price.toFixed(2)}` : 'N/A'
-                }
+                    }
                 };
-            })
-            .filter(node => node !== null) // Remove null values
-            .reduce((acc, node) => {
-                const shape = node.data;
-                // Generate a unique key for the group
-                const key = `${shape.type}`;
 
-                // If the group doesn't exist in the accumulator, create it
-                if (!acc[key]) {
-                    acc[key] = {
-                        key: `${shape.type}-${shape.area}-${shape.radius}-${shape.circumference}`,
-                        data: {
-                            type: shape.type
-                        },
+                // Group shapes by type
+                if (!acc[shape.type]) {
+                    acc[shape.type] = {
+                        key: shape.type,
+                        data: { type: shape.type },
                         children: []
                     };
                 }
 
-                // Add the shape to the group's children
-                acc[key].children.push({
-                    key: `${key}-${acc[key].children.length}`,
-                    data: {
-                        type: shape.type,
+                acc[shape.type].children.push(shapeData);
+                return acc;
+            }, {});
 
-                        //we have already rounded, so we don't need to round again
-                        centerX: shape.centerX !=="" ? shape.centerX : 'N/A',
-                        centerY: shape.centerY !=="" ? shape.centerY : 'N/A',
-                        area: shape.area !=="" ? shape.area : 'N/A',
-                        radius: shape.radius !=="" ? shape.radius : 'N/A',
-                        circumference: shape.circumference !=="" ? shape.circumference : 'N/A',
-                        multipleRadius: shape.multipleRadius !=="" ? shape.multipleRadius.toString() : 'N/A',
-                        price: shape.price !== undefined ? shape.price: 'N/A'
-                    },
-                });
-                return acc; // Return the updated accumulator
-            }, {})); // Start with an empty object as the accumulator
+        return Object.values(shapeGroups);
     };
 
     const treeTableData = shapesToNodes();
-    //console.log("Transformed Data:", treeTableData);
 
-    // const totalPrice = treeTableData.reduce((sum, node) => {
-    //     const price = parseFloat(node.data.price.replace('$', ''));
-    //     return sum + price;
-    // })
+    // Calculate total price from all shapes in treeTableData
+    const totalPrice = treeTableData.reduce((sum, group) => {
+        return sum + group.children.reduce((groupSum, node) => {
+            const price = parseFloat(node.data.price.replace('$', '')) || 0;
+            return groupSum + price;
+        }, 0);
+    }, 0);
 
     return (
         <div className="results">
-            {/* Conditionally render the results or a default message/table based on whether 'results' has data */}
             {results ? (
                 <div>
                     {/* If results are available, display them inside a <pre> tag to preserve formatting */}
@@ -167,20 +125,15 @@ export default function DisplayResults({results}) {
                         <Column field="price" header="Price"></Column>
                     </TreeTable>
 
-                    {/*<div id="totalPrice"> Total Price: ${totalPrice.toFixed(2)}</div>*/}
+                    {/* Display total price */}
+                    <div className={`scrollHere ${highlightClass}`}>
+                        Total Price: ${totalPrice.toFixed(2)}
+                    </div>
                 </div>
             ) : (
                 <div>
                     {/* If no results are available, show a message indicating this */}
                     <h2>No Results Available</h2>
-
-                    {/*/!* Display a TreeTable with placeholder columns for "Name", "Size", and "Type" when no data is present *!/*/}
-                    {/*<TreeTable tableStyle={{ minWidth: '50rem' }}> /!* Setting a minimum width for the table *!/*/}
-                    {/*    /!* Define the columns for the TreeTable *!/*/}
-                    {/*    <Column field="name" header="Name" expander></Column> /!* Column for file or folder name with expander *!/*/}
-                    {/*    <Column field="size" header="Size"></Column> /!* Column for file size *!/*/}
-                    {/*    <Column field="type" header="Type"></Column> /!* Column for file type *!/*/}
-                    {/*</TreeTable>*/}
                 </div>
             )}
         </div>
