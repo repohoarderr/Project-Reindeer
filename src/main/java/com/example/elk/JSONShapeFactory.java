@@ -4,9 +4,9 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Double.isInfinite;
-import static java.util.stream.Collectors.groupingBy;
 
 public class JSONShapeFactory {
     private JSONShapeFactory() {
@@ -54,7 +54,7 @@ public class JSONShapeFactory {
         if (numStraightLines == 4 && numArcs == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
             //need to not use temp array here so we only find the lines relevant to shape recognition
-            ArrayList<ArrayList<BasicLine>> parallels = findParallelLines(singleShapeAsLines);
+            List<List<BasicLine>> parallels = findParallelLines(singleShapeAsLines);
 
             if (parallels.size() == 2){
                 //TODO: throw in check for parallelograms here
@@ -135,7 +135,7 @@ public class JSONShapeFactory {
     }
 
     private static ArrayList<ArrayList<BasicLine>> findLinesToCombine(List<BasicLine> singleShapeAsLines) {
-        ArrayList<ArrayList<BasicLine>> parallelLines = findParallelLines(singleShapeAsLines);
+        List<List<BasicLine>> parallelLines = findParallelLines(singleShapeAsLines);
         ArrayList<BasicLine> allLines = new ArrayList<>();
         parallelLines.forEach(allLines::addAll);
 
@@ -178,31 +178,17 @@ public class JSONShapeFactory {
     }
 
     private static List<List<BasicLine>> getEqualLengthLines(List<BasicLine> lines) {
-        List<List<BasicLine>> equalLengthLines = new ArrayList<>();
-        goHere:
-        for (BasicLine line : lines){
-            if (!(line.getSource() instanceof Line2D)){
-                continue;
-            }
-            if (equalLengthLines.isEmpty()){
-                equalLengthLines.add(new ArrayList<>());
-                equalLengthLines.get(0).add(line);
-                continue;
-            }
+        Collection<List<BasicLine>> equalLengthLines = lines.stream()
+                .filter(line -> line.getSource() instanceof Line2D)
+                .collect(Collectors.groupingBy(line -> {
+                    final double TOLERANCE = 0.001;
+                    return Math.round(line.getLength() / TOLERANCE) * TOLERANCE;
+                }))
+                .values();
 
-            final double TOLERANCE = 0.001;
-            for (List<BasicLine> list : equalLengthLines){
-                if (Math.abs(line.getLength() - list.get(0).getLength()) < TOLERANCE){
-                    list.add(line);
-                    continue goHere;
-                }
-            }
-            equalLengthLines.add(new ArrayList<>());
-            equalLengthLines.get(equalLengthLines.size() - 1).add(line);
-        }
 
         equalLengthLines.removeIf(list -> list.size() == 1);
-        return equalLengthLines;
+        return equalLengthLines.stream().toList();
     }
 
     private static RoundRectangle2D.Double parseRoundRectangle(List<BasicLine> singleShapeAsLines) {
@@ -295,47 +281,25 @@ public class JSONShapeFactory {
         return new JSONShape(feature);
     }
 
-    public static ArrayList<ArrayList<BasicLine>> findParallelLines(List<BasicLine> singleShapeAsLines) {
-
-        ArrayList<ArrayList<BasicLine>> parallels = new ArrayList<>();
-
-        double straightSlope;
-        double parallelLineSlope;
+    public static List<List<BasicLine>> findParallelLines(List<BasicLine> singleShapeAsLines) {
 
         //create deep copy
         ArrayList<BasicLine> straightsCopy = new ArrayList<>(singleShapeAsLines.stream()
                 .filter(line -> line.getSource() instanceof Line2D.Double)
                 .toList());
 
-        while (!straightsCopy.isEmpty()) {
-            goHere:
-            for (int i = 0; i < straightsCopy.size(); ++i) {
-                BasicLine straight = straightsCopy.get(i);
-                Line2D straightSource = (Line2D) straight.getSource();
-
-                straightSlope = (straightSource.getY2() - straightSource.getY1()) / (straightSource.getX2() - straightSource.getX1());
-                for (ArrayList<BasicLine> list : parallels) {
-                    if (list.isEmpty()) {
-                        list.add(straight);
-                        straightsCopy.remove(straight);
-                        break goHere;
+        return straightsCopy.stream()
+                .collect(Collectors.groupingBy(line -> {
+                    //group lines by slope. Need to round because we're comparing doubles, and create a special case for infinite slopes
+                    double slope = line.getSlope();
+                    if (isInfinite(slope)){
+                        return Math.abs(slope);
                     }
-
-                    BasicLine listLine = list.get(0);
-                    Line2D listLineSource = (Line2D) listLine.getSource();
-                    parallelLineSlope = (listLineSource.getY2() - listLineSource.getY1()) / (listLineSource.getX2() - listLineSource.getX1());
-
-                    boolean bothAreInfinite = isInfinite(parallelLineSlope) && isInfinite(straightSlope); //account for vertical lines (infinite slope)
-                    final double TOLERANCE = 0.001;
-                    if (bothAreInfinite || Math.abs(straightSlope - parallelLineSlope) < TOLERANCE) {
-                        list.add(straight);
-                        straightsCopy.remove(straight);
-                        break goHere;
-                    }
-                }
-                parallels.add(new ArrayList<>()); //add new list of parallels if line doesn't match anywhere else
-            }
-        }
-        return parallels;
+                    final double TOLERANCE = 0.01;
+                    return Math.round(slope / TOLERANCE) * TOLERANCE;
+                }))
+                .values()
+                .stream().filter(list -> list.size() > 1)//don't include "groups" of one line
+                .toList();
     }
 }
