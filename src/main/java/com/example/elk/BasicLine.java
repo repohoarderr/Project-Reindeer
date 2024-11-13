@@ -11,9 +11,9 @@ import java.util.List;
  * help condense collections of lines into composite objects such as RoundRectangle2D.Double.
  */
 public class BasicLine implements Comparable<BasicLine> {
-    private Point2D startPoint;
-    private Point2D endPoint;
-    private Shape source;
+    private final Point2D startPoint;
+    private final Point2D endPoint;
+    private final Shape source;
     private boolean draw = true;
 
     public BasicLine(Line2D src) {
@@ -202,6 +202,11 @@ public class BasicLine implements Comparable<BasicLine> {
         return 0;
     }
 
+    /**
+     * Return true if two lines are "in line" with each other. In other words, they are two line segments which are part of a larger line.
+     * @param listLine the line being compared with "this"
+     * @return true if lines are "in line", false if otherwise
+     */
     public boolean isInLineWith(BasicLine listLine) {
         if (this.source instanceof Arc2D ||
                 listLine.source instanceof Arc2D) {
@@ -236,7 +241,8 @@ public class BasicLine implements Comparable<BasicLine> {
         double deltaY = lineSrc.getY2() - lineSrc.getY1();
         double deltaX = lineSrc.getX2() - lineSrc.getX1();
 
-        if (deltaX == 0) {//straight line up and down
+        final double TOLERANCE = 0.001;
+        if (Math.abs(deltaX) <= TOLERANCE) {//straight line up and down
             return Double.POSITIVE_INFINITY;
         }
 
