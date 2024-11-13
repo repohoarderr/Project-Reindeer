@@ -18,13 +18,13 @@ public class JSONShapeFactory {
         //this happens if we are trying to parse a shape which has had lines taken out
         //ex. a triangle with a radius notch will have the radius notch lines removed so we can recognize the triangle portion
 
-        List<BasicLine> tempRemovedLines = new ArrayList<>();
+        ArrayList<BasicLine> drawLines = new ArrayList<>(singleShapeAsLines);
+
         //if lines have a gap between them because a notch has been removed, fill those gaps
         if (!BasicLine.isOneLinkedShape(singleShapeAsLines)){
             ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(singleShapeAsLines);
             for (ArrayList<BasicLine> list : linesToCombine){
                 singleShapeAsLines.removeAll(list);
-                tempRemovedLines.addAll(list);
 
                 //note that createMergedLine returns a BasicLine with its draw boolean set to false
                 singleShapeAsLines.add(BasicLine.createMergedLine(list));
@@ -35,41 +35,40 @@ public class JSONShapeFactory {
         int numArcs = (int) singleShapeAsLines.stream().filter(line-> line.getSource() instanceof Arc2D).count();
         int numStraightLines = (int) singleShapeAsLines.stream().filter(line-> line.getSource() instanceof Line2D).count();
 
-        //add removed lines back to this variable so we can draw all of our lines (without missing the ones removed for feature recognition)
-        ArrayList<BasicLine> tempSingleShapeAsLines = new ArrayList<>(singleShapeAsLines);
-        tempSingleShapeAsLines.addAll(tempRemovedLines);
-
         if (numStraightLines == 2 && numArcs == 2) {
-            return new JSONCustomShape(ShapeType.OBLONG, tempSingleShapeAsLines);
+            return new JSONCustomShape(ShapeType.OBLONG, drawLines);
         }
 
         if (numStraightLines == 3 && numArcs == 3) {
-            return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, tempSingleShapeAsLines);
+            return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, drawLines);
         }
 
         if (numStraightLines == 3 && numArcs == 0) {
-            return new JSONCustomShape(ShapeType.TRIANGLE, tempSingleShapeAsLines);
+            return new JSONCustomShape(ShapeType.TRIANGLE, drawLines);
         }
 
         if (numStraightLines == 4 && numArcs == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
-            //need to not use temp array here so we only find the lines relevant to shape recognition
             List<List<BasicLine>> parallels = findParallelLines(singleShapeAsLines);
 
             if (parallels.size() == 2){
                 //TODO: throw in check for parallelograms here
-                return new JSONShape(parseRoundRectangle(singleShapeAsLines), tempSingleShapeAsLines);
+                return new JSONShape(parseRoundRectangle(singleShapeAsLines), drawLines);
             }
             else{
-                return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, tempSingleShapeAsLines);
+                return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, drawLines);
             }
         }
 
         if (numStraightLines == 4 && numArcs == 0) {
             return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calculateYCoord(singleShapeAsLines),
-                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), tempSingleShapeAsLines);
+                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), drawLines);
         }
 
+        return parseSubFeaturesOrFreehand(singleShapeAsLines, drawLines);
+    }
+
+    private static JSONShape parseSubFeaturesOrFreehand(List<BasicLine> singleShapeAsLines, ArrayList<BasicLine> drawLines) {
         //check to see if shape has notch features, chamfered corners, etc.
         //TODO: idea for checking for chamfered corners
         //check to see if there are two sets of two lines which are parallel with each other --> these are the sides of the non-chamfered rectangle
@@ -96,7 +95,7 @@ public class JSONShapeFactory {
         }
         else{
             //if we haven't removed lines this time around, probably a freehand shape
-            return new JSONCustomShape(ShapeType.FREEHAND, tempSingleShapeAsLines);
+            return new JSONCustomShape(ShapeType.FREEHAND, drawLines);
         }
     }
 

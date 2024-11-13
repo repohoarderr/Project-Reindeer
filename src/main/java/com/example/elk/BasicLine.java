@@ -185,19 +185,10 @@ public class BasicLine implements Comparable<BasicLine> {
         if (source instanceof Line2D line) {
             return line.getP1().distance(line.getP2());
         } else if (source instanceof Arc2D.Double arc) {
-            //arc length = angle * radius        angle in radians
-            //radius is dist(p1, p2) * (sqrt(2) / 2)
-
-            double angleDegs = arc.getAngleExtent();
-            if (angleDegs < 0) {
-                angleDegs += 360;//need to account for negative angles
-            }
-            double angleRads = Math.toRadians(angleDegs);
-
-            double pointDist = arc.getStartPoint().distance(arc.getEndPoint());
-            double radius = pointDist * (Math.sqrt(2) / 2.0);
-
-            return angleRads * radius;
+            double extentRad = Math.toRadians(arc.extent);
+            double radius = arc.width / 2;
+            double angleRad = Math.abs(extentRad);
+            return radius * angleRad;
         }
         return 0;
     }

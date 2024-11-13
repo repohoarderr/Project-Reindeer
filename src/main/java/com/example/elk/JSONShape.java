@@ -266,6 +266,7 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -281,5 +282,19 @@ public class JSONShape {
     public JSONShape addRemovedLines(List<BasicLine> tempRemovedLines) {
         this.lines.addAll(tempRemovedLines);
         return this;
+    }
+
+    public double getPerimeter(){
+        double mainShapePerimeter =  lines.stream()
+                .map(BasicLine::getLength)
+                .reduce(Double::sum)
+                .orElse(0.0);
+
+        double subFeaturesPerimeter = subFeatures.stream()
+                .map(JSONShape::getPerimeter)
+                .reduce(Double::sum)
+                .orElse(0.0);
+
+        return mainShapePerimeter + subFeaturesPerimeter;
     }
 }
