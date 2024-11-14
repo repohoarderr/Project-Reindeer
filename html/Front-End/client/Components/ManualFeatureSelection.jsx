@@ -5,16 +5,17 @@ export default function ManualFeatureSelection() {
   const [isVisible, setIsVisible] = useState(false);
   const [isManualVisible, setIsManualVisible] = useState(false); // State for user's manual
 
-    //Function to toggle panel visibility
-    const togglePanel = () => {
-        setIsVisible(!isVisible);
-    };
+  //State to keep track of the active manual section
+  const [activeSection, setActiveSection] = useState("introduction");
 
-    //Function to toggle the user's manual visibility
-    const toggleManual = () => {
-        setIsManualVisible(!isManualVisible);
-    };
+  //Function to set the active manual section
+  const changeSection = (section) => { setActiveSection(section); };
 
+  //Function to toggle panel visibility
+  const togglePanel = () => { setIsVisible(!isVisible); };
+
+  //Function to toggle the user's manual visibility
+  const toggleManual = () => { setIsManualVisible(!isManualVisible);};
 
   //Button click handler
   const selectFeature = (event) => {
@@ -109,26 +110,109 @@ export default function ManualFeatureSelection() {
         <i className="fas fa-book"></i>
       </button>
 
-      {/* User's manual dialog box with mock text */}
+      {/* User manual with sidebar navigation and content sections */}
       {isManualVisible && (
-        <div className="manual-dialog">
-          <p>
-            Welcome to the User Manual! This is a guide to help you navigate through the app.
-            There was something special about this little creature. Donna couldn't quite pinpoint what it was, but she knew with all her heart that it was true. It wasn't a matter of if she was going to try and save it, but a matter of how she was going to save it. She went back to the car to get a blanket and when she returned the creature was gone.
-There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.
-The red glow of tail lights indicating another long drive home from work after an even longer 24-hour shift at the hospital. The shift hadn’t been horrible but the constant stream of patients entering the ER meant there was no downtime. She had some of the “regulars” in tonight with new ailments they were sure were going to kill them. It’s amazing what a couple of Tylenol and a physical exam from the doctor did to eliminate their pain, nausea, headache, or whatever other mild symptoms they had. Sometimes she wondered if all they really needed was some interaction with others and a bit of the individual attention they received from the nurses.
-She patiently waited for his number to be called. She had no desire to be there, but her mom had insisted that she go. She's resisted at first, but over time she realized it was simply easier to appease her and go. Mom tended to be that way. She would keep insisting until you wore down and did what she wanted. So, here she sat, patiently waiting for her number to be called. There was something special about this little creature. Donna couldn't quite pinpoint what it was, but she knew with all her heart that it was true. It wasn't a matter of if she was going to try and save it, but a matter of how she was going to save it. She went back to the car to get a blanket and when she returned the creature was gone.
-There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.
-The red glow of tail lights indicating another long drive home from work after an even longer 24-hour shift at the hospital. The shift hadn’t been horrible but the constant stream of patients entering the ER meant there was no downtime. She had some of the “regulars” in tonight with new ailments they were sure were going to kill them. It’s amazing what a couple of Tylenol and a physical exam from the doctor did to eliminate their pain, nausea, headache, or whatever other mild symptoms they had. Sometimes she wondered if all they really needed was some interaction with others and a bit of the individual attention they received from the nurses.
-She patiently waited for his number to be called. She had no desire to be there, but her mom had insisted that she go. She's resisted at first, but over time she realized it was simply easier to appease her and go. Mom tended to be that way. She would keep insisting until you wore down and did what she wanted. So, here she sat, patiently waiting for her number to be called. There was something special about this little creature. Donna couldn't quite pinpoint what it was, but she knew with all her heart that it was true. It wasn't a matter of if she was going to try and save it, but a matter of how she was going to save it. She went back to the car to get a blanket and when she returned the creature was gone.
-There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.
-The red glow of tail lights indicating another long drive home from work after an even longer 24-hour shift at the hospital. The shift hadn’t been horrible but the constant stream of patients entering the ER meant there was no downtime. She had some of the “regulars” in tonight with new ailments they were sure were going to kill them. It’s amazing what a couple of Tylenol and a physical exam from the doctor did to eliminate their pain, nausea, headache, or whatever other mild symptoms they had. Sometimes she wondered if all they really needed was some interaction with others and a bit of the individual attention they received from the nurses.
-She patiently waited for his number to be called. She had no desire to be there, but her mom had insisted that she go. She's resisted at first, but over time she realized it was simply easier to appease her and go. Mom tended to be that way. She would keep insisting until you wore down and did what she wanted. So, here she sat, patiently waiting for her number to be called.
-          </p>
+        <div className="manual-dialog-modern">
+
+          {/* Close button in the top-right corner */}
+          <button className="close-button" onClick={() => setIsManualVisible(false)}>
+            &times;
+          </button>
+
+          <div className="manual-sidebar">
+            <h3>User Manual</h3>
+            <ul>
+              <li onClick={() => changeSection("introduction")}>Introduction</li>
+              <li onClick={() => changeSection("getting-started")}>Getting Started</li>
+              <li onClick={() => changeSection("features")}>Features</li>
+              <li onClick={() => changeSection("guide")}>Step-by-Step Guide</li>
+              <li onClick={() => changeSection("troubleshooting")}>Troubleshooting</li>
+              <li onClick={() => changeSection("faqs")}>FAQs</li>
+              <li onClick={() => changeSection("support")}>Contact Support</li>
+            </ul>
+          </div>
+          <div className="manual-content">
+            {activeSection === "introduction" && (
+              <div>
+                <h2>Introduction</h2>
+                <p>Welcome to the File Upload and Shape Visualization App!</p>
+                <p>This app allows users to upload .dxf files, view structured results, visualize shapes, choose your own shapes and calculate prices.</p>
+              </div>
+            )}
+            {activeSection === "getting-started" && (
+              <div>
+                <h2>Getting Started</h2>
+                <p><b>System Requirements</b>: Web browser with JavaScript enabled.</p>
+                <p><b>Accessing the App</b>: Open the app URL in your web browser.</p>
+              </div>
+            )}
+            {activeSection === "features" && (
+              <div>
+                <h2>Features</h2>
+                <h3>Uploading a File</h3>
+                <p>Click on the "Upload" button to select and upload a .dxf file.</p>
+                <h3>Viewing Upload Results</h3>
+                <p>After uploading, view results in the tree table format under "Results."</p>
+                <h3>Selecting Features</h3>
+                <p>Open the panel by clicking the Shapes icon and choose from various features.</p>
+                <h3>Visualizing Shapes</h3>
+                <p>Shapes from the file will display on the canvas after upload.</p>
+              </div>
+            )}
+            {activeSection === "guide" && (
+              <div>
+                <h2>Step-by-Step Guide</h2>
+                <h3>Step 1: Uploading a File</h3>
+                <p>Select a .dxf file and click "Upload." Look for a confirmation message.</p>
+                <h3>Step 2: Viewing Results</h3>
+                <p>Results will display in a structured format if the upload is successful.</p>
+                <h3>Step 3: Using the Feature Selection Panel</h3>
+                <p>Click the Shapes icon, select desired features, and click again to close.</p>
+                <h3>Step 4: Visualizing Shapes</h3>
+                <p>The canvas will display shapes extracted from your .dxf file.</p>
+              </div>
+            )}
+            {activeSection === "troubleshooting" && (
+              <div>
+                <h2>Troubleshooting</h2>
+                <p>If the file upload fails, ensure it’s a .dxf file and retry.</p>
+              </div>
+            )}
+            {activeSection === "faqs" && (
+              <div>
+                <h2>FAQs</h2>
+                <p><b>What file types are supported?</b> Only .dxf files.</p>
+                <p><b>How can I remove a file?</b> Click the "Remove File" button.</p>
+              </div>
+            )}
+            {activeSection === "support" && (
+
+            <div className="info-section">
+              <div className="info-item">
+                <div className="icon-circle">
+                  <i class="fa-solid fa-phone"></i> {/* Phone Icon */}
+                </div>
+                <div className="info-text">
+                  <h4>Customer Support</h4>
+                  <p>(800) 899-3437</p>
+                </div>
+              </div>
+
+              <div className="info-item">
+                <div className="icon-circle">
+                  <i class="fa-solid fa-location-dot"></i> {/* Location Icon */}
+                </div>
+                <div className="info-text">
+                  <h4>Our Location</h4>
+                  <p>391 Malden Street</p>
+                  <p>South St. Paul, MN 55075</p>
+                </div>
+              </div>
+            </div>
+            )}
+          </div>  
         </div>
-      )}
-
-
+      )}  
     </div>
   );
 }
