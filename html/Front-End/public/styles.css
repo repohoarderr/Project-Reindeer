@@ -84,8 +84,9 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
     width: 100%;
+    overflow: hidden; /* Hide vertical scrollbar */
+    /*height: auto; /* Allow the container height to auto-adjust based on content */
 }
 
 .centered-image {
@@ -95,12 +96,14 @@ button:hover {
 }
 
 .results {
-    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+    width: 100%; /* Full width to take up available space */
+    max-width: calc(100vw - 40px); /* Responsive max width based on viewport, with padding */
+    overflow: visible; /* Remove scroll bars */
 }
 
 .p-treetable th,
@@ -118,9 +121,12 @@ button:hover {
 }
 
 .visualize-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2000px;
+    overflow: visible; /* Remove scroll bars */
+    margin: 20px auto;
 }
 
 .scrollHere {
@@ -139,9 +145,23 @@ button:hover {
 }
 
 #container {
-    width: 80%;
-    max-height: 400px;
-    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Allow full width to fit within the parent */
+    max-width: 1000px; /* Define a reasonable max width for large displays */
+    padding-bottom: 40px; /* Extra space below the graph */
+    margin: 0 auto; /* Center align */
+    overflow: hidden; /* Prevent any overflow */
+    box-sizing: border-box;
+}
+
+canvas {
+    display: block;
+    width: 100%; /* Ensure canvas scales to fit container width */
+    height: auto; /* Maintain aspect ratio */
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* User Manual Styling */
