@@ -52,12 +52,15 @@ const VisualizeShapes = ({shapesData}) => {
 
             // Clear the canvas before drawing to avoid overlapping previous drawings
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            scaleFactor = Math.abs(600 / Math.max(findMaxX(shapesData), findMaxY(shapesData)));
-
+            const scaleFactor = Math.abs(600 / Math.max(findMaxX(shapesData), findMaxY(shapesData)));
             const breathingRoom = 1.05;
+
             canvas.height = findMaxY(shapesData) * scaleFactor * breathingRoom;
             canvas.width = findMaxX(shapesData) * scaleFactor * breathingRoom;
+
+            // Center the canvas within the container by setting padding and margins
+            canvas.style.display = 'block';
+            canvas.style.margin = '0 auto';
 
             //flip y-axis, need to apply transforms after changing canvas width and height
             ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
