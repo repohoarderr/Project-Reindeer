@@ -155,7 +155,7 @@ public class JSONShape {
     }
 
     public Optional<Shape> getShape(){
-        return Optional.of(source);
+        return Optional.ofNullable(source);
     }
 
     public static JSONObject writeDrawData(Shape shape, int id) {

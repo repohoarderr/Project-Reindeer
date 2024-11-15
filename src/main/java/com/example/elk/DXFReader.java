@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Stream;
+
 import com.example.elk.*;
 
 /*
@@ -1504,7 +1506,18 @@ public class DXFReader {
     DXFViewer(String fileName) throws IOException {
       dxf = new DXFReader();
       JSONShape[] jsonShapes = dxf.parseFile(new File(fileName));
-      shapes = (Shape[]) Arrays.stream(jsonShapes).map(e -> e.getShape().orElse(null)).toArray(); //TODO: idk if this works, haven't tested
+      shapes = Arrays.stream(jsonShapes)
+              .flatMap(e -> {
+                if (e.getShape().isPresent()) {
+                  //make a single shape
+                  return Stream.of(e.getShape().get());
+                }
+
+                return Stream.of(e.lines)
+                        .flatMap(Collection::stream)
+                        .map(BasicLine::getSource);
+              })
+              .toArray(Shape[]::new);
       if (shapes.length > 0) {
         // Create a bounding box that's the union of all shapes in the shapes array
         for (Shape shape : shapes) {
