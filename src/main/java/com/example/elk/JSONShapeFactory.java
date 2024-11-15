@@ -13,27 +13,35 @@ public class JSONShapeFactory {
         //hide useless constructor
     }
 
-    public static JSONShape createJSONShape(List<BasicLine> singleShapeAsLines) {
+    public static JSONShape createJSONShape(List<BasicLine> sourceLines) {
+        ArrayList<BasicLine> drawLines = new ArrayList<>(sourceLines);
+        ArrayList<BasicLine> shapeComponentLines = new ArrayList<>(sourceLines);
+
         //if lines aren't all connected, then we need to "connect" them together
         //this happens if we are trying to parse a shape which has had lines taken out
         //ex. a triangle with a radius notch will have the radius notch lines removed so we can recognize the triangle portion
 
-        ArrayList<BasicLine> drawLines = new ArrayList<>(singleShapeAsLines);
-
         //if lines have a gap between them because a notch has been removed, fill those gaps
-        if (!BasicLine.isOneLinkedShape(singleShapeAsLines)){
-            ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(singleShapeAsLines);
+        if (!BasicLine.isOneLinkedShape(sourceLines)){
+            ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(sourceLines);
             for (ArrayList<BasicLine> list : linesToCombine){
-                singleShapeAsLines.removeAll(list);
+                shapeComponentLines.removeAll(list);
 
                 //note that createMergedLine returns a BasicLine with its draw boolean set to false
-                singleShapeAsLines.add(BasicLine.createMergedLine(list));
+                shapeComponentLines.add(BasicLine.createMergedLine(list));
             }
         }
 
+        JSONShape shape = parseSimpleShape(shapeComponentLines, drawLines);
+        if (shape != null) return shape;
+
+        return parseSubFeaturesOrFreehand(sourceLines, drawLines);
+    }
+
+    private static JSONShape parseSimpleShape(List<BasicLine> shapeComponentLines, ArrayList<BasicLine> drawLines) {
         //tally number of arcs and lines
-        int numArcs = (int) singleShapeAsLines.stream().filter(line-> line.getSource() instanceof Arc2D).count();
-        int numStraightLines = (int) singleShapeAsLines.stream().filter(line-> line.getSource() instanceof Line2D).count();
+        int numArcs = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Arc2D).count();
+        int numStraightLines = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Line2D).count();
 
         if (numStraightLines == 2 && numArcs == 2) {
             return new JSONCustomShape(ShapeType.OBLONG, drawLines);
@@ -49,11 +57,11 @@ public class JSONShapeFactory {
 
         if (numStraightLines == 4 && numArcs == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
-            List<List<BasicLine>> parallels = findParallelLines(singleShapeAsLines);
+            List<List<BasicLine>> parallels = findParallelLines(shapeComponentLines);
 
             if (parallels.size() == 2){
                 //TODO: throw in check for parallelograms here
-                return new JSONShape(parseRoundRectangle(singleShapeAsLines), drawLines);
+                return new JSONShape(parseRoundRectangle(shapeComponentLines), drawLines);
             }
             else{
                 return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, drawLines);
@@ -61,30 +69,30 @@ public class JSONShapeFactory {
         }
 
         if (numStraightLines == 4 && numArcs == 0) {
-            return new JSONShape(new Rectangle2D.Double(calculateXCoord(singleShapeAsLines), calculateYCoord(singleShapeAsLines),
-                    calculateWidth(singleShapeAsLines), calculateHeight(singleShapeAsLines)), drawLines);
+            return new JSONShape(new Rectangle2D.Double(calculateXCoord(shapeComponentLines), calculateYCoord(shapeComponentLines),
+                    calculateWidth(shapeComponentLines), calculateHeight(shapeComponentLines)), drawLines);
         }
 
-        return parseSubFeaturesOrFreehand(singleShapeAsLines, drawLines);
+        return null;
     }
 
-    private static JSONShape parseSubFeaturesOrFreehand(List<BasicLine> singleShapeAsLines, ArrayList<BasicLine> drawLines) {
+    private static JSONShape parseSubFeaturesOrFreehand(List<BasicLine> shapeComponentLines, ArrayList<BasicLine> drawLines) {
         //check to see if shape has notch features, chamfered corners, etc.
         //TODO: idea for checking for chamfered corners
         //check to see if there are two sets of two lines which are parallel with each other --> these are the sides of the non-chamfered rectangle
         //additional lines are chamfered corners?
 
-        List<JSONShape> likelyRadiusNotches = findLikelyRadiusNotches(singleShapeAsLines);
+        List<JSONShape> likelyRadiusNotches = findLikelyRadiusNotches(shapeComponentLines);
         //TODO: similar processes for likelyNotches, likelyChamferedCorners, etc
 
-        List<BasicLine> nonFeatureLines = new ArrayList<>(singleShapeAsLines); //list of lines which don't draw a specific feature
+        List<BasicLine> nonFeatureLines = new ArrayList<>(shapeComponentLines); //list of lines which don't draw a specific feature
         for (JSONShape subFeature : likelyRadiusNotches){
             nonFeatureLines.removeAll(subFeature.lines);
         }
 
         JSONShape newShape;
         //if we've removed some lines, check again to see if we can make our base shape
-        if (nonFeatureLines.size() < singleShapeAsLines.size()){
+        if (nonFeatureLines.size() < shapeComponentLines.size()){
             newShape = JSONShapeFactory.createJSONShape(nonFeatureLines);
             //return newShape with additional subfeatures if they exist
             for (JSONShape subFeature : likelyRadiusNotches){
@@ -117,13 +125,7 @@ public class JSONShapeFactory {
                     .filter(shape -> shape.getSource() instanceof Arc2D)
                     .filter(shape -> isAngleExtentSufficient((Arc2D)shape.getSource(), 180))
                     .toList()) {
-                boolean connected = true;
-                for (BasicLine line : list){
-                    if (!arc.isLinkedWith(line)){
-                        connected = false;
-                    }
-                }
-                if (connected){
+                if (list.stream().allMatch(line -> line.isLinkedWith(arc))){//if all lines connect to arc
                     List<BasicLine> radiusNotchLines = new ArrayList<>(list);
                     radiusNotchLines.add(arc);
                     likelyRadiusNotches.add(new JSONCustomShape(ShapeType.RADIUS_NOTCH,radiusNotchLines));
@@ -186,7 +188,7 @@ public class JSONShapeFactory {
                 .values();
 
 
-        equalLengthLines.removeIf(list -> list.size() == 1);
+        equalLengthLines.removeIf(list -> list.size() < 2);
         return equalLengthLines.stream().toList();
     }
 
