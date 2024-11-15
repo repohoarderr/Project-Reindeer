@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-export default function ManualFeatureSelection() {
+export default function ManualFeatureSelection ({ onShapeSelect }){
+  const [selectedShapes, setSelectedShapes] = useState([]);
+
   //Ensure the state and toggle function are correctly initialized
   const [isVisible, setIsVisible] = useState(false);
   const [isManualVisible, setIsManualVisible] = useState(false); // State for user's manual
@@ -17,51 +19,28 @@ export default function ManualFeatureSelection() {
   //Function to toggle the user's manual visibility
   const toggleManual = () => { setIsManualVisible(!isManualVisible);};
 
+  // Function to handle shape selection on button click
+  const handleShapeSelect = (shapeType) => {
+    setSelectedShapes((prevShapes) => {
+      const isSelected = prevShapes.includes(shapeType);
+      const newShapes = isSelected
+          ? prevShapes.filter((shape) => shape !== shapeType)
+          : [...prevShapes, shapeType];
+
+      if (onShapeSelect) {
+        onShapeSelect(newShapes);
+      }
+
+      return newShapes;
+    });
+  };
+
+
   //Button click handler
   const selectFeature = (event) => {
-    switch (event.target.innerText) {
-      case "1A":
-        console.log("Good job clicking the first button!!!");
-        break;
-      case "1B":
-        break;
-      case "1C":
-        break;
-      case "2A":
-        break;
-      case "3":
-        break;
-      case "4":
-        break;
-      case "6":
-        break;
-      case "7":
-        break;
-      case "8":
-        break;
-      case "9":
-        break;
-      case "11":
-        break;
-      case "12":
-        break;
-      case "13":
-        break;
-      case "14":
-        break;
-      case "15":
-        break;
-      case "17":
-        break;
-      case "S1":
-        break;
-      case "S2":
-        break;
-      case "16":
-        break;
-      default:
-        console.log("what did you click???"); // TODO: Add error handling logic here.
-    }
+    const shapeType = event.target.innerText;
+    console.log(`Button clicked: ${shapeType}`);
+    handleShapeSelect(shapeType); // Directly call handleShapeSelect with shapeType
   };
 
   return (
@@ -69,25 +48,34 @@ export default function ManualFeatureSelection() {
 
       {/* Toggle button placed at the top-right corner */}
       <button className="toggle-button" onClick={togglePanel}>
-      <i className="fas fa-shapes"></i> {/* Use the Shapes icon */}
+      <i className="fas fa-shapes"></i>
       </button>
 
       <div className={`fade-out-panel ${isVisible ? "visible" : "hidden"}`}>
 
-        {/* Feature buttons */}
-        <button className="feature-button">
-        <img src="/icons/Grp1.png" alt="1A thumbnail" className="thumbnail" />
+        {/* Feature buttons with click event */}
+        <button className="feature-button" onClick={() => handleShapeSelect("F1A")}>
+          <img src="/icons/F1A.png" alt="1A thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F1B")}>
+          <img src="/icons/F1B.png" alt="1B thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F1C")}>
+          <img src="/icons/F1C.png" alt="1C thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F2A")}>
+          <img src="/icons/F2A.png" alt="2A thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F3")}>
+          <img src="/icons/F3.png" alt="3 thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F4")}>
+          <img src="/icons/F4.png" alt="4 thumbnail" className="thumbnail"/>
+        </button>
+        <button className="feature-button" onClick={() => handleShapeSelect("F6")}>
+          <img src="/icons/F6.png" alt="6 thumbnail" className="thumbnail"/>
         </button>
 
-        <button className="feature-button">
-        <img src="/icons/Grp2A.png" alt="1B thumbnail" className="thumbnail" />
-        </button>
-
-        <button className="feature-button">
-        <img src="/icons/Grp3.png" alt="1C thumbnail" className="thumbnail" />
-        </button>
-
-        <button className="feature-button" onClick={selectFeature}>2A</button>
         <button className="feature-button" onClick={selectFeature}>3</button>
         <button className="feature-button" onClick={selectFeature}>4</button>
         <button className="feature-button" onClick={selectFeature}>6</button>
