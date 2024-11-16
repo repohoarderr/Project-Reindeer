@@ -140,7 +140,7 @@ public class Features {
                 .filter(line -> line.getSource() instanceof Arc2D.Double)
                 .toList();
 
-        //TODO: doesn't condense all arcs yet, also need to figure out how to convert a single, 360 degree arc into a circle
+        //TODO: still busted
         arcs = arcs.stream().collect(Collectors.groupingBy(line -> calculateArcHash((Arc2D) line.getSource())))
                 .values()
                 .stream().map(list -> list.stream().reduce((bigLine, smallLine) ->{
@@ -163,10 +163,10 @@ public class Features {
                 arc.getWidth(), arc.getHeight(),
                 arc.getAngleStart(), 360, Arc2D.OPEN);
 
-        return Math.round(arcCopy.getWidth()) * 10000019 +
-                Math.round(arcCopy.getHeight()) * 10006721 +
-                Math.round(arcCopy.getBounds2D().getCenterX()) * 10010111 +
-                Math.round(arcCopy.getBounds2D().getCenterY()) * 10000379;
+        return arcCopy.getWidth() * 10000019 +
+                arcCopy.getHeight() * 10006721 +
+                arcCopy.getBounds2D().getCenterX() * 10010111 +
+                arcCopy.getBounds2D().getCenterY() * 10000379;
     }
 
 

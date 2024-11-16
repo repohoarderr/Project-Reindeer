@@ -38,6 +38,44 @@ function findMaxX(shapesData) {
     return maxX;
 }
 
+function findMinY(shapesData) {
+    let drawData = shapesData
+        .map((object) => {
+            return object.drawing;
+        })
+
+    let minY = 0;
+    for (let i = 0; i < drawData.length; ++i) {
+        let arr = drawData[i];
+        for (let k = 0; k < arr.length; k++) {
+            let shape = arr[k];
+            if (shape.startX) minY = Math.min(minY, shape.startY);
+            if (shape.endX) minY = Math.min(minY, shape.endY);
+            if (shape.centerY) minY = Math.min(minY, shape.centerY);
+        }
+    }
+    return minY;
+}
+
+function findMinX(shapesData) {
+    let drawData = shapesData
+        .map((object) => {
+            return object.drawing;
+        })
+
+    let minX = 0;
+    for (let i = 0; i < drawData.length; ++i) {
+        let arr = drawData[i];
+        for (let k = 0; k < arr.length; k++) {
+            let shape = arr[k];
+            if (shape.startX) minX = Math.min(minX, shape.startX);
+            if (shape.endX) minX = Math.min(minX, shape.endX);
+            if (shape.centerX) minX = Math.min(minX, shape.centerX);
+        }
+    }
+    return minX;
+}
+
 const VisualizeShapes = ({shapesData}) => {
     // Reference to the canvas element
     const canvasRef = useRef(null);
@@ -52,11 +90,12 @@ const VisualizeShapes = ({shapesData}) => {
 
             // Clear the canvas before drawing to avoid overlapping previous drawings
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const scaleFactor = Math.abs(600 / Math.max(findMaxX(shapesData), findMaxY(shapesData)));
+            const scaleFactor = Math.abs(600 /
+                Math.max(findMaxX(shapesData) - findMinX(shapesData), findMaxY(shapesData) - findMinY(shapesData)));
             const breathingRoom = 1.05;
 
-            canvas.height = findMaxY(shapesData) * scaleFactor * breathingRoom;
-            canvas.width = findMaxX(shapesData) * scaleFactor * breathingRoom;
+            canvas.width = (findMaxX(shapesData) - findMinX(shapesData) )* scaleFactor * breathingRoom;
+            canvas.height = (findMaxY(shapesData) - findMinY(shapesData)) * scaleFactor * breathingRoom;
 
             // Center the canvas within the container by setting padding and margins
             canvas.style.display = 'block';
@@ -78,40 +117,41 @@ const VisualizeShapes = ({shapesData}) => {
                         return object.drawing;
                     })
                     .forEach((drawArr) => {
-                        let offset = 5;
+                        let xOffset = Math.abs(Math.min(0, findMinX(shapesData)));
+                        let yOffset = Math.abs(Math.min(0, findMinY(shapesData)));
                         drawArr.forEach((shape) => {
                             // Check the shape type and call the appropriate function to draw it
                             if (shape.type.toLowerCase() === 'Line2D'.toLowerCase()) {
-                                drawLine(ctx, shape, scaleFactor, offset); // Draw a line
+                                drawLine(ctx, shape, scaleFactor, xOffset, yOffset); // Draw a line
                             } else if (shape.type.toLowerCase() === 'Arc2D'.toLowerCase()) {
-                                drawArc(ctx, shape, scaleFactor, offset); // Draw an arc
+                                drawArc(ctx, shape, scaleFactor, xOffset, yOffset); // Draw an arc
                             } else if (shape.type.toLowerCase() === 'circle'.toLowerCase() ||
                                 shape.type.toLowerCase() === 'punch'.toLowerCase()) {
-                                drawCircle(ctx, shape, scaleFactor, offset); // Draw a circle
+                                drawCircle(ctx, shape, scaleFactor, xOffset, yOffset); // Draw a circle
                             }
                         })
                     });
             };
 
             // Function to draw a Line2D shape
-            const drawLine = (ctx, shape, scaleFactor, offset) => {
+            const drawLine = (ctx, shape, scaleFactor, xOffset, yOffset) => {
                 ctx.beginPath();
                 // Move to the start coordinates of the line, scaled by scaleFactor
-                ctx.moveTo((shape.startX * scaleFactor) + offset, (shape.startY * scaleFactor) + offset);
+                ctx.moveTo((shape.startX + xOffset) * scaleFactor, (shape.startY + yOffset) * scaleFactor);
                 // Draw the line to the end coordinates
-                ctx.lineTo((shape.endX * scaleFactor) + offset, (shape.endY * scaleFactor) + offset);
+                ctx.lineTo((shape.endX + xOffset) * scaleFactor, (shape.endY + yOffset) * scaleFactor);
                 ctx.strokeStyle = 'black'; // Set line color to black
                 ctx.lineWidth = 2; // Set line width
                 ctx.stroke(); // Render the line
             };
 
             // Function to draw an Arc2D shape
-            const drawArc = (ctx, shape, scaleFactor, offset) => {
+            const drawArc = (ctx, shape, scaleFactor, xOffset, yOffset) => {
                 ctx.beginPath();
                 // Draw the arc using the center point, radius, and start/end angles
                 ctx.arc(
-                    (shape.centerX * scaleFactor) + offset, // Center X coordinate, scaled
-                    (shape.centerY * scaleFactor) + offset, // Center Y coordinate, scaled
+                    (shape.centerX + xOffset) * scaleFactor, // Center X coordinate, scaled
+                    (shape.centerY + yOffset) * scaleFactor, // Center Y coordinate, scaled
                     shape.radius * scaleFactor,  // Arc radius, scaled
                     -(shape.angle),              // Start angle, converted from degrees to radians and flipped
                     -(shape.rotation),           // End angle, converted and flipped
@@ -123,12 +163,12 @@ const VisualizeShapes = ({shapesData}) => {
             };
 
             // Function to draw a Circle shape
-            const drawCircle = (ctx, shape, scaleFactor, offset) => {
+            const drawCircle = (ctx, shape, scaleFactor, xOffset, yOffset) => {
                 ctx.beginPath();
                 // Draw the circle using the center point and radius
                 ctx.arc(
-                    (shape.centerX * scaleFactor) + offset, // Center X coordinate, scaled
-                    (shape.centerY * scaleFactor) + offset, // Center Y coordinate, scaled
+                    (shape.centerX + xOffset) * scaleFactor, // Center X coordinate, scaled
+                    (shape.centerY + yOffset) * scaleFactor, // Center Y coordinate, scaled
                     shape.radius * scaleFactor,  // Circle radius, scaled
                     0,                           // Start angle (0 for a full circle)
                     2 * Math.PI                  // End angle (2π radians for a full circle)
