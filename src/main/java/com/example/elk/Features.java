@@ -138,19 +138,24 @@ public class Features {
 
         List<BasicLine> arcs = lines.stream()
                 .filter(line -> line.getSource() instanceof Arc2D.Double)
-                .toList();
-
-        //TODO: still busted
-        arcs = arcs.stream().collect(Collectors.groupingBy(line -> calculateArcHash((Arc2D) line.getSource())))
+                .collect(Collectors.groupingBy(line -> calculateArcHash((Arc2D) line.getSource())))
                 .values()
                 .stream().map(list -> list.stream().reduce((bigLine, smallLine) ->{
                     Arc2D bigArc = (Arc2D) bigLine.getSource();
                     Arc2D smallArc = (Arc2D) smallLine.getSource();
-                    return new BasicLine(new Arc2D.Double(bigArc.getX(), bigArc.getY(),
-                            bigArc.getWidth(), bigArc.getHeight(),
-                            Math.min(bigArc.getAngleStart(), smallArc.getAngleStart()),
-                            bigArc.getAngleExtent() + smallArc.getAngleExtent(),
-                            Arc2D.OPEN));
+
+                    double x = bigArc.getX();
+                    double y = bigArc.getY();
+                    double width = bigArc.getWidth();
+                    double height = bigArc.getHeight();
+
+                    final double TOLERANCE = 0.01;
+                    boolean startAtSmallArcStart = Math.abs(smallArc.getAngleStart() + smallArc.getAngleExtent() - bigArc.getAngleStart()) % 360 < TOLERANCE;
+
+                    double angleStart = startAtSmallArcStart ? smallArc.getAngleStart() : bigArc.getAngleStart();
+                    double angleExtent = bigArc.getAngleExtent() + smallArc.getAngleExtent();
+
+                    return new BasicLine(new Arc2D.Double(x, y, width, height, angleStart, angleExtent, Arc2D.OPEN));
                 }).orElse(null)).toList();
 
         returned.addAll(arcs);
@@ -158,15 +163,17 @@ public class Features {
 
     }
 
-    private static double calculateArcHash(Arc2D arc) {
+    private static long calculateArcHash(Arc2D arc) {
         Arc2D arcCopy = new Arc2D.Double(arc.getX(), arc.getY(),
                 arc.getWidth(), arc.getHeight(),
                 arc.getAngleStart(), 360, Arc2D.OPEN);
 
-        return arcCopy.getWidth() * 10000019 +
+        //need to apply rounding to the hash due to lack of precision in x and y values
+        //ex. arcs with center x at 0.248 and 0.25 should have the same hash if all other values are equal
+        return Math.round(arcCopy.getWidth() * 10000019 +
                 arcCopy.getHeight() * 10006721 +
                 arcCopy.getBounds2D().getCenterX() * 10010111 +
-                arcCopy.getBounds2D().getCenterY() * 10000379;
+                arcCopy.getBounds2D().getCenterY() * 10000379);
     }
 
 
