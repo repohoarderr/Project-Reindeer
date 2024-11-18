@@ -70,22 +70,21 @@ public class Features {
         //all lines which aren't complete shapes (ellipses, circles, etc. are excluded)
         ArrayList<BasicLine> linePool = new ArrayList<>();
 
-        //used to build one shape out of several lines
-        List<BasicLine> singleShapeAsLines = new ArrayList<>();
-
         //add all lines to line pool
         for (Shape feature : features) {
             switch (feature) {
                 case Arc2D arc2d -> linePool.add(new BasicLine(arc2d));
                 case Line2D line2d -> linePool.add(new BasicLine(line2d));
                 case Path2D.Double path2d -> linePool.addAll(BasicLine.path2DToLines(path2d));
-                default ->
-                        newFeatureList.add(JSONShapeFactory.createJSONShapeFromCondensedShape(feature)); //feature is already condensed (ellipse, circle, etc.)
+                default -> newFeatureList.add(JSONShapeFactory.createJSONShapeFromCondensedShape(feature)); //feature is already condensed (ellipse, circle, etc.)
             }
         }
 
         BasicLine poolLine;
         BasicLine shapeLine;
+
+        //used to build one shape out of several lines
+        List<BasicLine> singleShapeAsLines = new ArrayList<>();
 
         while (!linePool.isEmpty()) {
             int oldSize = linePool.size();
