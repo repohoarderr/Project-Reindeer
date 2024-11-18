@@ -76,7 +76,7 @@ public class Features {
                 case Arc2D arc2d -> linePool.add(new BasicLine(arc2d));
                 case Line2D line2d -> linePool.add(new BasicLine(line2d));
                 case Path2D.Double path2d -> linePool.addAll(BasicLine.path2DToLines(path2d));
-                default -> newFeatureList.add(JSONShapeFactory.createJSONShapeFromCondensedShape(feature)); //feature is already condensed (ellipse, circle, etc.)
+                default -> newFeatureList.add(JSONShapeFactory.createJSONShape(feature)); //feature is already condensed (ellipse, circle, etc.)
             }
         }
 

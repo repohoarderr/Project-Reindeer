@@ -30,7 +30,7 @@ export default function DisplayResults({results}) {
 
     // Round a number to 4 decimal places
     const round = (num) => {
-        if(num === undefined || isNaN(num)){
+        if(num === undefined || num === null || isNaN(num)){
             return "";
         }
         return parseFloat(num.toFixed(4));

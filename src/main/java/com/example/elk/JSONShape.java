@@ -185,10 +185,6 @@ public class JSONShape {
                 jsonWriter.put("endY", arc2D.getEndPoint().getY());
                 jsonWriter.put("centerX", arc2D.getCenterX());
                 jsonWriter.put("centerY", arc2D.getCenterY());
-                jsonWriter.put("maxX", arc2D.getBounds2D().getMaxX());
-                jsonWriter.put("maxY", arc2D.getBounds2D().getMaxY());
-                jsonWriter.put("minX", arc2D.getBounds2D().getMinX());
-                jsonWriter.put("minY", arc2D.getBounds2D().getMinY());
                 jsonWriter.put("radius", radius);
                 jsonWriter.put("arcType", arc2D.getArcType());
                 jsonWriter.put("rotation", startAngleRad);  // Keep the start angle (rotation) the same
@@ -234,6 +230,10 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("maxX", shape.getBounds2D().getMaxX());
+        jsonWriter.put("maxY", shape.getBounds2D().getMaxY());
+        jsonWriter.put("minX", shape.getBounds2D().getMinX());
+        jsonWriter.put("minY", shape.getBounds2D().getMinY());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
