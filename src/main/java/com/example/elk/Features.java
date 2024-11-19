@@ -121,6 +121,8 @@ public class Features {
             }
         }
 
+        //add uncategorized lines so they can still be drawn
+        linePool.forEach(line -> newFeatureList.add(new JSONShape(line.getSource())));
         return newFeatureList;
     }
 

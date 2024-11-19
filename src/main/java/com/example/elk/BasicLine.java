@@ -35,7 +35,7 @@ public class BasicLine implements Comparable<BasicLine> {
 
         double[] coords = new double[6]; //pass coords into currentSegment() to fill coords w/ data
         Point2D prevPoint = null;
-        Point2D startPoint;
+        int prevStyle = -1;
 
         //adapted from https://stackoverflow.com/questions/47728519/getting-the-coordinate-pairs-of-a-path2d-object-in-java
         while (!pathIterator.isDone()) {
@@ -43,7 +43,6 @@ public class BasicLine implements Comparable<BasicLine> {
                 case PathIterator.SEG_MOVETO:
                     System.out.printf("move to x1=%f, y1=%f\n",
                             coords[0], coords[1]);
-                    startPoint = new Point2D.Double(coords[0], coords[1]);
                     prevPoint = new Point2D.Double(coords[0], coords[1]);
                     break;
                 case PathIterator.SEG_LINETO:
