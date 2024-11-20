@@ -1316,7 +1316,7 @@ public class DXFReader {
     System.out.println(value);
   }
 
-  Shape[] parseFile(File file, double maxSize, double minSize) throws IOException {
+  JSONShape[] parseFile(File file) throws IOException {
     readFile(file);//puts info into entities ArrayList
 
     ArrayList<Shape> shapes = new ArrayList<>();
@@ -1330,19 +1330,20 @@ public class DXFReader {
     }
 
     Features feature = new Features();
-
     feature.setFeatureList(shapes);
-    feature.condenseFeatureList();
     feature.printFeatures();
+
+    return feature.getJSONFeatures();
 
 //    return feature.getFeatures();
 
     //uncomment this to give arcs and lines instead of condensed shapes (rectangles, triangles, etc.)
-    Shape[] sOut = new Shape[shapes.size()];
-    for (int ii = 0; ii < shapes.size(); ii++) {
-      sOut[ii] = shapes.get(ii);
-    }
-    return sOut;
+    //^^^ NO LONGER TRUE
+//    Shape[] sOut = new Shape[shapes.size()];
+//    for (int ii = 0; ii < shapes.size(); ii++) {
+//      sOut[ii] = shapes.get(ii);
+//    }
+//    return sOut;
 
 
     //ignore transformations for now
@@ -1500,9 +1501,10 @@ public class DXFReader {
     private final DXFReader dxf;
     private Rectangle2D bounds;
 
-    DXFViewer(String fileName, double maxSize, double minSize) throws IOException {
+    DXFViewer(String fileName) throws IOException {
       dxf = new DXFReader();
-      shapes = dxf.parseFile(new File(fileName), maxSize, minSize);
+      JSONShape[] jsonShapes = dxf.parseFile(new File(fileName));
+      shapes = (Shape[]) Arrays.stream(jsonShapes).map(e -> e.getShape().orElse(null)).toArray(); //TODO: idk if this works, haven't tested
       if (shapes.length > 0) {
         // Create a bounding box that's the union of all shapes in the shapes array
         for (Shape shape : shapes) {
@@ -1600,12 +1602,12 @@ public class DXFReader {
       JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
       fileChooser.showOpenDialog(null);
       try {
-        new DXFViewer(fileChooser.getSelectedFile().toString(), 14, 3);
+        new DXFViewer(fileChooser.getSelectedFile().toString());
       }catch (NullPointerException e){
         System.exit(0);
       }
     } else {
-      new DXFViewer(args[0], 14, 3);
+      new DXFViewer(args[0]);
     }
   }
 }
