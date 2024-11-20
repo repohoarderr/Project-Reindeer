@@ -30,7 +30,7 @@ export default function DisplayResults({results}) {
 
     // Round a number to 4 decimal places
     const round = (num) => {
-        if(num === undefined || isNaN(num)){
+        if(num === undefined || num === null || isNaN(num)){
             return "";
         }
         return parseFloat(num.toFixed(4));
@@ -76,8 +76,9 @@ export default function DisplayResults({results}) {
                         circumference: round(shape.circumference),
                         radius: round(shape.radius),
                         multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A',
-                        price: price !== undefined ? `$${price.toFixed(2)}` : 'N/A'
-                    }
+                        price: price !== undefined ? `$${price.toFixed(2)}` : 'N/A',
+                        perimeter:round(shape.perimeter)
+                    },
                 };
 
                 // Group shapes by type
@@ -122,6 +123,7 @@ export default function DisplayResults({results}) {
                         <Column field="circumference" header="Circumference"></Column>
                         <Column field="radius" header="Radius"></Column>
                         <Column field="multipleRadius" header="Multiple Radius"></Column>
+                        <Column field="perimeter" header="Perimeter"></Column>
                         <Column field="price" header="Price"></Column>
                     </TreeTable>
 

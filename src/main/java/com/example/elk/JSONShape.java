@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,7 +155,7 @@ public class JSONShape {
     }
 
     public Optional<Shape> getShape(){
-        return Optional.of(source);
+        return Optional.ofNullable(source);
     }
 
     public static JSONObject writeDrawData(Shape shape, int id) {
@@ -198,8 +197,10 @@ public class JSONShape {
                 double b = ellipse2D.width / 2;
                 double circum = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2)) / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
                 jsonWriter.put("circumference", circum);
+                jsonWriter.put("perimeter", circum);
+
                 if (ellipse2D.getWidth() == ellipse2D.getHeight()) { //check to see if the shape is a circle or oval
-                    jsonWriter.put("radius", ((Ellipse2D.Double) shape).getHeight() / 2);
+                    jsonWriter.put("radius", ellipse2D.getHeight() / 2);
                     if (((Ellipse2D.Double) shape).getHeight() <= 0.5) {
                         jsonWriter.put("type", "punch");
                     } else {
@@ -229,6 +230,10 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("maxX", shape.getBounds2D().getMaxX());
+        jsonWriter.put("maxY", shape.getBounds2D().getMaxY());
+        jsonWriter.put("minX", shape.getBounds2D().getMinX());
+        jsonWriter.put("minY", shape.getBounds2D().getMinY());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -266,6 +271,7 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -278,8 +284,26 @@ public class JSONShape {
         return centerY;
     }
 
-    public JSONShape addRemovedLines(List<BasicLine> tempRemovedLines) {
-        this.lines.addAll(tempRemovedLines);
-        return this;
+    public double getPerimeter(){
+        double mainShapePerimeter = 0;
+        if (source instanceof Ellipse2D.Double ellipse2d){
+            double a = ellipse2d.height / 2;
+            double b = ellipse2d.width / 2;
+            mainShapePerimeter = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2))
+                    / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
+        }
+        else{
+            mainShapePerimeter =  lines.stream()
+                    .map(BasicLine::getLength)
+                    .reduce(Double::sum)
+                    .orElse(0.0);
+        }
+
+        double subFeaturesPerimeter = subFeatures.stream()
+                .map(JSONShape::getPerimeter)
+                .reduce(Double::sum)
+                .orElse(0.0);
+
+        return mainShapePerimeter + subFeaturesPerimeter;
     }
 }

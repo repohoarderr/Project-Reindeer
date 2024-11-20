@@ -59,6 +59,7 @@ public class JSONCustomShape extends JSONShape {
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("centerX", this.getCenterX());
         jsonWriter.put("centerY", this.getCenterY());
         jsonWriter.put("id", id);

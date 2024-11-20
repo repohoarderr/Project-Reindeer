@@ -35,7 +35,7 @@ public class BasicLine implements Comparable<BasicLine> {
 
         double[] coords = new double[6]; //pass coords into currentSegment() to fill coords w/ data
         Point2D prevPoint = null;
-        Point2D startPoint;
+        int prevStyle = -1;
 
         //adapted from https://stackoverflow.com/questions/47728519/getting-the-coordinate-pairs-of-a-path2d-object-in-java
         while (!pathIterator.isDone()) {
@@ -43,7 +43,6 @@ public class BasicLine implements Comparable<BasicLine> {
                 case PathIterator.SEG_MOVETO:
                     System.out.printf("move to x1=%f, y1=%f\n",
                             coords[0], coords[1]);
-                    startPoint = new Point2D.Double(coords[0], coords[1]);
                     prevPoint = new Point2D.Double(coords[0], coords[1]);
                     break;
                 case PathIterator.SEG_LINETO:
@@ -61,7 +60,7 @@ public class BasicLine implements Comparable<BasicLine> {
                 case PathIterator.SEG_CUBICTO:
                     System.out.printf("cubic to x1=%f, y1=%f, x2=%f, y2=%f, x3=%f, y3=%f\n",
                             coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                    lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
+                    //lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
 
                     //uncomment this line to approximate curves w/ straight lines
                     //lines.add(new BasicLine(new Line2D.Double(prevPoint, new Point2D.Double(coords[4], coords[5]))));
@@ -185,19 +184,10 @@ public class BasicLine implements Comparable<BasicLine> {
         if (source instanceof Line2D line) {
             return line.getP1().distance(line.getP2());
         } else if (source instanceof Arc2D.Double arc) {
-            //arc length = angle * radius        angle in radians
-            //radius is dist(p1, p2) * (sqrt(2) / 2)
-
-            double angleDegs = arc.getAngleExtent();
-            if (angleDegs < 0) {
-                angleDegs += 360;//need to account for negative angles
-            }
-            double angleRads = Math.toRadians(angleDegs);
-
-            double pointDist = arc.getStartPoint().distance(arc.getEndPoint());
-            double radius = pointDist * (Math.sqrt(2) / 2.0);
-
-            return angleRads * radius;
+            double extentRad = Math.toRadians(arc.extent);
+            double radius = arc.width / 2;
+            double angleRad = Math.abs(extentRad);
+            return radius * angleRad;
         }
         return 0;
     }
