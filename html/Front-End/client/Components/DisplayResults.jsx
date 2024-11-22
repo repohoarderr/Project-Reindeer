@@ -66,31 +66,43 @@ export default function DisplayResults({results}) {
             .reduce((acc, shape, index) => {
                 const price = calculatePrice(shape);
                 // Create a data object for the shape
+                const type = shape.type;
+                const centerX = round(shape.centerX);
+                const centerY = round(shape.centerY);
+                const area = round(shape.area);
+                const circumference = round(shape.circumference);
+                const radius = round(shape.radius);
+                const multipleRadius = shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A';
+                const priceStr = price !== undefined ? `$${price.toFixed(2)}` : 'N/A';
+                const perimeter = round(shape.perimeter);
+
                 const shapeData = {
-                    key: `${shape.type}-${index}`,
+
+                    key: `${type}-${area}-${radius}-${circumference}-${multipleRadius}-${perimeter}`,
+
                     data: {
-                        type: shape.type,
-                        centerX: round(shape.centerX),
-                        centerY: round(shape.centerY),
-                        area: round(shape.area),
-                        circumference: round(shape.circumference),
-                        radius: round(shape.radius),
-                        multipleRadius: shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A',
-                        price: price !== undefined ? `$${price.toFixed(2)}` : 'N/A',
-                        perimeter:round(shape.perimeter)
+                        type: type,
+                        centerX: centerX,
+                        centerY: centerY,
+                        area: area,
+                        circumference: circumference,
+                        radius: radius,
+                        multipleRadius: multipleRadius,
+                        price: priceStr,
+                        perimeter:perimeter
                     },
                 };
 
                 // Group shapes by type
-                if (!acc[shape.type]) {
-                    acc[shape.type] = {
-                        key: shape.type,
+                if (!acc[shapeData.key]) {
+                    acc[shapeData.key] = {
+                        key: shapeData.key,
                         data: { type: shape.type },
                         children: []
                     };
                 }
 
-                acc[shape.type].children.push(shapeData);
+                acc[shapeData.key].children.push(shapeData);
                 return acc;
             }, {});
 
