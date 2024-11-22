@@ -42,11 +42,24 @@ public class JSONCustomShape extends JSONShape {
                 jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "oblong");
             }
+            case RADIUS_NOTCH ->{
+                jsonWriter.put("type", "radiusNotch");
+            }
+            case MITERED_NOTCH ->{
+                jsonWriter.put("type", "miteredNotch");
+            }
+            case CORNER_NOTCH ->{
+                jsonWriter.put("type", "cornerNotch");
+            }
+            case CHAMFERED_CORNER ->{
+                jsonWriter.put("type", "chamferedCorner");
+            }
             case FREEHAND -> {
                 jsonWriter.put("type", "freehand");
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("centerX", this.getCenterX());
         jsonWriter.put("centerY", this.getCenterY());
         jsonWriter.put("id", id);
@@ -63,7 +76,9 @@ public class JSONCustomShape extends JSONShape {
 
         //output individual line data (drawing data)
         for (BasicLine line : lines){
-            arr.add(writeDrawData(line.getSource(), id));
+            if (line.doDraw()){
+                arr.add(writeDrawData(line.getSource(), id));
+            }
         }
         jsonWriter.put("drawing", arr);
 

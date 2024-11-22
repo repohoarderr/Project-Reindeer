@@ -41,10 +41,44 @@ export default function UploadForm({ onUploadComplete }) {
       // If successful, update the status to inform the user and invoke the callback to notify the parent component
       setUploadStatus('Upload successful');
       onUploadComplete(result); // Pass the upload result to the parent component (App.js)
+
+      setTimeout(() => {
+        smoothScrollTo(".scrollHere", 1000);
+      }, 500);
     } catch (error) {
       // If there is an error during the upload process, display an error message
       setUploadStatus(`Upload failed: ${error.message}`);
     }
+  };
+
+  // Custom smooth scroll function
+  const smoothScrollTo = (selector, duration) => {
+    const targetElement = document.querySelector(selector);
+    if (!targetElement) return;
+
+    const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    function animation(currentTime) {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+
+      window.scrollTo(0, run);
+      if (timeElapsed < duration) requestAnimationFrame(animation);
+    }
+
+
+    function easeInOutQuad(t, b, c, d) {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t + b;
+      t--;
+      return (-c / 2) * (t * (t - 2) - 1) + b;
+    }
+
+    requestAnimationFrame(animation);
   };
 
   /**
