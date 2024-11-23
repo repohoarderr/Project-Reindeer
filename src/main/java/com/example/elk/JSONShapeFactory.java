@@ -247,17 +247,13 @@ public class JSONShapeFactory {
     }
 
     public static double calculateHeight(List<BasicLine> singleShapeAsLines) {
-        double maxY = 0;
+        double maxY = Double.NEGATIVE_INFINITY;
         double minY = Double.MAX_VALUE;
 
         for (BasicLine line : singleShapeAsLines) {
             Rectangle2D lineBounds = line.getSource().getBounds2D();
-            if (lineBounds.getMaxY() > maxY) {
-                maxY = lineBounds.getMaxY();
-            }
-            if (lineBounds.getMinY() < minY) {
-                minY = lineBounds.getMinY();
-            }
+            maxY = Math.max(maxY, lineBounds.getMaxY());
+            minY = Math.min(minY, lineBounds.getMinY());
         }
 
         return maxY - minY;
@@ -266,17 +262,13 @@ public class JSONShapeFactory {
     private static double calculateWidth(List<BasicLine> singleShapeAsLines) {
         //TODO: provides incorrect width if rectangle is rotated?
         // Do we want longest side or distance between leftmost and rightmost points?
-        double maxX = 0;
+        double maxX = Double.NEGATIVE_INFINITY;
         double minX = Double.MAX_VALUE;
 
         for (BasicLine line : singleShapeAsLines) {
             Rectangle2D lineBounds = line.getSource().getBounds2D();
-            if (lineBounds.getMaxX() > maxX) {
-                maxX = lineBounds.getMaxX();
-            }
-            if (lineBounds.getMinX() < minX) {
-                minX = lineBounds.getMinX();
-            }
+            maxX = Math.max(maxX, lineBounds.getMaxX());
+            minX = Math.min(minX, lineBounds.getMinX());
         }
         return maxX - minX;
     }

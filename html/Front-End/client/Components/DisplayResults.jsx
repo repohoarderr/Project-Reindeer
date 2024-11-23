@@ -30,7 +30,7 @@ export default function DisplayResults({results}) {
 
     // Round a number to 4 decimal places
     const round = (num) => {
-        if(num === undefined || num === null || isNaN(num)){
+        if (num === undefined || num === null || isNaN(num)) {
             return "";
         }
         return parseFloat(num.toFixed(4));
@@ -49,8 +49,7 @@ export default function DisplayResults({results}) {
         let basePrice;
         if (shape.type === "freehand") {
 
-        }
-        else {
+        } else {
             basePrice = prices[`${shape.type}`]
         }
         return basePrice;
@@ -63,7 +62,7 @@ export default function DisplayResults({results}) {
         // Parse the results JSON and extract the shape data
         const shapeGroups = JSON.parse(results)
             .map((object) => object.table)
-            .reduce((acc, shape, index) => {
+            .reduce((acc, shape) => {
                 const price = calculatePrice(shape);
                 // Create a data object for the shape
                 const type = shape.type;
@@ -89,11 +88,10 @@ export default function DisplayResults({results}) {
                         radius: radius,
                         multipleRadius: multipleRadius,
                         price: priceStr,
-                        perimeter:perimeter
+                        perimeter: perimeter
                     },
                 };
 
-                // Group shapes by type
                 if (!acc[shapeData.key]) {
                     acc[shapeData.key] = {
                         key: shapeData.key,
@@ -106,12 +104,26 @@ export default function DisplayResults({results}) {
                 return acc;
             }, {});
 
+        // return Object.values(Object.values(shapeGroups).reduce((acc, shapeGroup) => {
+        //     const groupKey = shapeGroup.children[0].data.type;
+        //     if(!acc[groupKey]){
+        //         acc[groupKey] = {
+        //             key:groupKey,
+        //             data:shapeGroup.data,
+        //             count: shapeGroup.children.length,
+        //             children: []
+        //         }
+        //     }
+        //     acc[groupKey].children.push(shapeGroup);
+        //     return acc;
+        // }, {}));
+
         return Object.values(shapeGroups);
     };
 
     const treeTableData = shapesToNodes();
 
-    // Calculate total price from all shapes in treeTableData
+    //Calculate total price from all shapes in treeTableData
     const totalPrice = treeTableData.reduce((sum, group) => {
         return sum + group.children.reduce((groupSum, node) => {
             const price = parseFloat(node.data.price.replace('$', '')) || 0;
