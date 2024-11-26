@@ -192,6 +192,33 @@ public class JSONShape {
 
                 jsonWriter.put("type", "arc2D");
             }
+            case QuadCurve2D.Double quadCurve2D ->{
+                jsonWriter.put("startX", quadCurve2D.getP1().getX());
+                jsonWriter.put("startY", quadCurve2D.getP1().getY());
+                jsonWriter.put("endX", quadCurve2D.getP2().getX());
+                jsonWriter.put("endY", quadCurve2D.getP2().getY());
+                jsonWriter.put("centerX", quadCurve2D.getBounds2D().getX());
+                jsonWriter.put("centerY", quadCurve2D.getBounds2D().getY());
+
+                jsonWriter.put("controlX", quadCurve2D.getCtrlPt().getX());
+                jsonWriter.put("controlY", quadCurve2D.getCtrlPt().getY());
+
+                jsonWriter.put("type", "quadCurve2D");
+            }
+            case CubicCurve2D.Double cubicCurve2d ->{
+                jsonWriter.put("startX", cubicCurve2d.getP1().getX());
+                jsonWriter.put("startY", cubicCurve2d.getP1().getY());
+                jsonWriter.put("endX", cubicCurve2d.getP2().getX());
+                jsonWriter.put("endY", cubicCurve2d.getP2().getY());
+
+                jsonWriter.put("control1X", cubicCurve2d.getCtrlP1().getX());
+                jsonWriter.put("control1Y", cubicCurve2d.getCtrlP1().getY());
+
+                jsonWriter.put("control2X", cubicCurve2d.getCtrlP2().getX());
+                jsonWriter.put("control2Y", cubicCurve2d.getCtrlP2().getY());
+
+                jsonWriter.put("type", "cubicCurve2d");
+            }
             case Ellipse2D.Double ellipse2D -> { //if the shape is an ellipse
                 double a = ellipse2D.height / 2;
                 double b = ellipse2D.width / 2;

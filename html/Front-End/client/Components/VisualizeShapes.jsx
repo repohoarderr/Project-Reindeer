@@ -138,6 +138,10 @@ const VisualizeShapes = ({shapesData}) => {
                             } else if (shape.type.toLowerCase() === 'circle'.toLowerCase() ||
                                 shape.type.toLowerCase() === 'punch'.toLowerCase()) {
                                 drawCircle(ctx, shape, scaleFactor, xOffset, yOffset); // Draw a circle
+                            } else if (shape.type.toLowerCase() === 'quadcurve2d') {
+                                drawQuadLine(ctx, shape, scaleFactor, xOffset, yOffset);
+                            } else if (shape.type.toLowerCase() === 'cubiccurve2d') {
+                                drawCubicLine(ctx, shape, scaleFactor, xOffset, yOffset);
                             }
                         })
                     });
@@ -186,6 +190,45 @@ const VisualizeShapes = ({shapesData}) => {
                 ctx.strokeStyle = 'blue'; // Set circle color to blue
                 ctx.lineWidth = 2; // Set line width
                 ctx.stroke(); // Render the circle
+            };
+
+            const drawQuadLine = (ctx, shape, scaleFactor, xOffset, yOffset) => {
+                ctx.beginPath();
+                const startX = (shape.startX + xOffset) * scaleFactor;
+                const startY = (shape.startY + yOffset) * scaleFactor;
+                ctx.moveTo(startX, startY);
+
+                const ctrlX = (shape.controlX + xOffset) * scaleFactor;
+                const ctrlY = (shape.controlY + yOffset) * scaleFactor;
+
+                const endX = (shape.endX + xOffset) * scaleFactor;
+                const endY = (shape.endY + yOffset) * scaleFactor;
+
+                ctx.quadraticCurveTo(ctrlX, ctrlY, endX, endY);
+                ctx.strokeStyle = 'green';
+                ctx.lineWidth = 2; // Set line width
+                ctx.stroke();
+            };
+
+            const drawCubicLine = (ctx, shape, scaleFactor, xOffset, yOffset) => {
+                ctx.beginPath();
+                const startX = (shape.startX + xOffset) * scaleFactor;
+                const startY = (shape.startY + yOffset) * scaleFactor;
+                ctx.moveTo(startX, startY);
+
+                const ctrl1X = (shape.control1X + xOffset) * scaleFactor;
+                const ctrl1Y = (shape.control1Y + yOffset) * scaleFactor;
+
+                const ctrl2X = (shape.control2X + xOffset) * scaleFactor;
+                const ctrl2Y = (shape.control2Y + yOffset) * scaleFactor;
+
+                const endX = (shape.endX + xOffset) * scaleFactor;
+                const endY = (shape.endY + yOffset) * scaleFactor;
+
+                ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
+                ctx.strokeStyle = 'orange';
+                ctx.lineWidth = 2; // Set line width
+                ctx.stroke();
             };
 
             // Call the function to draw all the shapes on the canvas

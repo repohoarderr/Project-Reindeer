@@ -15,6 +15,10 @@ import settings from '../services/settings.json';
 export default function DisplayResults({results}) {
     const [highlightClass, setHighlightClass] = useState("");
 
+    const doubleToPriceStr = (num) =>{
+        return num !== undefined && !isNaN(num) ? `$${num.toFixed(2)}` : 'N/A'
+    }
+
     // useEffect hook to handle the animation for the total price display
     useEffect(() => {
         if (results) {
@@ -72,13 +76,13 @@ export default function DisplayResults({results}) {
                 const circumference = round(shape.circumference);
                 const radius = round(shape.radius);
                 const multipleRadius = shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A';
-                const priceStr = price !== undefined ? `$${price.toFixed(2)}` : 'N/A';
+                const priceStr = doubleToPriceStr(price);
                 const perimeter = round(shape.perimeter);
 
                 const shapeData = {
 
                     key: `${type}-${area}-${radius}-${circumference}-${multipleRadius}-${perimeter}`,
-
+                    //build info for an individual shape
                     data: {
                         type: type,
                         centerX: centerX,
@@ -87,20 +91,39 @@ export default function DisplayResults({results}) {
                         circumference: circumference,
                         radius: radius,
                         multipleRadius: multipleRadius,
-                        price: priceStr,
+                        unitPrice: price,
+                        unitPriceStr:priceStr,
                         perimeter: perimeter
                     },
                 };
 
-                if (!acc[shapeData.key]) {
-                    acc[shapeData.key] = {
+                //build info for an object which holds a group of similar shapes
+                let groupNode = acc[shapeData.key];
+                if (!groupNode) {
+                   groupNode = acc[shapeData.key] = {
                         key: shapeData.key,
-                        data: { type: shape.type },
+                        data: {
+                            type: type,
+                            area: area,
+                            circumference: circumference,
+                            radius: radius,
+                            multipleRadius: multipleRadius,
+                            perimeter: perimeter,
+
+                            unitPrice: price,
+                            unitPriceStr: doubleToPriceStr(price),
+                            totalPrice: 0,
+                            totalPriceStr: `$0.00`,
+                            count:0
+                        },
                         children: []
                     };
                 }
 
-                acc[shapeData.key].children.push(shapeData);
+                groupNode.children.push(shapeData);
+                groupNode.data.count++;
+                groupNode.data.totalPrice = groupNode.data.unitPrice * groupNode.data.count;
+                groupNode.data.totalPriceStr = doubleToPriceStr(groupNode.data.totalPrice)
                 return acc;
             }, {});
 
@@ -126,7 +149,7 @@ export default function DisplayResults({results}) {
     //Calculate total price from all shapes in treeTableData
     const totalPrice = treeTableData.reduce((sum, group) => {
         return sum + group.children.reduce((groupSum, node) => {
-            const price = parseFloat(node.data.price.replace('$', '')) || 0;
+            const price = node.data.unitPrice || 0;
             return groupSum + price;
         }, 0);
     }, 0);
@@ -140,15 +163,12 @@ export default function DisplayResults({results}) {
                     <pre>{results}</pre>
                     {/* Using <pre> tag for formatting the results output (e.g., JSON or text) */}
                     <TreeTable value={treeTableData} columnResizeMode={"expand"} tableStyle={{minWidth: '50rem'}}>
-                        <Column field="type" header="Type" expander></Column>
-                        <Column field="centerX" header="Center X"></Column>
-                        <Column field="centerY" header="Center Y"></Column>
-                        <Column field="area" header="Area"></Column>
-                        <Column field="circumference" header="Circumference"></Column>
-                        <Column field="radius" header="Radius"></Column>
-                        <Column field="multipleRadius" header="Multiple Radius"></Column>
-                        <Column field="perimeter" header="Perimeter"></Column>
-                        <Column field="price" header="Price"></Column>
+                        <Column field="type" header="Type" expander ></Column>
+                        <Column field="count" header="#" ></Column>
+                        <Column field="multipleRadius" header="Multiple Radius" ></Column>
+                        <Column field="perimeter" header="Perimeter" sortable></Column>
+                        <Column field="unitPriceStr" header="Unit Price" sortable></Column>
+                        <Column field="totalPriceStr" header="Total Price" sortable></Column>
                     </TreeTable>
 
                     {/* Display total price */}

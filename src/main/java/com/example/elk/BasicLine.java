@@ -28,6 +28,17 @@ public class BasicLine implements Comparable<BasicLine> {
         endPoint = src.getEndPoint();
     }
 
+    public BasicLine(QuadCurve2D src){
+        source = src;
+        startPoint = src.getP1();
+        endPoint = src.getP2();
+    }
+
+    public BasicLine(CubicCurve2D src){
+        source = src;
+        startPoint = src.getP1();
+        endPoint = src.getP2();
+    }
 
     public static List<BasicLine> path2DToLines(Path2D.Double path2d) {
         ArrayList<BasicLine> lines = new ArrayList<>();
@@ -35,45 +46,42 @@ public class BasicLine implements Comparable<BasicLine> {
 
         double[] coords = new double[6]; //pass coords into currentSegment() to fill coords w/ data
         Point2D prevPoint = null;
-        int prevStyle = -1;
 
         //adapted from https://stackoverflow.com/questions/47728519/getting-the-coordinate-pairs-of-a-path2d-object-in-java
         while (!pathIterator.isDone()) {
             switch (pathIterator.currentSegment(coords)) {
                 case PathIterator.SEG_MOVETO:
-                    System.out.printf("move to x1=%f, y1=%f\n",
-                            coords[0], coords[1]);
                     prevPoint = new Point2D.Double(coords[0], coords[1]);
                     break;
                 case PathIterator.SEG_LINETO:
-                    System.out.printf("line to x1=%f, y1=%f\n",
-                            coords[0], coords[1]);
-                    lines.add(new BasicLine(new Line2D.Double(prevPoint, new Point2D.Double(coords[0], coords[1]))));
-                    prevPoint = new Point2D.Double(coords[0], coords[1]);
+                    Point2D newPoint = new Point2D.Double(coords[0], coords[1]);
+                    lines.add(new BasicLine(new Line2D.Double(prevPoint, newPoint)));
+                    prevPoint = newPoint;
                     break;
                 case PathIterator.SEG_QUADTO:
-                    System.out.printf("quad to x1=%f, y1=%f, x2=%f, y2=%f\n",
-                            coords[0], coords[1], coords[2], coords[3]);
-                    lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
-                    prevPoint = new Point2D.Double(coords[4], coords[5]);
+                    QuadCurve2D quadCurve2D = new QuadCurve2D.Double(
+                            prevPoint.getX(), prevPoint.getY(), coords[0], coords[1],
+                            coords[2], coords[3]);
+                    lines.add(new BasicLine(quadCurve2D));
+
+                    prevPoint = quadCurve2D.getP2();
                     break;
                 case PathIterator.SEG_CUBICTO:
-                    System.out.printf("cubic to x1=%f, y1=%f, x2=%f, y2=%f, x3=%f, y3=%f\n",
-                            coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                    //lines.add(new BasicLine(new Arc2D.Double()));//TODO: not sure what values to put here
+                    CubicCurve2D cubicCurve2D = new CubicCurve2D.Double(
+                            prevPoint.getX(), prevPoint.getY(),
+                            coords[0], coords[1],
+                            coords[2], coords[3],
+                            coords[4], coords[5]
+                    );
 
-                    //uncomment this line to approximate curves w/ straight lines
-                    //lines.add(new BasicLine(new Line2D.Double(prevPoint, new Point2D.Double(coords[4], coords[5]))));
-                    prevPoint = new Point2D.Double(coords[4], coords[5]);
+                    lines.add(new BasicLine(cubicCurve2D));
+                    prevPoint = cubicCurve2D.getP2();
                     break;
                 case PathIterator.SEG_CLOSE:
-                    System.out.printf("close\n");
                     break;
             }
             pathIterator.next();
         }
-        System.out.println();
-        System.out.println();
         return lines;
     }
 
@@ -89,11 +97,16 @@ public class BasicLine implements Comparable<BasicLine> {
         Point2D bestEndpoint = list.getLast().getEndPoint();
         double maxDistance = bestStartPoint.distance(bestEndpoint);
 
+        if (list.stream().anyMatch(line -> !(line.getSource() instanceof Line2D))) {
+            throw new UnsupportedOperationException("Only straight lines can be merged by createMergedLine.");
+        }
+
         for (BasicLine line : list) {
             for (BasicLine lineLine : list) {
                 if (line == lineLine) {
                     continue;
                 }
+
                 if (line.getStartPoint().distance(lineLine.getStartPoint()) > maxDistance) {
                     bestStartPoint = line.getStartPoint();
                     bestEndpoint = lineLine.getStartPoint();
@@ -189,11 +202,18 @@ public class BasicLine implements Comparable<BasicLine> {
             double angleRad = Math.abs(extentRad);
             return radius * angleRad;
         }
+        else if (source instanceof QuadCurve2D quadCurve2D){
+            return 0;//TODO: how to get length of this?
+        }
+        else if (source instanceof CubicCurve2D cubicCurve2D){
+            return 0; //TODO: how to get length of this?
+        }
         return 0;
     }
 
     /**
      * Return true if two lines are "in line" with each other. In other words, they are two line segments which are part of a larger line.
+     *
      * @param listLine the line being compared with "this"
      * @return true if lines are "in line", false if otherwise
      */

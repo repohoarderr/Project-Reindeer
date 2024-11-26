@@ -134,7 +134,9 @@ public class Features {
      */
     private List<BasicLine> condenseArcs(List<BasicLine> lines) {
         List<BasicLine> returned = new ArrayList<>(lines.stream()
-                .filter(line -> line.getSource() instanceof Line2D.Double)
+                .filter(line -> line.getSource() instanceof Line2D.Double ||
+                        line.getSource() instanceof QuadCurve2D.Double ||
+                        line.getSource() instanceof CubicCurve2D.Double)
                 .toList());
 
         List<BasicLine> arcs = lines.stream()

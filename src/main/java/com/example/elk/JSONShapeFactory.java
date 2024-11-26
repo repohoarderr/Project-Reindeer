@@ -48,22 +48,25 @@ public class JSONShapeFactory {
 
     private static JSONShape parseSimpleShape(List<BasicLine> shapeComponentLines, ArrayList<BasicLine> drawLines) {
         //tally number of arcs and lines
-        int numArcs = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Arc2D).count();
+        int numCurves = (int) shapeComponentLines.stream().filter(line->
+                line.getSource() instanceof Arc2D ||
+                line.getSource() instanceof QuadCurve2D ||
+                line.getSource() instanceof CubicCurve2D).count();
         int numStraightLines = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Line2D).count();
 
-        if (numStraightLines == 2 && numArcs == 2) {
+        if (numStraightLines == 2 && numCurves == 2) {
             return new JSONCustomShape(ShapeType.OBLONG, drawLines);
         }
 
-        if (numStraightLines == 3 && numArcs == 3) {
+        if (numStraightLines == 3 && numCurves == 3) {
             return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, drawLines);
         }
 
-        if (numStraightLines == 3 && numArcs == 0) {
+        if (numStraightLines == 3 && numCurves == 0) {
             return new JSONCustomShape(ShapeType.TRIANGLE, drawLines);
         }
 
-        if (numStraightLines == 4 && numArcs == 4) {
+        if (numStraightLines == 4 && numCurves == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
             List<List<BasicLine>> parallels = findParallelLines(shapeComponentLines);
 
@@ -71,12 +74,12 @@ public class JSONShapeFactory {
                 //TODO: throw in check for parallelograms here
                 return new JSONShape(parseRoundRectangle(shapeComponentLines), drawLines);
             }
-            else{
+            else if (parallels.size() == 1){
                 return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, drawLines);
             }
         }
 
-        if (numStraightLines == 4 && numArcs == 0) {
+        if (numStraightLines == 4 && numCurves == 0) {
             return new JSONShape(new Rectangle2D.Double(calculateXCoord(shapeComponentLines), calculateYCoord(shapeComponentLines),
                     calculateWidth(shapeComponentLines), calculateHeight(shapeComponentLines)), drawLines);
         }
