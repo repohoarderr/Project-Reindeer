@@ -5,7 +5,6 @@ import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Features {
     //Debug console colors
@@ -83,7 +82,7 @@ public class Features {
         BasicLine poolLine;
         BasicLine shapeLine;
 
-        //used to build one shape out of several lines
+        //build one shape out of several lines
         List<BasicLine> singleShapeAsLines = new ArrayList<>();
 
         while (!linePool.isEmpty()) {
@@ -115,14 +114,23 @@ public class Features {
                     singleShapeAsLines.clear();
                 }
             }
-            //we've stopped categorizing lines and would be stuck in an infinite loop trying to categorize lines which don't connect, so break
             if (linePool.size() == oldSize) {
-                break;
+                if (singleShapeAsLines.size() == 1){
+                    //we've stopped categorizing lines and would be stuck in an infinite loop trying to categorize lines which don't connect, so break
+                    break;
+                }
+                singleShapeAsLines = condenseArcs(singleShapeAsLines);
+                newFeatureList.add(JSONShapeFactory.createJSONShape(singleShapeAsLines));
+                singleShapeAsLines.clear();
             }
         }
 
         //add uncategorized lines so they can still be drawn
         linePool.forEach(line -> newFeatureList.add(new JSONShape(line.getSource())));
+        if (!singleShapeAsLines.isEmpty()){
+            singleShapeAsLines = condenseArcs(singleShapeAsLines);
+            newFeatureList.add(JSONShapeFactory.createJSONShape(singleShapeAsLines));
+        }
         return newFeatureList;
     }
 
@@ -141,7 +149,7 @@ public class Features {
 
         List<BasicLine> arcs = lines.stream()
                 .filter(line -> line.getSource() instanceof Arc2D.Double)
-                .collect(Collectors.groupingBy(line -> calculateArcHash((Arc2D) line.getSource())))
+                .collect(Collectors.groupingBy(BasicLine::hashCode))
                 .values()
                 .stream().map(list -> list.stream().reduce((bigLine, smallLine) ->{
                     Arc2D bigArc = (Arc2D) bigLine.getSource();
@@ -165,20 +173,6 @@ public class Features {
         return returned;
 
     }
-
-    private static long calculateArcHash(Arc2D arc) {
-        Arc2D arcCopy = new Arc2D.Double(arc.getX(), arc.getY(),
-                arc.getWidth(), arc.getHeight(),
-                arc.getAngleStart(), 360, Arc2D.OPEN);
-
-        //need to apply rounding to the hash due to lack of precision in x and y values
-        //ex. arcs with center x at 0.248 and 0.25 should have the same hash if all other values are equal
-        return Math.round(arcCopy.getWidth() * 10000019 +
-                arcCopy.getHeight() * 10006721 +
-                arcCopy.getBounds2D().getCenterX() * 10010111 +
-                arcCopy.getBounds2D().getCenterY() * 10000379);
-    }
-
 
     public Shape[] getFeatures() {
         Shape[] features = new Shape[featureList.size()];

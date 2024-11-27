@@ -18,12 +18,12 @@ public class JSONShapeFactory {
         ArrayList<BasicLine> shapeComponentLines = new ArrayList<>(sourceLines);
 
         //if sourceLines is a single arc in the shape of a circle, return a circle object
-        if (sourceLines.size() == 1 && sourceLines.get(0).getSource() instanceof Arc2D arc2D){
-            if (Math.abs(arc2D.getAngleExtent()) % 360 == 0){
+        if (sourceLines.size() == 1 && sourceLines.get(0).getSource() instanceof Arc2D arc2D
+                && Math.abs(arc2D.getAngleExtent()) % 360 == 0){
                 return JSONShapeFactory.createJSONShape(
                         new Ellipse2D.Double(arc2D.getX(), arc2D.getY(), arc2D.getWidth(), arc2D.getHeight()));
             }
-        }
+
 
         //if lines aren't all connected, then we need to "connect" them together
         //this happens if we are trying to parse a shape which has had lines taken out
@@ -31,8 +31,14 @@ public class JSONShapeFactory {
 
         //if lines have a gap between them because a notch has been removed, fill those gaps
         if (!BasicLine.isOneLinkedShape(sourceLines)){
-            ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(sourceLines);
-            for (ArrayList<BasicLine> list : linesToCombine){
+            List<List<BasicLine>> linesToCombine = sourceLines.stream()
+                    .filter(line -> line.getSource() instanceof Line2D)
+                    .collect(Collectors.groupingBy(BasicLine::hashCode))
+                    .values()
+                    .stream()
+                    .filter(lineList -> lineList.size() > 1)
+                    .toList();
+            for (List<BasicLine> list : linesToCombine){
                 shapeComponentLines.removeAll(list);
 
                 //note that createMergedLine returns a BasicLine with its draw boolean set to false
@@ -146,41 +152,6 @@ public class JSONShapeFactory {
         return likelyRadiusNotches;
     }
 
-    private static ArrayList<ArrayList<BasicLine>> findLinesToCombine(List<BasicLine> singleShapeAsLines) {
-        List<List<BasicLine>> parallelLines = findParallelLines(singleShapeAsLines);
-        ArrayList<BasicLine> allLines = new ArrayList<>();
-        parallelLines.forEach(allLines::addAll);
-
-        ArrayList<ArrayList<BasicLine>> linesToCombine = new ArrayList<>();
-
-        //start w/ list of parallel lines
-        //add lines to the same list if the slope between the lines matches the slope of the lines themselves
-        //this means that the lines are "in line" with each other
-        //(they are two line segments which are part of the same line)
-        toHere:
-        for (BasicLine line : allLines){
-            if (linesToCombine.isEmpty()){
-                linesToCombine.add(new ArrayList<>());
-            }
-
-            for (ArrayList<BasicLine> list : linesToCombine){
-                if (list.isEmpty()){
-                    list.add(line);
-                    continue toHere;
-                }
-                if (line.isInLineWith(list.getFirst())){
-                    list.add(line);
-                    continue toHere;
-                }
-            }
-            //if we never added the line to a list, we need to create a new bucket for it
-            linesToCombine.add(new ArrayList<>());
-            linesToCombine.getLast().add(line);
-        }
-        linesToCombine.removeIf(list -> list.size() < 2);
-        return linesToCombine;
-    }
-
     private static boolean isAngleExtentSufficient(Arc2D arc, double targetExtent) {
         double extent = arc.getAngleExtent();
         if (extent < 0){
@@ -277,7 +248,6 @@ public class JSONShapeFactory {
     }
 
     public static List<List<BasicLine>> findParallelLines(List<BasicLine> singleShapeAsLines) {
-
         //create deep copy
         ArrayList<BasicLine> straightsCopy = new ArrayList<>(singleShapeAsLines.stream()
                 .filter(line -> line.getSource() instanceof Line2D.Double)

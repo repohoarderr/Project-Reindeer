@@ -4,11 +4,10 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Represents either a Line2D or an Arc2D.
- * Used to simplify comparison between these two classes and
- * help condense collections of lines into composite objects such as RoundRectangle2D.Double.
+ * Wrapper for line objects, particularly Line2D, Arc2D, QuadCurve2D, and CubicCurve2D.
  */
 public class BasicLine implements Comparable<BasicLine> {
     private final Point2D startPoint;
@@ -193,6 +192,51 @@ public class BasicLine implements Comparable<BasicLine> {
         return 0;
     }
 
+    /**
+     * BasicLines with the same hash code should be merged.
+     * For straight lines, these are lines with the same slope and y-intercept which are likely broken up by a perimeter feature.
+     * For arcs, these are lines which are part of the same overall ellipse, which are likely segmented by the software which exported them.
+     * @return the hash code of the BasicLine
+     */
+    @Override
+    public int hashCode(){
+        if (source instanceof Arc2D arc){
+            Arc2D arcCopy = new Arc2D.Double(arc.getX(), arc.getY(),
+                    arc.getWidth(), arc.getHeight(),
+                    arc.getAngleStart(), 360, Arc2D.OPEN);
+
+            //need to apply rounding to the hash anyway due to lack of precision in x and y values
+            //ex. arcs with center x at 0.248 and 0.25 should have the same hash if all other values are equal
+            return (int) (arcCopy.getWidth() * 10000019 +
+                    arcCopy.getHeight() * 10006721 +
+                    arcCopy.getBounds2D().getCenterX() * 10010111 +
+                    arcCopy.getBounds2D().getCenterY() * 10000379);
+        }
+        else if (source instanceof Line2D line){
+            // Get the coordinates of the line's two endpoints
+            double x1 = line.getX1();
+            double y1 = line.getY1();
+            double x2 = line.getX2();
+            double y2 = line.getY2();
+
+            // Compute the slope m
+            double slope;
+            if (x2 == x1) {
+                // Vertical line: assign an infinite slope
+                slope = Double.POSITIVE_INFINITY;
+            } else {
+                slope = (y2 - y1) / (x2 - x1);
+            }
+
+            // Compute the y-intercept b
+            double intercept = y1 - slope * x1;
+
+            // Return a combined hash code for the slope and intercept
+            return Objects.hash(slope, intercept);
+        }
+        return 0;
+    }
+
     public double getLength() {
         if (source instanceof Line2D line) {
             return line.getP1().distance(line.getP2());
@@ -203,50 +247,79 @@ public class BasicLine implements Comparable<BasicLine> {
             return radius * angleRad;
         }
         else if (source instanceof QuadCurve2D quadCurve2D){
-            return 0;//TODO: how to get length of this?
+            //adapted from https://gamedev.stackexchange.com/questions/6009/bezier-curve-arc-length
+            Point2D a = quadCurve2D.getP1();
+            Point2D b = quadCurve2D.getP2();
+            Point2D c = quadCurve2D.getCtrlPt();
+
+            Point2D v = new Point2D.Double( 2*(b.getX() - a.getX()), 2*(b.getY() - a.getY()));
+            Point2D w = new Point2D.Double(c.getX() - (2*b.getX()) + a.getX(), c.getY() - (2*b.getY()) + a.getY());
+
+            double uu = 4*(w.getX()*w.getX() + w.getY()*w.getY());
+
+            if(uu < 0.00001)
+            {
+                return (float) Math.sqrt((c.getX() - a.getX())*(c.getX() - a.getX()) + (c.getY() - a.getY())*(c.getY() - a.getY()));
+            }
+
+            double vv = 4*(v.getX()*w.getX() + v.getY()*w.getY());
+            double ww = v.getX()*v.getX() + v.getY()*v.getY();
+
+            double t1 = (2*Math.sqrt(uu*(uu + vv + ww)));
+            double t2 = 2*uu+vv;
+            double t3 = vv*vv - 4*uu*ww;
+            double t4 = (2*Math.sqrt(uu*ww));
+
+            //return (float) ((t1*t2 - t3*Math.log(t2+t1) -(vv*t4 - t3*Math.log(vv+t4))) / (8*Math.pow(uu, 1.5)));
+            return 0; //TODO: not tested yet
         }
         else if (source instanceof CubicCurve2D cubicCurve2D){
-            return 0; //TODO: how to get length of this?
+            double length = 0.0;
+            int segments = 1000;
+            double prevX = cubicCurve2D.getX1();
+            double prevY = cubicCurve2D.getY1();
+
+            for (int i = 1; i <= segments; i++) {
+                double t = i / (double) segments;
+                double x = getCubicBezierX(cubicCurve2D, t);
+                double y = getCubicBezierY(cubicCurve2D, t);
+
+                // Calculate distance from the previous point to the current point
+                double dx = x - prevX;
+                double dy = y - prevY;
+                length += Math.sqrt(dx * dx + dy * dy);
+
+                prevX = x;
+                prevY = y;
+            }
+
+//            return 0; TODO: not tested
+            return length;
         }
         return 0;
     }
 
-    /**
-     * Return true if two lines are "in line" with each other. In other words, they are two line segments which are part of a larger line.
-     *
-     * @param listLine the line being compared with "this"
-     * @return true if lines are "in line", false if otherwise
-     */
-    public boolean isInLineWith(BasicLine listLine) {
-        if (this.source instanceof Arc2D ||
-                listLine.source instanceof Arc2D) {
-            throw new UnsupportedOperationException("Arcs do not have a slope");
-        }
-        //slope of two lines must be the same
-        final double TOLERANCE = 0.001;
-        if (Math.abs(this.getSlope() - listLine.getSlope()) > TOLERANCE) {
-            return false;
-        }
+    private static double getCubicBezierX(CubicCurve2D curve, double t) {
+        double x1 = curve.getX1();
+        double x2 = curve.getCtrlX1();
+        double x3 = curve.getCtrlX2();
+        double x4 = curve.getX2();
+        return Math.pow(1 - t, 3) * x1 + 3 * Math.pow(1 - t, 2) * t * x2 + 3 * (1 - t) * Math.pow(t, 2) * x3 + Math.pow(t, 3) * x4;
+    }
 
-        //slope of one line's point to the other line's point must match the slope of the lines themselves
-        Line2D thisLineSrc = (Line2D) source;
-        Line2D listLineSrc = (Line2D) listLine.source;
-
-        double deltaY = thisLineSrc.getY2() - listLineSrc.getY1();
-        double deltaX = thisLineSrc.getX2() - listLineSrc.getX1();
-
-        if (deltaX == 0) {
-            //check to see if all lines are straight up and down
-            return listLine.getSlope() == Double.POSITIVE_INFINITY;
-        }
-
-        return Math.abs((deltaY / deltaX) - listLine.getSlope()) < TOLERANCE;
+    private static double getCubicBezierY(CubicCurve2D curve, double t) {
+        double y1 = curve.getY1();
+        double y2 = curve.getCtrlY1();
+        double y3 = curve.getCtrlY2();
+        double y4 = curve.getY2();
+        return Math.pow(1 - t, 3) * y1 + 3 * Math.pow(1 - t, 2) * t * y2 + 3 * (1 - t) * Math.pow(t, 2) * y3 + Math.pow(t, 3) * y4;
     }
 
     public double getSlope() {
-        if (this.source instanceof Arc2D) {
-            throw new UnsupportedOperationException("Arcs do not have a slope");
+        if (!(this.source instanceof Line2D)) {
+            throw new UnsupportedOperationException("This line does not have a slope");
         }
+
         Line2D lineSrc = (Line2D) source;
         double deltaY = lineSrc.getY2() - lineSrc.getY1();
         double deltaX = lineSrc.getX2() - lineSrc.getX1();
