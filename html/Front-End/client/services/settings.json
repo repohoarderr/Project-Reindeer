@@ -27,5 +27,14 @@
     "61": 255,
     "62": 172,
     "63": 177
-  }
+  },
+  "kissCutPrice": 20,
+  "manHours": {
+    "punch": 0.15,
+    "circle": 0.2,
+    "freehand": 0.25,
+    "oblong": 0.1
+  },
+  "rate": 120,
+  "perimeterOver20Price": 30
 }
