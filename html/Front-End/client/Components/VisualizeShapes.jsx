@@ -117,114 +117,117 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
 
     // useEffect hook is used to handle the drawing logic when the component mounts or when shapesData or scaleFactor changes
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
 
-        // Function to draw all shapes
-        const drawCanvas = () => {
-            // Clear the canvas before redrawing
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Function to draw all shapes
+            const drawCanvas = () => {
+                // Clear the canvas before redrawing
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Padding to ensure the shapes aren't clipped
-            let padding = 0.1;
+                // Padding to ensure the shapes aren't clipped
+                let padding = 0.1;
 
-            // Calculate bounding box for all shapes
-            let minX = findMinX(shapesData) - padding;
-            let minY = findMinY(shapesData) - padding;
-            let maxX = findMaxX(shapesData) + padding;
-            let maxY = findMaxY(shapesData) + padding;
+                // Calculate bounding box for all shapes
+                let minX = findMinX(shapesData) - padding;
+                let minY = findMinY(shapesData) - padding;
+                let maxX = findMaxX(shapesData) + padding;
+                let maxY = findMaxY(shapesData) + padding;
 
-            // Calculate scaling factor to fit all shapes within the canvas
-            const scaleFactor = Math.abs(600 / Math.max(maxX - minX, maxY - minY));
+                // Calculate scaling factor to fit all shapes within the canvas
+                const scaleFactor = Math.abs(600 / Math.max(maxX - minX, maxY - minY));
 
-            // Set canvas dimensions based on the bounding box
-            canvas.width = (maxX - minX) * scaleFactor;
-            canvas.height = (maxY - minY) * scaleFactor;
+                // Set canvas dimensions based on the bounding box
+                canvas.width = (maxX - minX) * scaleFactor;
+                canvas.height = (maxY - minY) * scaleFactor;
 
-            // Center the canvas visually
-            canvas.style.display = 'block';
-            canvas.style.margin = '0 auto';
+                // Center the canvas visually
+                canvas.style.display = 'block';
+                canvas.style.margin = '0 auto';
 
-            // Flip y-axis (canvas coordinates vs. typical 2D Cartesian coordinates)
-            ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
+                // Flip y-axis (canvas coordinates vs. typical 2D Cartesian coordinates)
+                ctx.setTransform(1, 0, 0, -1, 0, canvas.height);
 
-            // Outline the canvas with a dashed border for clarity
-            ctx.setLineDash([5, 10]);
-            ctx.strokeRect(0, 0, canvas.width, canvas.height);
-            ctx.setLineDash([]); // Reset to solid lines
+                // Outline the canvas with a dashed border for clarity
+                ctx.setLineDash([5, 10]);
+                ctx.strokeRect(0, 0, canvas.width, canvas.height);
+                ctx.setLineDash([]); // Reset to solid lines
 
-            // Calculate offsets to shift shapes into the visible area
-            let xOffset = Math.abs(Math.min(0, minX));
-            let yOffset = Math.abs(Math.min(0, minY));
+                // Calculate offsets to shift shapes into the visible area
+                let xOffset = Math.abs(Math.min(0, minX));
+                let yOffset = Math.abs(Math.min(0, minY));
 
-            // Iterate over each shape and draw it on the canvas
-            shapesData.forEach((object) => {
-                const drawArr = object.drawing;
-                const shapeKey = object.key; // Use the provided key
-                drawArr.forEach((shape) => {
-                    const isKissCut = kissCutSelections[shapeKey] || false;
-                    if (shape.type.toLowerCase() === 'line2d') {
-                        drawLine(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
-                    } else if (shape.type.toLowerCase() === 'arc2d') {
-                        drawArc(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
-                    } else if (
-                        shape.type.toLowerCase() === 'circle' ||
-                        shape.type.toLowerCase() === 'punch'
-                    ) {
-                        drawCircle(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
-                    }
+                // Iterate over each shape and draw it on the canvas
+                shapesData.forEach((object) => {
+                    const drawArr = object.drawing;
+                    const shapeKey = object.key; // Use the provided key
+                    drawArr.forEach((shape) => {
+                        const isKissCut = kissCutSelections[shapeKey] || false;
+                        if (shape.type.toLowerCase() === 'line2d') {
+                            drawLine(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
+                        } else if (shape.type.toLowerCase() === 'arc2d') {
+                            drawArc(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
+                        } else if (
+                            shape.type.toLowerCase() === 'circle' ||
+                            shape.type.toLowerCase() === 'punch'
+                        ) {
+                            drawCircle(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
+                        } else if (shape.type.toLowerCase() === 'quadcurve2d') {
+                            drawQuadLine(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
+                        } else if (shape.type.toLowerCase() === 'cubiccurve2d') {
+                            drawCubicLine(ctx, shape, scaleFactor, xOffset, yOffset, isKissCut);
+                        }
+                    });
                 });
-            });
-        };
+            };
 
 
-        const drawLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-            ctx.beginPath();
-            ctx.moveTo((shape.startX + xOffset) * scaleFactor, (shape.startY + yOffset) * scaleFactor);
-            ctx.lineTo((shape.endX + xOffset) * scaleFactor, (shape.endY + yOffset) * scaleFactor);
+            const drawLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+                ctx.beginPath();
+                ctx.moveTo((shape.startX + xOffset) * scaleFactor, (shape.startY + yOffset) * scaleFactor);
+                ctx.lineTo((shape.endX + xOffset) * scaleFactor, (shape.endY + yOffset) * scaleFactor);
 
-            // Sets the color of the line based on whether it is a kiss cut (green) or not (black)
-            ctx.strokeStyle = isKissCut ? 'green' : 'black';
-            ctx.setLineDash(isKissCut ? [5, 5] : []);
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        };
+                // Sets the color of the line based on whether it is a kiss cut (green) or not (black)
+                ctx.strokeStyle = isKissCut ? 'green' : 'black';
+                ctx.setLineDash(isKissCut ? [5, 5] : []);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            };
 
-        const drawArc = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-            ctx.beginPath();
-            ctx.arc(
-                (shape.centerX + xOffset) * scaleFactor,
-                (shape.centerY + yOffset) * scaleFactor,
-                shape.radius * scaleFactor,
-                -shape.angle,
-                -shape.rotation,
-                true
-            );
-            // Sets the color of the arc based on whether it is a kiss cut (green) or not (red)
-            ctx.strokeStyle = isKissCut ? 'green' : 'red';
-            ctx.setLineDash(isKissCut ? [5, 5] : []);
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        };
+            const drawArc = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+                ctx.beginPath();
+                ctx.arc(
+                    (shape.centerX + xOffset) * scaleFactor,
+                    (shape.centerY + yOffset) * scaleFactor,
+                    shape.radius * scaleFactor,
+                    -shape.angle,
+                    -shape.rotation,
+                    true
+                );
+                // Sets the color of the arc based on whether it is a kiss cut (green) or not (red)
+                ctx.strokeStyle = isKissCut ? 'green' : 'red';
+                ctx.setLineDash(isKissCut ? [5, 5] : []);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            };
 
-        const drawCircle = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-            ctx.beginPath();
-            ctx.arc(
-                (shape.centerX + xOffset) * scaleFactor,
-                (shape.centerY + yOffset) * scaleFactor,
-                shape.radius * scaleFactor,
-                0,
-                2 * Math.PI
-            );
-            // Sets the color of the circle based on whether it is a kiss cut (green) or not (blue)
-            ctx.strokeStyle = isKissCut ? 'green' : 'blue';
-            ctx.setLineDash(isKissCut ? [5, 5] : []);
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        };
+            const drawCircle = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+                ctx.beginPath();
+                ctx.arc(
+                    (shape.centerX + xOffset) * scaleFactor,
+                    (shape.centerY + yOffset) * scaleFactor,
+                    shape.radius * scaleFactor,
+                    0,
+                    2 * Math.PI
+                );
+                // Sets the color of the circle based on whether it is a kiss cut (green) or not (blue)
+                ctx.strokeStyle = isKissCut ? 'green' : 'blue';
+                ctx.setLineDash(isKissCut ? [5, 5] : []);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            };
 
-        //TODO: add support for kiss cut drawing
-            const drawQuadLine = (ctx, shape, scaleFactor, xOffset, yOffset) => {
+            const drawQuadLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
                 ctx.beginPath();
                 const startX = (shape.startX + xOffset) * scaleFactor;
                 const startY = (shape.startY + yOffset) * scaleFactor;
@@ -237,13 +240,13 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
                 const endY = (shape.endY + yOffset) * scaleFactor;
 
                 ctx.quadraticCurveTo(ctrlX, ctrlY, endX, endY);
-                ctx.strokeStyle = 'green';
+                ctx.strokeStyle = isKissCut ? 'green' : 'purple';
+                ctx.setLineDash(isKissCut ? [5, 5] : []);
                 ctx.lineWidth = 2; // Set line width
                 ctx.stroke();
             };
 
-            //TODO: add support for kiss cut drawing
-            const drawCubicLine = (ctx, shape, scaleFactor, xOffset, yOffset) => {
+            const drawCubicLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
                 ctx.beginPath();
                 const startX = (shape.startX + xOffset) * scaleFactor;
                 const startY = (shape.startY + yOffset) * scaleFactor;
@@ -259,7 +262,8 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
                 const endY = (shape.endY + yOffset) * scaleFactor;
 
                 ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
-                ctx.strokeStyle = 'orange';
+                ctx.strokeStyle = isKissCut ? 'green' : 'orange';
+                ctx.setLineDash(isKissCut ? [5, 5] : []);
                 ctx.lineWidth = 2; // Set line width
                 ctx.stroke();
             };

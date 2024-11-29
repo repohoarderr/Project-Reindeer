@@ -48,13 +48,14 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
     // Calculate nodes and price breakdown whenever results or kissCutSelections change
     useEffect(() => {
         if (!results) return;
+
         let shapesTotal = 0;
         let laborTotal = 0;
 
         // Calculate the total price for each shape and update the price breakdown
         const shapeGroups = JSON.parse(results)
             .map((object) => object.table)
-            .reduce((acc, shape) => {
+            .reduce((acc, shape, index) => {
                 // Create a data object for the shape
                 const type = shape.type;
                 const centerX = round(shape.centerX);
@@ -63,10 +64,18 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
                 const circumference = round(shape.circumference);
                 const radius = round(shape.radius);
                 const multipleRadius = shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A';
-                const priceStr = doubleToPriceStr(price);
+
                 const perimeter = round(shape.perimeter);
                 const key = `${type}-${area}-${radius}-${circumference}-${multipleRadius}-${perimeter}`
+                const kissKey = `${key}-${index}`;
                 const isKissCut = kissCutSelections[key] || false;
+                const perimeterOver20 =`${perimeter > 20 ? "true" : "false"} (${perimeter.toFixed(2)}")`;
+
+                const totalPrice = calculateTotalPrice(shape, isKissCut, perimeterOver20);
+
+                shapesTotal += totalPrice - calculateManHourPrice(shape);
+                laborTotal += calculateManHourPrice(shape);
+
                 const shapeData = {
                     key: key,
                     data: {
@@ -77,17 +86,17 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
                         circumference: circumference,
                         radius: radius,
                         multipleRadius: multipleRadius,
-                        unitPrice: price,
-                        unitPriceStr:priceStr,
                         perimeter: perimeter,
                         kissCut: (
                             <input
                                 type="checkbox"
-                                checked={kissCutSelections[key] || false}
-                                onChange={(e) => onKissCutChange(key, e.target.checked)}
+                                checked={kissCutSelections[kissKey] || false}
+                                onChange={(e) => onKissCutChange(kissKey, e.target.checked)}
                             />
 
                         ),
+                        perimeterOver20: perimeterOver20,
+                        price: doubleToPriceStr(totalPrice),
                     },
                     meta: { key, index },
                 };
@@ -104,11 +113,8 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
                             radius: radius,
                             multipleRadius: multipleRadius,
                             perimeter: perimeter,
+                            perimeterOver20: perimeterOver20,
 
-                            unitPrice: price,
-                            unitPriceStr: doubleToPriceStr(price),
-                            totalPrice: 0,
-                            totalPriceStr: `$0.00`,
                             count:0
                         },
                         children: []
@@ -117,8 +123,6 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
 
                 groupNode.children.push(shapeData);
                 groupNode.data.count++;
-                groupNode.data.totalPrice = groupNode.data.unitPrice * groupNode.data.count;
-                groupNode.data.totalPriceStr = doubleToPriceStr(groupNode.data.totalPrice)
                 return acc;
             }, {});
 
@@ -126,11 +130,6 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
         setTreeTableData(Object.values(shapeGroups));
         setPriceBreakdown({ shapes: shapesTotal, labor: laborTotal });
     }, [results, kissCutSelections]);
-
-    // Callback function to handle the kiss cut selection change
-    const handleKissCutChange = (key, isChecked) => {
-        setKissCutSelections((prev) => ({ ...prev, [key]: isChecked }));
-    };
 
     // TODO change later
     const totalPrice = priceBreakdown.shapes + priceBreakdown.labor;
@@ -152,17 +151,14 @@ export default function DisplayResults({ results, kissCutSelections, onKissCutCh
                         <Column field="type" header="Type" expander ></Column>
                         <Column field="count" header="#" ></Column>
                         <Column field="multipleRadius" header="Multiple Radius" ></Column>
-                        <Column field="perimeter" header="Perimeter" sortable></Column>
-                        <Column field="unitPriceStr" header="Unit Price" sortable></Column>
-                        <Column field="totalPriceStr" header="Total Price" sortable></Column>
                         <Column field="kissCut" header="Kiss-Cut" />
-                        <Column field="perimeterOver20" header="Perimeter Over 20&quot;" />
+                        <Column field="perimeterOver20" header="Perimeter Over 20&quot;" sortable/>
                     </TreeTable>
 
                     {/* Dropdown for price breakdown */}
                     <div className={`scrollHere ${highlightClass}`}>
                         <div className="dropdown-container">
-                            <label>Total Price: ${totalPrice.toFixed(2)}</label>
+                            <label>Total Price: {doubleToPriceStr(totalPrice)}</label>
                             <Dropdown
                                 value={selectedBreakdownCategory}
                                 options={priceBreakdownOptions}
