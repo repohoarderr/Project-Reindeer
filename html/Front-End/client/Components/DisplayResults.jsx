@@ -1,18 +1,22 @@
-import React, {useEffect, useState} from "react";
-import {TreeTable} from 'primereact/treetable';
-import {Column} from 'primereact/column';
-import 'primereact/resources/themes/saga-blue/theme.css';  // Choose a theme
-import 'primereact/resources/primereact.min.css';
-import settings from '../services/settings.json';
+import React, { useEffect, useState } from "react";
+import { TreeTable } from 'primereact/treetable';
+import { Column } from 'primereact/column';
+import { Dropdown } from 'primereact/dropdown';
+import { calculateTotalPrice, calculateManHourPrice } from '../services/pricingEngine';
 
 /**
- * DisplayResults component renders the results received from the backend.
- * It either shows the file upload results or displays a table with default column headers if no results are present.
+ * DisplayResults component displays the results of the uploaded file, including the shapes, quantities, kiss-cut options, and prices.
  *
- * @param {Object} props - The props passed to the component.
- * @param {string} props.results - The results data to display. If no results are available, a message or table is shown.
+ * @param results - The results of the uploaded file, containing the shapes and their properties
+ * @param kissCutSelections - Whether kiss-cut is selected for each shape
+ * @param onKissCutChange - Callback function to handle the kiss-cut selection change
+ * @returns {Element} - The component to display the results of the uploaded file
  */
-export default function DisplayResults({results}) {
+export default function DisplayResults({ results, kissCutSelections, onKissCutChange }) {
+    // State variables to manage the price breakdown, selected breakdown category, tree table data, and highlight class
+    const [priceBreakdown, setPriceBreakdown] = useState({ shapes: 0, labor: 0 });
+    const [selectedBreakdownCategory, setSelectedBreakdownCategory] = useState(null);
+    const [treeTableData, setTreeTableData] = useState([]);
     const [highlightClass, setHighlightClass] = useState("");
 
     const doubleToPriceStr = (num) =>{
@@ -23,12 +27,13 @@ export default function DisplayResults({results}) {
     useEffect(() => {
         if (results) {
             const delayTimer = setTimeout(() => {
-                setHighlightClass("highlight"); // Add class to trigger animation after 2 seconds
-                const animationTimer = setTimeout(() => setHighlightClass(""), 2000); // Remove class after animation
-                return () => clearTimeout(animationTimer); // Cleanup for animation timeout
-            }, 1500); // 1.5-second delay before animation starts
+                setHighlightClass("highlight"); // Add class to trigger animation
+                const animationTimer = setTimeout(() => setHighlightClass(""), 2000);
 
-            return () => clearTimeout(delayTimer); // Cleanup for delay timer
+                return () => clearTimeout(animationTimer); // Cleanup animation timer
+            }, 1500);
+
+            return () => clearTimeout(delayTimer); // Cleanup delay timer
         }
     }, [results]);
 
@@ -40,34 +45,16 @@ export default function DisplayResults({results}) {
         return parseFloat(num.toFixed(4));
     }
 
-    // Extract the size thresholds and prices from the settings.json file. All changes in the settings file will be reflected here.
-    const prices = settings.prices
-    /**
-     * Calculate the price of the shape based on its type and size.
-     *
-     * There is probably a better way of doing this.
-     * @param shape - The shape object to calculate the price for.
-     * @returns {*} - The price of the shape.
-     */
-    const calculatePrice = (shape) => {
-        let basePrice;
-        if (shape.type === "freehand") {
+    // Calculate nodes and price breakdown whenever results or kissCutSelections change
+    useEffect(() => {
+        if (!results) return;
+        let shapesTotal = 0;
+        let laborTotal = 0;
 
-        } else {
-            basePrice = prices[`${shape.type}`]
-        }
-        return basePrice;
-    };
-
-    // Function to transform the results JSON into a format suitable for the TreeTable component
-    const shapesToNodes = () => {
-        if (!results) return [];
-
-        // Parse the results JSON and extract the shape data
+        // Calculate the total price for each shape and update the price breakdown
         const shapeGroups = JSON.parse(results)
             .map((object) => object.table)
             .reduce((acc, shape) => {
-                const price = calculatePrice(shape);
                 // Create a data object for the shape
                 const type = shape.type;
                 const centerX = round(shape.centerX);
@@ -78,11 +65,10 @@ export default function DisplayResults({results}) {
                 const multipleRadius = shape.multipleRadius !== undefined ? shape.multipleRadius.toString() : 'N/A';
                 const priceStr = doubleToPriceStr(price);
                 const perimeter = round(shape.perimeter);
-
+                const key = `${type}-${area}-${radius}-${circumference}-${multipleRadius}-${perimeter}`
+                const isKissCut = kissCutSelections[key] || false;
                 const shapeData = {
-
-                    key: `${type}-${area}-${radius}-${circumference}-${multipleRadius}-${perimeter}`,
-                    //build info for an individual shape
+                    key: key,
                     data: {
                         type: type,
                         centerX: centerX,
@@ -93,8 +79,17 @@ export default function DisplayResults({results}) {
                         multipleRadius: multipleRadius,
                         unitPrice: price,
                         unitPriceStr:priceStr,
-                        perimeter: perimeter
+                        perimeter: perimeter,
+                        kissCut: (
+                            <input
+                                type="checkbox"
+                                checked={kissCutSelections[key] || false}
+                                onChange={(e) => onKissCutChange(key, e.target.checked)}
+                            />
+
+                        ),
                     },
+                    meta: { key, index },
                 };
 
                 //build info for an object which holds a group of similar shapes
@@ -127,33 +122,24 @@ export default function DisplayResults({results}) {
                 return acc;
             }, {});
 
-        // return Object.values(Object.values(shapeGroups).reduce((acc, shapeGroup) => {
-        //     const groupKey = shapeGroup.children[0].data.type;
-        //     if(!acc[groupKey]){
-        //         acc[groupKey] = {
-        //             key:groupKey,
-        //             data:shapeGroup.data,
-        //             count: shapeGroup.children.length,
-        //             children: []
-        //         }
-        //     }
-        //     acc[groupKey].children.push(shapeGroup);
-        //     return acc;
-        // }, {}));
+        // Update state with the new data
+        setTreeTableData(Object.values(shapeGroups));
+        setPriceBreakdown({ shapes: shapesTotal, labor: laborTotal });
+    }, [results, kissCutSelections]);
 
-        return Object.values(shapeGroups);
+    // Callback function to handle the kiss cut selection change
+    const handleKissCutChange = (key, isChecked) => {
+        setKissCutSelections((prev) => ({ ...prev, [key]: isChecked }));
     };
 
-    const treeTableData = shapesToNodes();
+    // TODO change later
+    const totalPrice = priceBreakdown.shapes + priceBreakdown.labor;
+    const priceBreakdownOptions = [
+        { label: "Shapes", value: priceBreakdown.shapes },
+        { label: "Labor", value: priceBreakdown.labor }
+    ];
 
-    //Calculate total price from all shapes in treeTableData
-    const totalPrice = treeTableData.reduce((sum, group) => {
-        return sum + group.children.reduce((groupSum, node) => {
-            const price = node.data.unitPrice || 0;
-            return groupSum + price;
-        }, 0);
-    }, 0);
-
+    // Render the component with the results table and price breakdown dropdown
     return (
         <div className="results">
             {results ? (
@@ -169,18 +155,28 @@ export default function DisplayResults({results}) {
                         <Column field="perimeter" header="Perimeter" sortable></Column>
                         <Column field="unitPriceStr" header="Unit Price" sortable></Column>
                         <Column field="totalPriceStr" header="Total Price" sortable></Column>
+                        <Column field="kissCut" header="Kiss-Cut" />
+                        <Column field="perimeterOver20" header="Perimeter Over 20&quot;" />
                     </TreeTable>
 
-                    {/* Display total price */}
+                    {/* Dropdown for price breakdown */}
                     <div className={`scrollHere ${highlightClass}`}>
-                        Total Price: ${totalPrice.toFixed(2)}
+                        <div className="dropdown-container">
+                            <label>Total Price: ${totalPrice.toFixed(2)}</label>
+                            <Dropdown
+                                value={selectedBreakdownCategory}
+                                options={priceBreakdownOptions}
+                                onChange={(e) => setSelectedBreakdownCategory(e.value)}
+                                placeholder="Select Category"
+                            />
+                            {selectedBreakdownCategory !== null && (
+                                <p>Category Cost: ${selectedBreakdownCategory.toFixed(2)}</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             ) : (
-                <div>
-                    {/* If no results are available, show a message indicating this */}
-                    <h2>No Results Available</h2>
-                </div>
+                <h2>No Results Available</h2>
             )}
         </div>
     );
