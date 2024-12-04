@@ -18,6 +18,7 @@ export default function App() {
     // Callback function to handle the upload completion
     const handleUploadComplete = (results) => {
         setUploadResults(results);
+        setKissCutSelections({});
     };
 
     // Callback function to handle the kiss cut selection change
