@@ -196,6 +196,8 @@ public class BasicLine implements Comparable<BasicLine> {
      * BasicLines with the same hash code should be merged.
      * For straight lines, these are lines with the same slope and y-intercept which are likely broken up by a perimeter feature.
      * For arcs, these are lines which are part of the same overall ellipse, which are likely segmented by the software which exported them.
+     * Rounding is applied to the hash due to imprecise x and y values in given source files.
+     * ex. arcs with center x at 0.248 and 0.25 should have the same hash if all other values are equal
      * @return the hash code of the BasicLine
      */
     @Override
@@ -205,30 +207,28 @@ public class BasicLine implements Comparable<BasicLine> {
                     arc.getWidth(), arc.getHeight(),
                     arc.getAngleStart(), 360, Arc2D.OPEN);
 
-            //need to apply rounding to the hash anyway due to lack of precision in x and y values
-            //ex. arcs with center x at 0.248 and 0.25 should have the same hash if all other values are equal
             return (int) (arcCopy.getWidth() * 10000019 +
                     arcCopy.getHeight() * 10006721 +
                     arcCopy.getBounds2D().getCenterX() * 10010111 +
-                    arcCopy.getBounds2D().getCenterY() * 10000379) /10 * 10;//arcs end w/ 0
+                    arcCopy.getBounds2D().getCenterY() * 10000379);
         }
         else if (source instanceof Line2D line){
             // Get the coordinates of the line's two endpoints
-            double x1 = line.getX1();
-            double y1 = line.getY1();
-            double x2 = line.getX2();
-            double y2 = line.getY2();
+            double x1 = Math.round(line.getX1() * 10d) / 10d;
+            double y1 = Math.round(line.getY1() * 10d) / 10d;
+            double x2 = Math.round(line.getX2() * 10d) / 10d;
+            double y2 = Math.round(line.getY2() * 10d) / 10d;
 
             // Compute the slope m
             double slope;
             if (x2 == x1) {
                 slope = Double.POSITIVE_INFINITY;
-                return (Objects.hash(slope, x2) /10 * 10) + 1;
+                return Objects.hash(slope, x2);
             } else {
-                slope = (y2 - y1) / (x2 - x1);
-                double intercept = y1 - slope * x1;
+                slope = Math.round((y2 - y1) / (x2 - x1) * 10d) / 10d;
+                int intercept = (int) Math.round(y1 - slope * x1);
 
-                return (Objects.hash(slope, intercept) /10 * 10) + 1;//lines end with 1 or 9
+                return Objects.hash(slope, intercept);
             }
         }
         return 0;
