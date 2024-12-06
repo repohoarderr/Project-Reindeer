@@ -210,7 +210,7 @@ public class BasicLine implements Comparable<BasicLine> {
             return (int) (arcCopy.getWidth() * 10000019 +
                     arcCopy.getHeight() * 10006721 +
                     arcCopy.getBounds2D().getCenterX() * 10010111 +
-                    arcCopy.getBounds2D().getCenterY() * 10000379);
+                    arcCopy.getBounds2D().getCenterY() * 10000379) /10 * 10;//arcs end w/ 0
         }
         else if (source instanceof Line2D line){
             // Get the coordinates of the line's two endpoints
@@ -222,17 +222,14 @@ public class BasicLine implements Comparable<BasicLine> {
             // Compute the slope m
             double slope;
             if (x2 == x1) {
-                // Vertical line: assign an infinite slope
                 slope = Double.POSITIVE_INFINITY;
+                return (Objects.hash(slope, x2) /10 * 10) + 1;
             } else {
                 slope = (y2 - y1) / (x2 - x1);
+                double intercept = y1 - slope * x1;
+
+                return (Objects.hash(slope, intercept) /10 * 10) + 1;//lines end with 1 or 9
             }
-
-            // Compute the y-intercept b
-            double intercept = y1 - slope * x1;
-
-            // Return a combined hash code for the slope and intercept
-            return Objects.hash(slope, intercept);
         }
         return 0;
     }
