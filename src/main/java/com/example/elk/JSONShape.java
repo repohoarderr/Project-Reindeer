@@ -203,13 +203,16 @@ public class JSONShape {
                     jsonWriter.put("radius", ellipse2D.getHeight() / 2);
                     if (((Ellipse2D.Double) shape).getHeight() <= 0.5) {
                         jsonWriter.put("type", "punch");
+                        jsonWriter.put("class", "punch");
                     } else {
                         jsonWriter.put("type", "circle");
+                        jsonWriter.put("class", "F1B");
                     }
                 } else {
                     jsonWriter.put("width", ellipse2D.getWidth());
                     jsonWriter.put("height", ellipse2D.getHeight());
                     jsonWriter.put("type", "ellipse");
+                    jsonWriter.put("class", "F1B");
                 }
                 double area = Math.PI * a * b;
                 jsonWriter.put("area", area);
@@ -248,6 +251,7 @@ public class JSONShape {
                 jsonWriter.put("centerY", rect.getCenterY());
                 jsonWriter.put("area", rect.width * rect.height);
                 jsonWriter.put("type", "rectangle");
+                jsonWriter.put("class", "F1A");
             }
             case RoundRectangle2D.Double roundRect -> { //if the shape is a rectangle with radius corners
                 jsonWriter.put("width", roundRect.width);
@@ -258,6 +262,7 @@ public class JSONShape {
                 jsonWriter.put("cornerRadius", roundRect.getArcHeight());
                 jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "roundRectangle");
+                jsonWriter.put("class", "F1A");
             }
             default -> { // default to this if the shape does not fall under any category
                 String fullClassName = source != null ? source.getClass().getName() : "unknown";

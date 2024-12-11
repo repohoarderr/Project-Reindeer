@@ -30,7 +30,7 @@ export default function App() {
     return (
         <div className="container">
             {/* Display MDC logo at the top of the page. */}
-            <img
+            <img id={"logo"}
                 src="https://www.mathias-die.com/wp-content/uploads/2018/07/MDC-Logo-copy.png"
                 alt="MDC Logo"
                 className="centered-image"

@@ -10,6 +10,23 @@ body {
     overflow-x: hidden;
 }
 
+.radio-buttons {
+    align-items: center;
+    text-align: center;
+}
+
+#NoResults {
+    text-align: center;
+}
+
+#grey {
+    color: grey;
+}
+
+#logo {
+    padding-top: 20px;
+}
+
   /*
 p {
     padding-top: 10px;

@@ -203,7 +203,7 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
                 true
             );
             // Sets the color of the arc based on whether it is a kiss cut (green) or not (red)
-            ctx.strokeStyle = isKissCut ? 'green' : 'red';
+            ctx.strokeStyle = isKissCut ? 'green' : 'black';
             ctx.setLineDash(isKissCut ? [5, 5] : []);
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -219,7 +219,7 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
                 2 * Math.PI
             );
             // Sets the color of the circle based on whether it is a kiss cut (green) or not (blue)
-            ctx.strokeStyle = isKissCut ? 'green' : 'blue';
+            ctx.strokeStyle = isKissCut ? 'green' : 'black';
             ctx.setLineDash(isKissCut ? [5, 5] : []);
             ctx.lineWidth = 2;
             ctx.stroke();
