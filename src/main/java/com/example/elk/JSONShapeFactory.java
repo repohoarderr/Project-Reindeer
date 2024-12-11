@@ -18,12 +18,12 @@ public class JSONShapeFactory {
         ArrayList<BasicLine> shapeComponentLines = new ArrayList<>(sourceLines);
 
         //if sourceLines is a single arc in the shape of a circle, return a circle object
-        if (sourceLines.size() == 1 && sourceLines.get(0).getSource() instanceof Arc2D arc2D){
-            if (Math.abs(arc2D.getAngleExtent()) % 360 == 0){
+        if (sourceLines.size() == 1 && sourceLines.get(0).getSource() instanceof Arc2D arc2D
+                && Math.abs(arc2D.getAngleExtent()) % 360 == 0){
                 return JSONShapeFactory.createJSONShape(
                         new Ellipse2D.Double(arc2D.getX(), arc2D.getY(), arc2D.getWidth(), arc2D.getHeight()));
             }
-        }
+
 
         //if lines aren't all connected, then we need to "connect" them together
         //this happens if we are trying to parse a shape which has had lines taken out
@@ -31,8 +31,14 @@ public class JSONShapeFactory {
 
         //if lines have a gap between them because a notch has been removed, fill those gaps
         if (!BasicLine.isOneLinkedShape(sourceLines)){
-            ArrayList<ArrayList<BasicLine>> linesToCombine = findLinesToCombine(sourceLines);
-            for (ArrayList<BasicLine> list : linesToCombine){
+            List<List<BasicLine>> linesToCombine = sourceLines.stream()
+                    .filter(line -> line.getSource() instanceof Line2D)
+                    .collect(Collectors.groupingBy(BasicLine::hashCode))
+                    .values()
+                    .stream()
+                    .filter(lineList -> lineList.size() > 1)
+                    .toList();
+            for (List<BasicLine> list : linesToCombine){
                 shapeComponentLines.removeAll(list);
 
                 //note that createMergedLine returns a BasicLine with its draw boolean set to false
@@ -48,22 +54,25 @@ public class JSONShapeFactory {
 
     private static JSONShape parseSimpleShape(List<BasicLine> shapeComponentLines, ArrayList<BasicLine> drawLines) {
         //tally number of arcs and lines
-        int numArcs = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Arc2D).count();
+        int numCurves = (int) shapeComponentLines.stream().filter(line->
+                line.getSource() instanceof Arc2D ||
+                line.getSource() instanceof QuadCurve2D ||
+                line.getSource() instanceof CubicCurve2D).count();
         int numStraightLines = (int) shapeComponentLines.stream().filter(line-> line.getSource() instanceof Line2D).count();
 
-        if (numStraightLines == 2 && numArcs == 2) {
+        if (numStraightLines == 2 && numCurves == 2) {
             return new JSONCustomShape(ShapeType.OBLONG, drawLines);
         }
 
-        if (numStraightLines == 3 && numArcs == 3) {
+        if (numStraightLines == 3 && numCurves == 3) {
             return new JSONCustomShape(ShapeType.ROUND_TRIANGLE, drawLines);
         }
 
-        if (numStraightLines == 3 && numArcs == 0) {
+        if (numStraightLines == 3 && numCurves == 0) {
             return new JSONCustomShape(ShapeType.TRIANGLE, drawLines);
         }
 
-        if (numStraightLines == 4 && numArcs == 4) {
+        if (numStraightLines == 4 && numCurves == 4) {
             //check parallel lines to see if we have a trapezoid or a rectangle
             List<List<BasicLine>> parallels = findParallelLines(shapeComponentLines);
 
@@ -71,12 +80,12 @@ public class JSONShapeFactory {
                 //TODO: throw in check for parallelograms here
                 return new JSONShape(parseRoundRectangle(shapeComponentLines), drawLines);
             }
-            else{
+            else if (parallels.size() == 1){
                 return new JSONCustomShape(ShapeType.ROUND_TRAPEZOID, drawLines);
             }
         }
 
-        if (numStraightLines == 4 && numArcs == 0) {
+        if (numStraightLines == 4 && numCurves == 0) {
             return new JSONShape(new Rectangle2D.Double(calculateXCoord(shapeComponentLines), calculateYCoord(shapeComponentLines),
                     calculateWidth(shapeComponentLines), calculateHeight(shapeComponentLines)), drawLines);
         }
@@ -141,41 +150,6 @@ public class JSONShapeFactory {
             }
         }
         return likelyRadiusNotches;
-    }
-
-    private static ArrayList<ArrayList<BasicLine>> findLinesToCombine(List<BasicLine> singleShapeAsLines) {
-        List<List<BasicLine>> parallelLines = findParallelLines(singleShapeAsLines);
-        ArrayList<BasicLine> allLines = new ArrayList<>();
-        parallelLines.forEach(allLines::addAll);
-
-        ArrayList<ArrayList<BasicLine>> linesToCombine = new ArrayList<>();
-
-        //start w/ list of parallel lines
-        //add lines to the same list if the slope between the lines matches the slope of the lines themselves
-        //this means that the lines are "in line" with each other
-        //(they are two line segments which are part of the same line)
-        toHere:
-        for (BasicLine line : allLines){
-            if (linesToCombine.isEmpty()){
-                linesToCombine.add(new ArrayList<>());
-            }
-
-            for (ArrayList<BasicLine> list : linesToCombine){
-                if (list.isEmpty()){
-                    list.add(line);
-                    continue toHere;
-                }
-                if (line.isInLineWith(list.getFirst())){
-                    list.add(line);
-                    continue toHere;
-                }
-            }
-            //if we never added the line to a list, we need to create a new bucket for it
-            linesToCombine.add(new ArrayList<>());
-            linesToCombine.getLast().add(line);
-        }
-        linesToCombine.removeIf(list -> list.size() < 2);
-        return linesToCombine;
     }
 
     private static boolean isAngleExtentSufficient(Arc2D arc, double targetExtent) {
@@ -247,17 +221,13 @@ public class JSONShapeFactory {
     }
 
     public static double calculateHeight(List<BasicLine> singleShapeAsLines) {
-        double maxY = 0;
+        double maxY = Double.NEGATIVE_INFINITY;
         double minY = Double.MAX_VALUE;
 
         for (BasicLine line : singleShapeAsLines) {
             Rectangle2D lineBounds = line.getSource().getBounds2D();
-            if (lineBounds.getMaxY() > maxY) {
-                maxY = lineBounds.getMaxY();
-            }
-            if (lineBounds.getMinY() < minY) {
-                minY = lineBounds.getMinY();
-            }
+            maxY = Math.max(maxY, lineBounds.getMaxY());
+            minY = Math.min(minY, lineBounds.getMinY());
         }
 
         return maxY - minY;
@@ -266,23 +236,18 @@ public class JSONShapeFactory {
     private static double calculateWidth(List<BasicLine> singleShapeAsLines) {
         //TODO: provides incorrect width if rectangle is rotated?
         // Do we want longest side or distance between leftmost and rightmost points?
-        double maxX = 0;
+        double maxX = Double.NEGATIVE_INFINITY;
         double minX = Double.MAX_VALUE;
 
         for (BasicLine line : singleShapeAsLines) {
             Rectangle2D lineBounds = line.getSource().getBounds2D();
-            if (lineBounds.getMaxX() > maxX) {
-                maxX = lineBounds.getMaxX();
-            }
-            if (lineBounds.getMinX() < minX) {
-                minX = lineBounds.getMinX();
-            }
+            maxX = Math.max(maxX, lineBounds.getMaxX());
+            minX = Math.min(minX, lineBounds.getMinX());
         }
         return maxX - minX;
     }
 
     public static List<List<BasicLine>> findParallelLines(List<BasicLine> singleShapeAsLines) {
-
         //create deep copy
         ArrayList<BasicLine> straightsCopy = new ArrayList<>(singleShapeAsLines.stream()
                 .filter(line -> line.getSource() instanceof Line2D.Double)
