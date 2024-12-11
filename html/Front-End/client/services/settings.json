@@ -1,40 +1,13 @@
 {
   "prices": {
-    "punch": 110,
-    "circle": 120,
-    "freehand": 130,
-    "oblong": 140,
-    "roundTrapezoid": 150,
-    "roundTriangle": 160,
-    "roundRectangle": 170,
-    "rectangle": 180,
-    "radiusNotch": 190,
-    "F1A": 182,
-    "F1B": 195,
-    "F1C": 195,
-    "F2A": 292,
-    "F3": 155,
-    "F4": 181,
-    "F6": 198,
-    "32": 244,
-    "33": 260,
-    "41": 186,
-    "42": 215,
-    "43": 205,
-    "51": 252,
-    "52": 170,
-    "53": 151,
-    "61": 255,
-    "62": 172,
-    "63": 177
+    "ShopRate": 139.1,
+    "DCShopRate": 126.45,
+    "PlugRate": 95.17
   },
-  "kissCutPrice": 20,
-  "manHours": {
-    "punch": 0.15,
-    "circle": 0.2,
-    "freehand": 0.25,
-    "oblong": 0.1
+  "options": {
+    "MDC +PLUS": 130
   },
-  "rate": 120,
-  "perimeterOver20Price": 30
+  "rules": {
+
+  }
 }

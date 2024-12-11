@@ -194,83 +194,81 @@ const VisualizeShapes = ({shapesData, kissCutSelections}) => {
                 ctx.stroke();
             };
 
-            const drawArc = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-                ctx.beginPath();
-                ctx.arc(
-                    (shape.centerX + xOffset) * scaleFactor,
-                    (shape.centerY + yOffset) * scaleFactor,
-                    shape.radius * scaleFactor,
-                    -shape.angle,
-                    -shape.rotation,
-                    true
-                );
-                // Sets the color of the arc based on whether it is a kiss cut (green) or not (red)
-                ctx.strokeStyle = isKissCut ? 'green' : 'red';
-                ctx.setLineDash(isKissCut ? [5, 5] : []);
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            };
+        const drawArc = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+            ctx.beginPath();
+            ctx.arc(
+                (shape.centerX + xOffset) * scaleFactor,
+                (shape.centerY + yOffset) * scaleFactor,
+                shape.radius * scaleFactor,
+                -shape.angle,
+                -shape.rotation,
+                true
+            );
+            // Sets the color of the arc based on whether it is a kiss cut (green) or not (red)
+            ctx.strokeStyle = isKissCut ? 'green' : 'black';
+            ctx.setLineDash(isKissCut ? [5, 5] : []);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        };
 
-            const drawCircle = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-                ctx.beginPath();
-                ctx.arc(
-                    (shape.centerX + xOffset) * scaleFactor,
-                    (shape.centerY + yOffset) * scaleFactor,
-                    shape.radius * scaleFactor,
-                    0,
-                    2 * Math.PI
-                );
-                // Sets the color of the circle based on whether it is a kiss cut (green) or not (blue)
-                ctx.strokeStyle = isKissCut ? 'green' : 'blue';
-                ctx.setLineDash(isKissCut ? [5, 5] : []);
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            };
+        const drawCircle = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+            ctx.beginPath();
+            ctx.arc(
+                (shape.centerX + xOffset) * scaleFactor,
+                (shape.centerY + yOffset) * scaleFactor,
+                shape.radius * scaleFactor,
+                0,
+                2 * Math.PI
+            );
+            // Sets the color of the circle based on whether it is a kiss cut (green) or not (blue)
+            ctx.strokeStyle = isKissCut ? 'green' : 'black';
+            ctx.setLineDash(isKissCut ? [5, 5] : []);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        };
 
-            const drawQuadLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-                ctx.beginPath();
-                const startX = (shape.startX + xOffset) * scaleFactor;
-                const startY = (shape.startY + yOffset) * scaleFactor;
-                ctx.moveTo(startX, startY);
+        const drawQuadLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+            ctx.beginPath();
+            const startX = (shape.startX + xOffset) * scaleFactor;
+            const startY = (shape.startY + yOffset) * scaleFactor;
+            ctx.moveTo(startX, startY);
 
-                const ctrlX = (shape.controlX + xOffset) * scaleFactor;
-                const ctrlY = (shape.controlY + yOffset) * scaleFactor;
+            const ctrlX = (shape.controlX + xOffset) * scaleFactor;
+            const ctrlY = (shape.controlY + yOffset) * scaleFactor;
 
-                const endX = (shape.endX + xOffset) * scaleFactor;
-                const endY = (shape.endY + yOffset) * scaleFactor;
+            const endX = (shape.endX + xOffset) * scaleFactor;
+            const endY = (shape.endY + yOffset) * scaleFactor;
 
-                ctx.quadraticCurveTo(ctrlX, ctrlY, endX, endY);
-                ctx.strokeStyle = isKissCut ? 'green' : 'purple';
-                ctx.setLineDash(isKissCut ? [5, 5] : []);
-                ctx.lineWidth = 2; // Set line width
-                ctx.stroke();
-            };
+            ctx.quadraticCurveTo(ctrlX, ctrlY, endX, endY);
+            ctx.strokeStyle = isKissCut ? 'green' : 'purple';
+            ctx.setLineDash(isKissCut ? [5, 5] : []);
+            ctx.lineWidth = 2; // Set line width
+            ctx.stroke();
+        };
 
-            const drawCubicLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
-                ctx.beginPath();
-                const startX = (shape.startX + xOffset) * scaleFactor;
-                const startY = (shape.startY + yOffset) * scaleFactor;
-                ctx.moveTo(startX, startY);
+        const drawCubicLine = (ctx, shape, scaleFactor, xOffset, yOffset, isKissCut) => {
+            ctx.beginPath();
+            const startX = (shape.startX + xOffset) * scaleFactor;
+            const startY = (shape.startY + yOffset) * scaleFactor;
+            ctx.moveTo(startX, startY);
 
-                const ctrl1X = (shape.control1X + xOffset) * scaleFactor;
-                const ctrl1Y = (shape.control1Y + yOffset) * scaleFactor;
+            const ctrl1X = (shape.control1X + xOffset) * scaleFactor;
+            const ctrl1Y = (shape.control1Y + yOffset) * scaleFactor;
 
-                const ctrl2X = (shape.control2X + xOffset) * scaleFactor;
-                const ctrl2Y = (shape.control2Y + yOffset) * scaleFactor;
+            const ctrl2X = (shape.control2X + xOffset) * scaleFactor;
+            const ctrl2Y = (shape.control2Y + yOffset) * scaleFactor;
 
-                const endX = (shape.endX + xOffset) * scaleFactor;
-                const endY = (shape.endY + yOffset) * scaleFactor;
+            const endX = (shape.endX + xOffset) * scaleFactor;
+            const endY = (shape.endY + yOffset) * scaleFactor;
 
-                ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
-                ctx.strokeStyle = isKissCut ? 'green' : 'orange';
-                ctx.setLineDash(isKissCut ? [5, 5] : []);
-                ctx.lineWidth = 2; // Set line width
-                ctx.stroke();
-            };
-
-            drawCanvas();
-        },
-        [shapesData, kissCutSelections]); // Re-run the effect if shapesData or scaleFactor changes
+            ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
+            ctx.strokeStyle = isKissCut ? 'green' : 'orange';
+            ctx.setLineDash(isKissCut ? [5, 5] : []);
+            ctx.lineWidth = 2; // Set line width
+            ctx.stroke();
+        };
+        drawCanvas();
+    }, [shapesData, kissCutSelections]);
 
     // Return the canvas element
     return (
