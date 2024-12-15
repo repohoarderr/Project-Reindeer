@@ -162,7 +162,9 @@ public class JSONShape {
         JSONObject jsonWriter = new JSONObject();
         switch (shape) {
             case Line2D.Double line2D -> { //if the shape is a line
-                jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
+                double length = Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2));
+                jsonWriter.put("length", length);
+                jsonWriter.put("perimeter", length);
                 jsonWriter.put("startX", line2D.x1);
                 jsonWriter.put("startY", line2D.y1);
                 jsonWriter.put("endX", line2D.x2);
@@ -179,6 +181,7 @@ public class JSONShape {
                 double arcLength = radius * angleRad;
 
                 jsonWriter.put("length", arcLength);
+                jsonWriter.put("perimeter", arcLength);
                 jsonWriter.put("startX", arc2D.getStartPoint().getX());
                 jsonWriter.put("startY", arc2D.getStartPoint().getY());
                 jsonWriter.put("endX", arc2D.getEndPoint().getX());
@@ -203,6 +206,9 @@ public class JSONShape {
                 jsonWriter.put("controlX", quadCurve2D.getCtrlPt().getX());
                 jsonWriter.put("controlY", quadCurve2D.getCtrlPt().getY());
 
+                //TODO: need to calculate this or change how empty perimeters are handled in DisplayResults.jsx
+                jsonWriter.put("perimeter", 0);
+
                 jsonWriter.put("type", "quadCurve2D");
             }
             case CubicCurve2D.Double cubicCurve2d ->{
@@ -216,6 +222,8 @@ public class JSONShape {
 
                 jsonWriter.put("control2X", cubicCurve2d.getCtrlP2().getX());
                 jsonWriter.put("control2Y", cubicCurve2d.getCtrlP2().getY());
+                //TODO: need to calculate this or change how empty perimeters are handled in DisplayResults.jsx
+                jsonWriter.put("perimeter", 0);
 
                 jsonWriter.put("type", "cubicCurve2d");
             }
