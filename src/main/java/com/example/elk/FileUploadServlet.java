@@ -1,6 +1,6 @@
 package com.example.elk;
 
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
@@ -22,7 +22,15 @@ public class FileUploadServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//    filterChain.doFilter(servletRequest, servletResponse);
+
+
+//    cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+//    cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+//    cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
+//    cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+//    cres.getHeaders().add("Access-Control-Max-Age", "1209600");
+//    CORSFilter filterChain = new CORSFilter();
+//    filterChain.doFilter(request, response, filterChain);
     String path = new File("Front-End").getAbsolutePath();
     /* Receive file uploaded to the Servlet from the HTML5 form */
     //String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
@@ -57,3 +65,4 @@ public class FileUploadServlet extends HttpServlet {
   }
 
 }
+
