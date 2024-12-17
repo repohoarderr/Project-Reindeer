@@ -722,22 +722,6 @@ public class DXFReader {
                 double rotate = xScale < 0 ? -rotation : rotation;
                 Shape transformedShape = transformShape(shape, transform, rotate);
                 list.add(transformedShape);
-//                BasicLine line = null;
-//                double origLength = 0;
-//                if (shape instanceof Line2D line2D){
-//                    line = new BasicLine(line2D);
-//                    origLength = line2D.getP2().distance(line2D.getP1());
-//                }
-//                else if (shape instanceof Arc2D.Double arc2D){
-//                    double extentRad = Math.toRadians(arc2D.extent);
-//                    double radius = arc2D.width / 2;
-//                    double angleRad = Math.abs(extentRad);
-//                    line = new BasicLine(arc2D);
-//                    origLength = radius * angleRad;
-//                }
-//                if (line != null){
-//                    System.out.println(line.getLength() == origLength );
-//                }
             }
             return list;
         }
