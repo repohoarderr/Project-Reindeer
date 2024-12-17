@@ -691,7 +691,42 @@ public class DXFReader {
                 return null;
             }
 
+            AffineTransform transform = buildTransform(block);
             Path2D.Double path = new Path2D.Double();
+            for (DrawItem entity : block.entities) {
+                Shape shape = entity.getShape();
+
+                if (!doDraw(entity) || shape == null) {
+                    continue;
+                }
+                shape = transform.createTransformedShape(shape);
+                path.append(shape, false);
+            }
+            return path;
+        }
+
+
+        public Collection<Shape> getShapes() {
+            Block block = blockDict.get(blockName);
+            if (block == null || block.entities.isEmpty()) {
+                return new ArrayList<>();
+            }
+            List<Shape> list = new ArrayList<>();
+            AffineTransform transform = buildTransform(block);
+            for (DrawItem entity : block.entities) {
+                Shape shape = entity.getShape();
+
+                if (!doDraw(entity) || shape == null) {
+                    continue;
+                }
+                double rotate = xScale < 0 ? -rotation : rotation;
+                Shape transformedShape = transformShape(shape, transform, rotate);
+                list.add(transformedShape);
+            }
+            return list;
+        }
+
+        private AffineTransform buildTransform(Block block) {
             AffineTransform at1 = null;
             if (block.baseX != 0 || block.baseY != 0) {
                 // TODO: make this work...
@@ -708,22 +743,64 @@ public class DXFReader {
                 at2.scale(xScale, yScale);
             }
             at2.rotate(Math.toRadians(xScale < 0 ? -rotation : rotation));
-            for (DrawItem entity : block.entities) {
-                Shape shape = entity.getShape();
-
-                if (!doDraw(entity) || shape == null) {
-                    continue;
-                }
-
-                if (at1 != null) {
-                    // TODO: make this work...
-                    shape = at1.createTransformedShape(shape);
-                }
-                shape = at2.createTransformedShape(shape);
-                path.append(shape, false);
+            if (at1 != null) {
+                at2.concatenate(at1);
             }
-            return path;
+
+            return at2;
         }
+    }
+
+    /**
+     * Manually transform shapes so that we can retain the initial shape instead of converting to Path2D
+     * (which AffineTransform getTransformedShape does)
+     *
+     * @param shape the shape to be transformed
+     * @return the transformed shape
+     */
+    private Shape transformShape(Shape shape, AffineTransform transform, double rotate) {
+        if (shape instanceof Line2D line) {
+            Point2D point1 = new Point2D.Double();
+            Point2D point2 = new Point2D.Double();
+            point1 = transform.transform(line.getP1(), point1);
+            point2 = transform.transform(line.getP2(), point2);
+
+            return new Line2D.Double(point1, point2);
+        } else if (shape instanceof Arc2D arc2D) {
+            //calculate max and min coordinates using the four boundary points
+            Point2D boundary1 = new Point2D.Double(arc2D.getFrame().getMinX(), arc2D.getFrame().getMinY());
+            Point2D boundary2 = new Point2D.Double(arc2D.getFrame().getMaxX(), arc2D.getFrame().getMinY());
+            Point2D boundary3 = new Point2D.Double(arc2D.getFrame().getMinX(), arc2D.getFrame().getMaxY());
+            Point2D boundary4 = new Point2D.Double(arc2D.getFrame().getMaxX(), arc2D.getFrame().getMaxY());
+
+            transform.transform(boundary1, boundary1);
+            transform.transform(boundary2, boundary2);
+            transform.transform(boundary3, boundary3);
+            transform.transform(boundary4, boundary4);
+            double minX = Math.min(boundary1.getX(), Math.min(boundary2.getX(), Math.min(boundary3.getX(), boundary4.getX())));
+            double minY = Math.min(boundary1.getY(), Math.min(boundary2.getY(), Math.min(boundary3.getY(), boundary4.getY())));
+
+            double maxX = Math.max(boundary1.getX(), Math.max(boundary2.getX(), Math.max(boundary3.getX(), boundary4.getX())));
+            double maxY = Math.max(boundary1.getY(), Math.max(boundary2.getY(), Math.max(boundary3.getY(), boundary4.getY())));
+
+            double newWidth = maxX - minX;
+            double newHeight = maxY - minY;
+            double newAngleStart = arc2D.getAngleStart() - rotate;
+            return new Arc2D.Double(minX, minY, newWidth, newHeight, newAngleStart, arc2D.getAngleExtent(), Arc2D.OPEN);
+            //x, y, width, height, start, extent, type  = 0
+        } else if (shape instanceof Ellipse2D ellipse2D && ellipse2D.getWidth() == ellipse2D.getHeight()) {
+            //TODO: need to support ellipses?
+           Point2D newCenterPoint = new Point2D.Double();
+           newCenterPoint = transform.transform(new Point2D.Double(ellipse2D.getCenterX(), ellipse2D.getCenterY()), newCenterPoint);
+
+           Point2D newRadiusPoint = new Point2D.Double();
+           newRadiusPoint = transform.transform(new Point2D.Double(ellipse2D.getCenterX() + ellipse2D.getWidth() / 2, ellipse2D.getCenterY()), newRadiusPoint);
+
+           double dist = newCenterPoint.distance(newRadiusPoint) * 2;
+           return new Ellipse2D.Double(newCenterPoint.getX(), newCenterPoint.getY(), dist, dist);
+        }
+
+        return transform.createTransformedShape(shape);
     }
 
     /*
@@ -1292,9 +1369,13 @@ public class DXFReader {
         ArrayList<Shape> shapes = new ArrayList<>();
         for (DrawItem entity : entities) {
             if (doDraw(entity)) {
-                Shape shape = entity.getShape();
-                if (shape != null) {
-                    shapes.add(shape);
+                if (entity instanceof Insert insert) {
+                    shapes.addAll(insert.getShapes());
+                } else {
+                    Shape shape = entity.getShape();
+                    if (shape != null) {
+                        shapes.add(shape);
+                    }
                 }
             }
         }
