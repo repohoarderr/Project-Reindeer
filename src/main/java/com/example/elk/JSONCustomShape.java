@@ -27,23 +27,30 @@ public class JSONCustomShape extends JSONShape {
         switch(this.getShapeType()){
             case TRIANGLE -> {
                 jsonWriter.put("type", "triangle");
+                jsonWriter.put("class", "F1C");
             }
             case ROUND_TRIANGLE -> {
                 jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "roundTriangle");
+                jsonWriter.put("class", "F1C");
             }
             case TRAPEZOID -> {
                 jsonWriter.put("type", "trapezoid");
+                jsonWriter.put("class", "F1A");
             }
             case ROUND_TRAPEZOID -> {
                 jsonWriter.put("type", "roundTrapezoid");
+                jsonWriter.put("class", "F1A");
             }
             case OBLONG ->{
                 jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "oblong");
+                jsonWriter.put("class", "F1B");
+
             }
             case RADIUS_NOTCH ->{
                 jsonWriter.put("type", "radiusNotch");
+                jsonWriter.put("class", "F17");
             }
             case MITERED_NOTCH ->{
                 jsonWriter.put("type", "miteredNotch");
@@ -56,9 +63,11 @@ public class JSONCustomShape extends JSONShape {
             }
             case FREEHAND -> {
                 jsonWriter.put("type", "freehand");
+                jsonWriter.put("class", "freehand");
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("centerX", this.getCenterX());
         jsonWriter.put("centerY", this.getCenterY());
         jsonWriter.put("id", id);

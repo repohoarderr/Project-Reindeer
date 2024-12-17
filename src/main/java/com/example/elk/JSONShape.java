@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,14 +155,16 @@ public class JSONShape {
     }
 
     public Optional<Shape> getShape(){
-        return Optional.of(source);
+        return Optional.ofNullable(source);
     }
 
     public static JSONObject writeDrawData(Shape shape, int id) {
         JSONObject jsonWriter = new JSONObject();
         switch (shape) {
             case Line2D.Double line2D -> { //if the shape is a line
-                jsonWriter.put("length", Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2)));
+                double length = Math.sqrt((Math.pow(line2D.x2 - line2D.x1, 2)) + Math.pow(line2D.y2 - line2D.y1, 2));
+                jsonWriter.put("length", length);
+                jsonWriter.put("perimeter", length);
                 jsonWriter.put("startX", line2D.x1);
                 jsonWriter.put("startY", line2D.y1);
                 jsonWriter.put("endX", line2D.x2);
@@ -180,6 +181,7 @@ public class JSONShape {
                 double arcLength = radius * angleRad;
 
                 jsonWriter.put("length", arcLength);
+                jsonWriter.put("perimeter", arcLength);
                 jsonWriter.put("startX", arc2D.getStartPoint().getX());
                 jsonWriter.put("startY", arc2D.getStartPoint().getY());
                 jsonWriter.put("endX", arc2D.getEndPoint().getX());
@@ -193,22 +195,59 @@ public class JSONShape {
 
                 jsonWriter.put("type", "arc2D");
             }
+            case QuadCurve2D.Double quadCurve2D ->{
+                jsonWriter.put("startX", quadCurve2D.getP1().getX());
+                jsonWriter.put("startY", quadCurve2D.getP1().getY());
+                jsonWriter.put("endX", quadCurve2D.getP2().getX());
+                jsonWriter.put("endY", quadCurve2D.getP2().getY());
+                jsonWriter.put("centerX", quadCurve2D.getBounds2D().getX());
+                jsonWriter.put("centerY", quadCurve2D.getBounds2D().getY());
+
+                jsonWriter.put("controlX", quadCurve2D.getCtrlPt().getX());
+                jsonWriter.put("controlY", quadCurve2D.getCtrlPt().getY());
+
+                //TODO: need to calculate this or change how empty perimeters are handled in DisplayResults.jsx
+                jsonWriter.put("perimeter", 0);
+
+                jsonWriter.put("type", "quadCurve2D");
+            }
+            case CubicCurve2D.Double cubicCurve2d ->{
+                jsonWriter.put("startX", cubicCurve2d.getP1().getX());
+                jsonWriter.put("startY", cubicCurve2d.getP1().getY());
+                jsonWriter.put("endX", cubicCurve2d.getP2().getX());
+                jsonWriter.put("endY", cubicCurve2d.getP2().getY());
+
+                jsonWriter.put("control1X", cubicCurve2d.getCtrlP1().getX());
+                jsonWriter.put("control1Y", cubicCurve2d.getCtrlP1().getY());
+
+                jsonWriter.put("control2X", cubicCurve2d.getCtrlP2().getX());
+                jsonWriter.put("control2Y", cubicCurve2d.getCtrlP2().getY());
+                //TODO: need to calculate this or change how empty perimeters are handled in DisplayResults.jsx
+                jsonWriter.put("perimeter", 0);
+
+                jsonWriter.put("type", "cubicCurve2d");
+            }
             case Ellipse2D.Double ellipse2D -> { //if the shape is an ellipse
                 double a = ellipse2D.height / 2;
                 double b = ellipse2D.width / 2;
                 double circum = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2)) / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
                 jsonWriter.put("circumference", circum);
+                jsonWriter.put("perimeter", circum);
+
                 if (ellipse2D.getWidth() == ellipse2D.getHeight()) { //check to see if the shape is a circle or oval
-                    jsonWriter.put("radius", ((Ellipse2D.Double) shape).getHeight() / 2);
+                    jsonWriter.put("radius", ellipse2D.getHeight() / 2);
                     if (((Ellipse2D.Double) shape).getHeight() <= 0.5) {
                         jsonWriter.put("type", "punch");
+                        jsonWriter.put("class", "punch");
                     } else {
                         jsonWriter.put("type", "circle");
+                        jsonWriter.put("class", "F1B");
                     }
                 } else {
                     jsonWriter.put("width", ellipse2D.getWidth());
                     jsonWriter.put("height", ellipse2D.getHeight());
                     jsonWriter.put("type", "ellipse");
+                    jsonWriter.put("class", "F1B");
                 }
                 double area = Math.PI * a * b;
                 jsonWriter.put("area", area);
@@ -229,6 +268,10 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("maxX", shape.getBounds2D().getMaxX());
+        jsonWriter.put("maxY", shape.getBounds2D().getMaxY());
+        jsonWriter.put("minX", shape.getBounds2D().getMinX());
+        jsonWriter.put("minY", shape.getBounds2D().getMinY());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -243,6 +286,7 @@ public class JSONShape {
                 jsonWriter.put("centerY", rect.getCenterY());
                 jsonWriter.put("area", rect.width * rect.height);
                 jsonWriter.put("type", "rectangle");
+                jsonWriter.put("class", "F1A");
             }
             case RoundRectangle2D.Double roundRect -> { //if the shape is a rectangle with radius corners
                 jsonWriter.put("width", roundRect.width);
@@ -253,6 +297,7 @@ public class JSONShape {
                 jsonWriter.put("cornerRadius", roundRect.getArcHeight());
                 jsonWriter.put("multipleRadius", this.multipleRadius);
                 jsonWriter.put("type", "roundRectangle");
+                jsonWriter.put("class", "F1A");
             }
             default -> { // default to this if the shape does not fall under any category
                 String fullClassName = source != null ? source.getClass().getName() : "unknown";
@@ -266,6 +311,7 @@ public class JSONShape {
             }
         }
 
+        jsonWriter.put("perimeter", getPerimeter());
         jsonWriter.put("id", id);
         return jsonWriter;
     }
@@ -278,8 +324,26 @@ public class JSONShape {
         return centerY;
     }
 
-    public JSONShape addRemovedLines(List<BasicLine> tempRemovedLines) {
-        this.lines.addAll(tempRemovedLines);
-        return this;
+    public double getPerimeter(){
+        double mainShapePerimeter = 0;
+        if (source instanceof Ellipse2D.Double ellipse2d){
+            double a = ellipse2d.height / 2;
+            double b = ellipse2d.width / 2;
+            mainShapePerimeter = Math.PI * (a + b) * (3 * (Math.pow(a - b, 2))
+                    / (Math.pow(a + b, 2)) * (Math.sqrt(-3 * (Math.pow(a - b, 2) / Math.pow(a + b, 2)) + 4) + 10) + 1);
+        }
+        else{
+            mainShapePerimeter =  lines.stream()
+                    .map(BasicLine::getLength)
+                    .reduce(Double::sum)
+                    .orElse(0.0);
+        }
+
+        double subFeaturesPerimeter = subFeatures.stream()
+                .map(JSONShape::getPerimeter)
+                .reduce(Double::sum)
+                .orElse(0.0);
+
+        return mainShapePerimeter + subFeaturesPerimeter;
     }
 }
